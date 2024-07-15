@@ -24,8 +24,15 @@ app.use(cors());
 
 const corsOptions = {
   origin: [
+    "http://localhost:3001/",
     "http://localhost:3000/",
-    "http://localhost:3001/, http://localhost:5173/",
+    "http://localhost:5173/",
+    "https://www.ridegudauri.ge/",
+    "https://ridegudauri.ge/",
+    "https://admin.ridegudauri.ge/",
+    "https://api.ridegudauri.ge/",
+    "https://admin.ridegudauri.ge/",
+    "https://admin.ridegudauri.com/",
   ],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
