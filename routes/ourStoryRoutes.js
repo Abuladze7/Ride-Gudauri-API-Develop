@@ -578,7 +578,7 @@ router.put("/beginningOfParagliding/:id", updateParaglidingSection);
  *           schema:
  *             type: object
  *             properties:
- *               imgUrls:
+ *               images:
  *                 type: array
  *                 items:
  *                   type: string
