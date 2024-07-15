@@ -121,14 +121,14 @@ exports.createActivity = async (req, res) => {
 
 // ========== Discount Coupon ========== //
 
-// exports.createDiscountCoupon = async (req, res) => {
-//   try {
-//     const discountCoupon = await DiscountCoupon.create(req.body);
-//     res.status(201).json(discountCoupon);
-//   } catch (err) {
-//     res.status(500).json({ message: err.message });
-//   }
-// };
+exports.createDiscountCoupon = async (req, res) => {
+  try {
+    const discountCoupon = await DiscountCoupon.create(req.body);
+    res.status(201).json(discountCoupon);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 
 exports.updateDiscountCoupon = async (req, res) => {
   try {

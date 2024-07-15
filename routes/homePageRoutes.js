@@ -2,16 +2,16 @@ const router = require("express").Router();
 const {
   updateBanner,
   getAllData,
-  // createBanner,
-  // createActivitiesSection,
+  createBanner,
+  createActivitiesSection,
   updateActivitySection,
-  // createDiscountCoupon,
+  createDiscountCoupon,
   updateDiscountCoupon,
-  // createWhatSetsApartSection,
+  createWhatSetsApartSection,
   updateWhatSetsApartSection,
-  // createWelcomeSection,
+  createWelcomeSection,
   updateWelcomeSection,
-  // createWonderlandSection,
+  createWonderlandSection,
   updateWonderlandSection,
   createCarouselImage,
   updateCarouselImage,
@@ -161,7 +161,7 @@ router.get("/", getAllData);
 
 // ========= Hero Section ========== //
 
-// router.post("/banner", createBanner);
+router.post("/banner", createBanner);
 
 /**
  * @swagger
@@ -202,7 +202,7 @@ router.get("/", getAllData);
 router.put("/banner/:id", updateBanner);
 
 // ========== Our Activities ========== //
-// router.post("/ourActivitiesSection", createActivitiesSection);
+router.post("/ourActivitiesSection", createActivitiesSection);
 /**
  * @swagger
  * title: homepage
@@ -277,7 +277,7 @@ router.put("/ourActivitiesSection", updateActivitySection);
 // router.put("/ourActivitiesSection/activity/:id", updateActivity);
 
 // ========== Discount Coupon ========== //
-// router.post("/discountCoupon", createDiscountCoupon);
+router.post("/discountCoupon", createDiscountCoupon);
 /**
  * @swagger
  * /api/homepage/discountCoupon/{id}:
@@ -348,7 +348,7 @@ router.put("/ourActivitiesSection", updateActivitySection);
 router.put("/discountCoupon/:id", updateDiscountCoupon);
 
 // ========== Welcome Section ========== //
-// router.post("/welcomeSection", createWelcomeSection);
+router.post("/welcomeSection", createWelcomeSection);
 /**
  * @swagger
  * /api/homepage/welcomeSection/{id}:
@@ -413,7 +413,7 @@ router.put("/discountCoupon/:id", updateDiscountCoupon);
 router.put("/welcomeSection/:id", updateWelcomeSection);
 
 // ========== What Sets Apart Section ========== //
-// router.post("/whatSetsApart", createWhatSetsApartSection);
+router.post("/whatSetsApart", createWhatSetsApartSection);
 /**
  * @swagger
  * /api/homepage/whatSetsApart/{id}:
@@ -481,7 +481,7 @@ router.put("/welcomeSection/:id", updateWelcomeSection);
 router.put("/whatSetsApart/:id", updateWhatSetsApartSection);
 
 // ========== Wonderland Section =========== //
-// router.post("/wonderlandSection", createWonderlandSection);
+router.post("/wonderlandSection", createWonderlandSection);
 /**
  * @swagger
  * /api/homepage/wonderlandSection/{id}:

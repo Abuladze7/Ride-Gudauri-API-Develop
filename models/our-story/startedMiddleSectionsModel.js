@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const bannerSchema = new Schema(
+const startedMiddleSectionSchema = new Schema(
   {
     subtitle: { type: String, required: true },
     imgUrl: { type: String, required: true },
@@ -9,4 +9,7 @@ const bannerSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-module.exports = mongoose.model("HomePageBanner", bannerSchema);
+module.exports = mongoose.model(
+  "HowStartedMiddleSections",
+  startedMiddleSectionSchema
+);

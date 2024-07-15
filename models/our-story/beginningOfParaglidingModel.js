@@ -1,12 +1,16 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const bannerSchema = new Schema(
+const beginningOfParaglidingSchema = new Schema(
   {
+    title: { type: String, required: true },
     subtitle: { type: String, required: true },
     imgUrl: { type: String, required: true },
   },
   { versionKey: false, timestamps: true }
 );
 
-module.exports = mongoose.model("HomePageBanner", bannerSchema);
+module.exports = mongoose.model(
+  "BeginningOfParaglidingSection",
+  beginningOfParaglidingSchema
+);

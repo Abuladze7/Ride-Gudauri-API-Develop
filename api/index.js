@@ -11,6 +11,7 @@ const authRoutes = require("../routes/authRoutes");
 const allDataRoutes = require("../routes/getalldataRoutes");
 const activitiesManagement = require("../routes/activitiesmanagementRoutes");
 const homePageRoutes = require("../routes/homePageRoutes");
+const ourStoryRoutes = require("../routes/ourStoryRoutes");
 const { swaggerUi, specs, CSS_URL, customCss } = require("../config/swagger");
 
 connectDB();
@@ -22,7 +23,10 @@ app.use(bodyParser.json());
 app.use(cors());
 
 const corsOptions = {
-  origin: ["http://localhost:3000/", "http://localhost:3001/"],
+  origin: [
+    "http://localhost:3000/",
+    "http://localhost:3001/, http://localhost:5173/",
+  ],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
   optionsSuccessStatus: 204,
@@ -39,6 +43,7 @@ app.use(
 );
 
 app.use("/api/homePage", homePageRoutes);
+app.use("/api/ourstory", ourStoryRoutes);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/contact", contactRoutes);
