@@ -22,7 +22,7 @@ const {
  *   get:
  *     summary: Retrieves all data for the homepage
  *     tags:
- *       - homepage
+ *       - Home Page
  *     responses:
  *       200:
  *         description: Successfully retrieved all homepage data
@@ -170,7 +170,7 @@ router.post("/banner", createBanner);
  *   put:
  *     summary: Updates a banner on the homepage
  *     tags:
- *       - homepage
+ *       - Home Page
  *     parameters:
  *       - in: path
  *         name: id
@@ -210,7 +210,7 @@ router.post("/ourActivitiesSection", createActivitiesSection);
  *   put:
  *     summary: Updates an activity section
  *     tags:
- *       - homepage
+ *       - Home Page
  *     parameters:
  *       - in: query
  *         name: titleId
@@ -284,7 +284,7 @@ router.post("/discountCoupon", createDiscountCoupon);
  *   put:
  *     summary: Updates a discount coupon
  *     tags:
- *       - homepage
+ *       - Home Page
  *     parameters:
  *       - in: path
  *         name: id
@@ -355,7 +355,7 @@ router.post("/welcomeSection", createWelcomeSection);
  *   put:
  *     summary: Updates a welcome section
  *     tags:
- *       - homepage
+ *       - Home Page
  *     parameters:
  *       - in: path
  *         name: id
@@ -420,7 +420,7 @@ router.post("/whatSetsApart", createWhatSetsApartSection);
  *   put:
  *     summary: Updates the "What Sets Us Apart" section
  *     tags:
- *       - homepage
+ *       - Home Page
  *     parameters:
  *       - in: query
  *         name: titleId
@@ -488,7 +488,7 @@ router.post("/wonderlandSection", createWonderlandSection);
  *   put:
  *     summary: Updates a Wonderland section
  *     tags:
- *       - homepage
+ *       - Home Page
  *     parameters:
  *       - in: path
  *         name: id
@@ -552,7 +552,7 @@ router.put("/wonderlandSection/:id", updateWonderlandSection);
  *   post:
  *     summary: Creates a new carousel image or updates existing ones
  *     tags:
- *       - homepage
+ *       - Home Page
  *     requestBody:
  *       required: true
  *       content:
@@ -573,7 +573,7 @@ router.put("/wonderlandSection/:id", updateWonderlandSection);
  *             schema:
  *               type: object
  *               properties:
- *                 imgUrls:
+ *                 images:
  *                   type: array
  *                   items:
  *                     type: string
@@ -583,7 +583,7 @@ router.put("/wonderlandSection/:id", updateWonderlandSection);
  *   put:
  *     summary: Updates a carousel image by index
  *     tags:
- *       - homepage
+ *       - Home Page
  *     parameters:
  *       - in: query
  *         name: index
@@ -609,7 +609,7 @@ router.put("/wonderlandSection/:id", updateWonderlandSection);
  *             schema:
  *               type: object
  *               properties:
- *                 imgUrls:
+ *                 images:
  *                   type: array
  *                   items:
  *                     type: string

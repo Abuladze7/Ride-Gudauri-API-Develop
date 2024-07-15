@@ -2,6 +2,7 @@ const HowStartedSection = require("../models/our-story/startedSectionModel");
 const HowStartedMiddleSections = require("../models/our-story/startedMiddleSectionsModel");
 const BeginningOfParaglidingSection = require("../models/our-story/beginningOfParaglidingModel");
 const OurStoryBanner = require("../models/our-story/bannerModel");
+const OurStoryCarouselImages = require("../models/our-story/ourStoryImageCarouselModel");
 
 // ========== Banner ========== //
 
@@ -147,6 +148,55 @@ exports.updateParaglidingSection = async (req, res) => {
   }
 };
 
+// ========== Carousel Images ========== //
+
+exports.createOurStoryCarouselImage = async (req, res) => {
+  try {
+    const { imgUrls } = req.body;
+    let carouselImages = await OurStoryCarouselImages.findOne();
+    if (!carouselImages) {
+      carouselImages = await OurStoryCarouselImages.create({
+        images: [...imgUrls],
+      });
+      return res.status(201).json(carouselImages);
+    }
+
+    if (!Array.isArray(imgUrls) && typeof imgUrls === "string") {
+      carouselImages.images.push(imgUrls);
+      const updatedCarouselImages = await carouselImages.save();
+      return res.status(201).json(updatedCarouselImages);
+    }
+
+    carouselImages.images = [...carouselImages.images, ...imgUrls];
+    const updatedCarouselImages = await carouselImages.save();
+    res.status(201).json(updatedCarouselImages);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.updateOurStoryCarouselImage = async (req, res) => {
+  try {
+    const { index } = req.query;
+    const { imgUrl } = req.body;
+
+    let carouselImages;
+    if (index) {
+      const images = await OurStoryCarouselImages.findOne();
+      if (index > images.images.length - 1 || index < 0) {
+        return res.status(400).json({ message: "Invalid index" });
+      }
+
+      images.images[index] = imgUrl;
+      carouselImages = await images.save();
+    }
+
+    res.status(200).json(carouselImages);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 exports.getAllData = async (req, res) => {
   try {
     const banner = await OurStoryBanner.findOne();
@@ -155,11 +205,14 @@ exports.getAllData = async (req, res) => {
     const beginningOfParaglidingSection =
       await BeginningOfParaglidingSection.findOne();
 
+    const carouselImages = await OurStoryCarouselImages.findOne();
+
     const ourStory = {
       banner,
       howStartedSection,
       middleSections,
       beginningOfParaglidingSection,
+      carouselImages,
     };
 
     res.json(ourStory);

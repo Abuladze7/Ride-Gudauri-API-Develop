@@ -9,6 +9,8 @@ const {
   createBanner,
   updateBanner,
   addImageToBanner,
+  createOurStoryCarouselImage,
+  updateOurStoryCarouselImage,
 } = require("../controllers/ourStoryControllers");
 
 const router = require("express").Router();
@@ -560,5 +562,81 @@ router.post("/howItStartedMiddleSection/:id", updateHowStartedMiddleSection);
  */
 router.post("/beginningOfParagliding", createParaglidingSection);
 router.post("/beginningOfParagliding/:id", updateParaglidingSection);
+
+// ========== Carousel Images ========== //
+/**
+ * @swagger
+ * /api/ourstory/carouselImages:
+ *   post:
+ *     summary: Creates a new carousel image or updates existing ones
+ *     tags:
+ *       - Our Story
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               imgUrls:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: The URLs of the images to be added to the carousel
+ *     responses:
+ *       201:
+ *         description: Successfully created or updated carousel images
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 images:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *       500:
+ *         description: Internal server error
+ *
+ *   put:
+ *     summary: Updates a carousel image by index
+ *     tags:
+ *       - Our Story
+ *     parameters:
+ *       - in: query
+ *         name: index
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The index of the image to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               imgUrl:
+ *                 type: string
+ *                 description: The new URL of the image
+ *     responses:
+ *       200:
+ *         description: Successfully updated the carousel image
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 images:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *       400:
+ *         description: Invalid index
+ *       500:
+ *         description: Internal server error
+ */
+router.post("/carouselImages", createOurStoryCarouselImage);
+router.put("/carouselImages", updateOurStoryCarouselImage);
 
 module.exports = router;

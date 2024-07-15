@@ -269,21 +269,22 @@ exports.updateWonderlandSection = async (req, res) => {
 
 exports.createCarouselImage = async (req, res) => {
   try {
+    const { imgUrls } = req.body;
     let carouselImages = await HomepageCarouselImages.findOne();
     if (!carouselImages) {
-      carouselImages = await HomepageCarouselImages.create(req.body);
+      carouselImages = await HomepageCarouselImages.create({
+        images: [...imgUrls],
+      });
       return res.status(201).json(carouselImages);
     }
 
-    const { imgUrls } = req.body;
-
     if (!Array.isArray(imgUrls) && typeof imgUrls === "string") {
-      carouselImages.imgUrls.push(imgUrls);
+      carouselImages.images.push(imgUrls);
       const updatedCarouselImages = await carouselImages.save();
       return res.status(201).json(updatedCarouselImages);
     }
 
-    carouselImages.imgUrls = [...carouselImages.imgUrls, ...imgUrls];
+    carouselImages.images = [...carouselImages.images, ...imgUrls];
     const updatedCarouselImages = await carouselImages.save();
     res.status(201).json(updatedCarouselImages);
   } catch (err) {
@@ -299,11 +300,11 @@ exports.updateCarouselImage = async (req, res) => {
     let carouselImages;
     if (index) {
       const images = await HomepageCarouselImages.findOne();
-      if (index > images.imgUrls.length - 1 || index < 0) {
+      if (index > images.images.length - 1 || index < 0) {
         return res.status(400).json({ message: "Invalid index" });
       }
 
-      images.imgUrls[index] = imgUrl;
+      images.images[index] = imgUrl;
       carouselImages = await images.save();
     }
 
