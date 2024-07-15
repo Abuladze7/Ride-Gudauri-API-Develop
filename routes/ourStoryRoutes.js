@@ -451,7 +451,7 @@ router.put("/howItStartedSection/:id", updateHowStartedSection);
  *         description: Internal server error
  */
 router.post("/howItStartedMiddleSection", createHowStartedMiddleSections);
-router.post("/howItStartedMiddleSection/:id", updateHowStartedMiddleSection);
+router.put("/howItStartedMiddleSection/:id", updateHowStartedMiddleSection);
 
 // ========== The Beginning of Paragliding ========== //
 
@@ -561,7 +561,7 @@ router.post("/howItStartedMiddleSection/:id", updateHowStartedMiddleSection);
  *         description: Internal server error
  */
 router.post("/beginningOfParagliding", createParaglidingSection);
-router.post("/beginningOfParagliding/:id", updateParaglidingSection);
+router.put("/beginningOfParagliding/:id", updateParaglidingSection);
 
 // ========== Carousel Images ========== //
 /**
