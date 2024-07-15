@@ -22,16 +22,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 const corsOptions = {
-  origin: [
-    "http://localhost:3000/",
-    "http://localhost:3001/",
-    "https://www.ridegudauri.ge/",
-    "https://ridegudauri.ge/",
-    "https://admin.ridegudauri.ge/",
-    "https://api.ridegudauri.ge/",
-    "https://admin.ridegudauri.ge/",
-    "https://admin.ridegudauri.com/",
-  ],
+  origin: ["http://localhost:3000/", "http://localhost:3001/"],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
   optionsSuccessStatus: 204,
