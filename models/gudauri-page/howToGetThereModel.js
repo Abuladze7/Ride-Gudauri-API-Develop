@@ -13,4 +13,7 @@ const howToGetThereSchema = new Schema(
   }
 );
 
-module.exports = mongoose.model("HowToGetThereSection", howToGetThereSchema);
+module.exports = mongoose.model(
+  "GudauriHowToGetThereSection",
+  howToGetThereSchema
+);

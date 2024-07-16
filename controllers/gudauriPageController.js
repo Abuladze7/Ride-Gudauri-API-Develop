@@ -3,7 +3,7 @@ const GudauriWonderlandSection = require("../models/gudauri-page/wonderlandSecti
 const PlanTripSection = require("../models/gudauri-page/planTripSectionModel");
 const WhyGudauriSection = require("../models/gudauri-page/whyGudauriSection");
 const GudauriSpiritSection = require("../models/gudauri-page/gudauriSpiritModel");
-const HowToGetThereSection = require("../models/gudauri-page/howToGetThereModel");
+const GudauriHowToGetThereSection = require("../models/gudauri-page/howToGetThereModel");
 
 // ========== Banner ========== //
 
@@ -189,7 +189,9 @@ exports.updateGudauriSpiritSection = async (req, res) => {
 
 exports.createHowToGetThereSection = async (req, res) => {
   try {
-    const howToGetThereSection = await HowToGetThereSection.create(req.body);
+    const howToGetThereSection = await GudauriHowToGetThereSection.create(
+      req.body
+    );
 
     res.status(201).json(howToGetThereSection);
   } catch (err) {
@@ -199,11 +201,12 @@ exports.createHowToGetThereSection = async (req, res) => {
 
 exports.updateHowToGetThereSection = async (req, res) => {
   try {
-    const howToGetThereSection = await HowToGetThereSection.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true }
-    );
+    const howToGetThereSection =
+      await GudauriHowToGetThereSection.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        { new: true, runValidators: true }
+      );
 
     if (!howToGetThereSection) {
       return res
