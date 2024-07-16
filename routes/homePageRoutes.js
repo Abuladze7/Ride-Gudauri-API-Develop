@@ -560,7 +560,7 @@ router.put("/wonderlandSection/:id", updateWonderlandSection);
  *           schema:
  *             type: object
  *             properties:
- *               imgUrls:
+ *               images:
  *                 type: array
  *                 items:
  *                   type: string

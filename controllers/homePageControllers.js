@@ -269,22 +269,22 @@ exports.updateWonderlandSection = async (req, res) => {
 
 exports.createCarouselImage = async (req, res) => {
   try {
-    const { imgUrls } = req.body;
+    const { images } = req.body;
     let carouselImages = await HomepageCarouselImages.findOne();
     if (!carouselImages) {
       carouselImages = await HomepageCarouselImages.create({
-        images: [...imgUrls],
+        images: [...images],
       });
       return res.status(201).json(carouselImages);
     }
 
-    if (!Array.isArray(imgUrls) && typeof imgUrls === "string") {
-      carouselImages.images.push(imgUrls);
+    if (!Array.isArray(images) && typeof images === "string") {
+      carouselImages.images.push(images);
       const updatedCarouselImages = await carouselImages.save();
       return res.status(201).json(updatedCarouselImages);
     }
 
-    carouselImages.images = [...carouselImages.images, ...imgUrls];
+    carouselImages.images = [...carouselImages.images, ...images];
     const updatedCarouselImages = await carouselImages.save();
     res.status(201).json(updatedCarouselImages);
   } catch (err) {

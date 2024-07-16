@@ -13,6 +13,8 @@ const {
   updateGudauriSpiritSection,
   createHowToGetThereSection,
   updateHowToGetThereSection,
+  createGudauriCarouselImage,
+  updateGudauriCarouselImage,
 } = require("../controllers/gudauriPageController");
 
 const router = require("express").Router();
@@ -824,5 +826,87 @@ router.put("/spiritSection/:id", updateGudauriSpiritSection);
  */
 router.post("/howtoget", createHowToGetThereSection);
 router.put("/howtoget/:id", updateHowToGetThereSection);
+
+// ========== Carousel Images ========== //
+/**
+ * @swagger
+ * /api/gudauriPage/carouselImage:
+ *   post:
+ *     summary: Creates or adds images to the Gudauri carousel
+ *     tags:
+ *       - Gudauri Page
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               images:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: The image URLs to add to the carousel
+ *                 example: ["string1", "string2"]
+ *     responses:
+ *       201:
+ *         description: Successfully created or updated the carousel images
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                 images:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *       500:
+ *         description: Internal server error
+ *
+ *   put:
+ *     summary: Updates an image in the Gudauri carousel
+ *     tags:
+ *       - Gudauri Page
+ *     parameters:
+ *       - in: query
+ *         name: index
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The index of the image to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               imgUrl:
+ *                 type: string
+ *                 description: The new image URL
+ *                 example: "string"
+ *     responses:
+ *       200:
+ *         description: Successfully updated the carousel image
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                 images:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *       400:
+ *         description: Invalid index
+ *       500:
+ *         description: Internal server error
+ */
+router.post("/carouselImage", createGudauriCarouselImage);
+router.put("/carouselImage", updateGudauriCarouselImage);
 
 module.exports = router;

@@ -4,6 +4,7 @@ const PlanTripSection = require("../models/gudauri-page/planTripSectionModel");
 const WhyGudauriSection = require("../models/gudauri-page/whyGudauriSection");
 const GudauriSpiritSection = require("../models/gudauri-page/gudauriSpiritModel");
 const GudauriHowToGetThereSection = require("../models/gudauri-page/howToGetThereModel");
+const GudauriImageCarousel = require("../models/gudauri-page/gudauriImageCarousel");
 
 // ========== Banner ========== //
 
@@ -220,6 +221,55 @@ exports.updateHowToGetThereSection = async (req, res) => {
   }
 };
 
+// ========== Carousel Images ========== //
+
+exports.createGudauriCarouselImage = async (req, res) => {
+  try {
+    const { images } = req.body;
+    let carouselImages = await GudauriImageCarousel.findOne();
+    if (!carouselImages) {
+      carouselImages = await GudauriImageCarousel.create({
+        images: [...images],
+      });
+      return res.status(201).json(carouselImages);
+    }
+
+    if (!Array.isArray(images) && typeof images === "string") {
+      carouselImages.images.push(images);
+      const updatedCarouselImages = await carouselImages.save();
+      return res.status(201).json(updatedCarouselImages);
+    }
+
+    carouselImages.images = [...carouselImages.images, ...images];
+    const updatedCarouselImages = await carouselImages.save();
+    res.status(201).json(updatedCarouselImages);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.updateGudauriCarouselImage = async (req, res) => {
+  try {
+    const { index } = req.query;
+    const { imgUrl } = req.body;
+
+    let carouselImages;
+    if (index) {
+      const images = await GudauriImageCarousel.findOne();
+      if (index > images.images.length - 1 || index < 0) {
+        return res.status(400).json({ message: "Invalid index" });
+      }
+
+      images.images[index] = imgUrl;
+      carouselImages = await images.save();
+    }
+
+    res.status(200).json(carouselImages);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 exports.getAllData = async (req, res) => {
   try {
     const banner = await GudauriBanner.findOne();
@@ -227,7 +277,8 @@ exports.getAllData = async (req, res) => {
     const planTripSection = await PlanTripSection.findOne();
     const whyGudauriSection = await WhyGudauriSection.find();
     const spiritSection = await GudauriSpiritSection.findOne();
-    const howToGetThereSection = await HowToGetThereSection.findOne();
+    const howToGetThereSection = await GudauriHowToGetThereSection.findOne();
+    const carouselImages = await GudauriImageCarousel.findOne();
 
     const gudauriPage = {
       banner,
@@ -236,6 +287,7 @@ exports.getAllData = async (req, res) => {
       whyGudauriSection,
       spiritSection,
       howToGetThereSection,
+      carouselImages,
     };
 
     res.status(200).json(gudauriPage);
