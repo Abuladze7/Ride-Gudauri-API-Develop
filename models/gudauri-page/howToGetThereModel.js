@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const howToGetThereSchema = new Schema(
   {
     title: { type: String, required: true },
-    subTitle: { type: String, required: true },
+    subtitle: { type: String, required: true },
     description: { type: String, required: true },
   },
   {

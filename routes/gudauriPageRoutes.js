@@ -735,7 +735,7 @@ router.put("/spiritSection/:id", updateGudauriSpiritSection);
  *                 type: string
  *                 description: The title of the section
  *                 example: "string"
- *               subTitle:
+ *               subtitle:
  *                 type: string
  *                 description: The subtitle of the section
  *                 example: "string"
@@ -755,7 +755,7 @@ router.put("/spiritSection/:id", updateGudauriSpiritSection);
  *                   type: string
  *                 title:
  *                   type: string
- *                 subTitle:
+ *                 subtitle:
  *                   type: string
  *                 description:
  *                   type: string
@@ -789,7 +789,7 @@ router.put("/spiritSection/:id", updateGudauriSpiritSection);
  *                 type: string
  *                 description: The title of the section
  *                 example: "string"
- *               subTitle:
+ *               subtitle:
  *                 type: string
  *                 description: The subtitle of the section
  *                 example: "string"
@@ -809,7 +809,7 @@ router.put("/spiritSection/:id", updateGudauriSpiritSection);
  *                   type: string
  *                 title:
  *                   type: string
- *                 subTitle:
+ *                 subtitle:
  *                   type: string
  *                 description:
  *                   type: string
