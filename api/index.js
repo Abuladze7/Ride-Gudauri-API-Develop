@@ -12,6 +12,7 @@ const allDataRoutes = require("../routes/getalldataRoutes");
 const activitiesManagement = require("../routes/activitiesmanagementRoutes");
 const homePageRoutes = require("../routes/homePageRoutes");
 const ourStoryRoutes = require("../routes/ourStoryRoutes");
+const gudauriPageRoutes = require("../routes/gudauriPageRoutes");
 const { swaggerUi, specs, CSS_URL, customCss } = require("../config/swagger");
 
 connectDB();
@@ -51,6 +52,7 @@ app.use(
 
 app.use("/api/homePage", homePageRoutes);
 app.use("/api/ourstory", ourStoryRoutes);
+app.use("/api/gudauriPage", gudauriPageRoutes);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/contact", contactRoutes);

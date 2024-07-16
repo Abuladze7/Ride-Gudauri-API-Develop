@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const wonderlandSectionModel = new Schema(
+const gudauriSpiritSchema = new Schema(
   {
     title: { type: String, required: true },
     subtitle: { type: String, required: true },
@@ -13,7 +13,4 @@ const wonderlandSectionModel = new Schema(
   }
 );
 
-module.exports = mongoose.model(
-  "GudauriWonderlandSection",
-  wonderlandSectionModel
-);
+module.exports = mongoose.model("GudauriSpiritSection", gudauriSpiritSchema);
