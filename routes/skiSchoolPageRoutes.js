@@ -336,9 +336,9 @@ router.get("/", getAllData);
  *       500:
  *         description: Internal server error
  */
-router.post("/bannerSection", createSkiSchoolPageBanner);
-router.post("/bannerSection/add-image", addImageToBanner);
-router.put("/bannerSection/:id", updateSkiSchoolPageBanner);
+router.post("/banner", createSkiSchoolPageBanner);
+router.post("/banner/add-image", addImageToBanner);
+router.put("/banner/:id", updateSkiSchoolPageBanner);
 
 // ========== About ========== //
 /**
