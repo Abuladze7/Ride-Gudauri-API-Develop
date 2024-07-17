@@ -840,13 +840,118 @@ router.post("/benefitsSection", createSkiSchoolPageBenefits);
 router.put("/benefitsSection", updateSkiSchoolPageBenefits);
 
 // ========== Ski School Rental Section ========== //
+/**
+ * @swagger
+ * /api/skiSchoolPage/rentalShopSection:
+ *   post:
+ *     summary: Creates a new Rental Shop section
+ *     tags:
+ *       - Ski School Page
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: The title of the section
+ *                 example: "string"
+ *               subtitle:
+ *                 type: string
+ *                 description: The subtitle of the section
+ *                 example: "string"
+ *               imgUrl:
+ *                 type: string
+ *                 description: The image URL of the section
+ *                 example: "string"
+ *     responses:
+ *       201:
+ *         description: Successfully created the section
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                 title:
+ *                   type: string
+ *                 subtitle:
+ *                   type: string
+ *                 imgUrl:
+ *                   type: string
+ *                 createdAt:
+ *                   type: string
+ *                 updatedAt:
+ *                   type: string
+ *       500:
+ *         description: Internal server error
+ *
+ * /api/skiSchoolPage/rentalShopSection/{id}:
+ *   put:
+ *     summary: Updates an existing Rental Shop section
+ *     tags:
+ *       - Ski School Page
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the section to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: The title of the section
+ *                 example: "string"
+ *               subtitle:
+ *                 type: string
+ *                 description: The subtitle of the section
+ *                 example: "string"
+ *               imgUrl:
+ *                 type: string
+ *                 description: The image URL of the section
+ *                 example: "string"
+ *     responses:
+ *       200:
+ *         description: Successfully updated the section
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                 title:
+ *                   type: string
+ *                 subtitle:
+ *                   type: string
+ *                 imgUrl:
+ *                   type: string
+ *                 createdAt:
+ *                   type: string
+ *                 updatedAt:
+ *                   type: string
+ *       404:
+ *         description: Section not found
+ *       500:
+ *         description: Internal server error
+ */
 router.post("/rentalShopSection", createSkiSchoolRentalShopSection);
 router.put("/rentalShopSection/:id", updateSkiSchoolRentalShopSection);
 
 // ========== Ski School Repair Section ========== //
 /**
  * @swagger
- * /api/skiSchoolPage/rentalShopSection:
+ * /api/skiSchoolPage/repairSection:
  *   post:
  *     summary: Creates a new Ski School Page Rental Shop section
  *     tags:
@@ -893,7 +998,7 @@ router.put("/rentalShopSection/:id", updateSkiSchoolRentalShopSection);
  *       500:
  *         description: Internal server error
  *
- * /api/skiSchoolPage/rentalShopSection/{id}:
+ * /api/skiSchoolPage/repairSection/{id}:
  *   put:
  *     summary: Updates an existing Ski School Page Rental Shop section
  *     tags:
