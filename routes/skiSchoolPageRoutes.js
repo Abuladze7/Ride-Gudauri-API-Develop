@@ -720,7 +720,7 @@ router.put("/groupLesson", updateSkiSchoolPrivateGroupLesson);
 // ========== Ski School Benefits ========== //
 /**
  * @swagger
- * /api/skiSchoolPage/benefits:
+ * /api/skiSchoolPage/benefitsSection:
  *   post:
  *     summary: Creates a new Ski School Page Benefits section
  *     tags:
