@@ -14,7 +14,122 @@ const {
 const router = require("express").Router();
 
 // =========== All Data ============ //
-
+/**
+ * @swagger
+ * /api/paraglidingPage:
+ *   get:
+ *     summary: Get all data for the Paragliding Page
+ *     tags:
+ *       - Paragliding Page
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved all data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 banner:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                       example: "string"
+ *                     subtitle:
+ *                       type: string
+ *                       example: "string"
+ *                     images:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                       example: ["string", "string", "string"]
+ *                     createdAt:
+ *                       type: string
+ *                       example: "string"
+ *                     updatedAt:
+ *                       type: string
+ *                       example: "string"
+ *                 mainSection:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                       example: "string"
+ *                     title:
+ *                       type: string
+ *                       example: "string"
+ *                     subtitle:
+ *                       type: string
+ *                       example: "string"
+ *                     imgUrl:
+ *                       type: string
+ *                       example: "string"
+ *                     createdAt:
+ *                       type: string
+ *                       example: "string"
+ *                     updatedAt:
+ *                       type: string
+ *                       example: "string"
+ *                 formSection:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                       example: "string"
+ *                     title:
+ *                       type: string
+ *                       example: "string"
+ *                     subtitle:
+ *                       type: string
+ *                       example: "string"
+ *                     items:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           description:
+ *                             type: string
+ *                             example: "string"
+ *                           imgUrl:
+ *                             type: string
+ *                             example: "string"
+ *                           _id:
+ *                             type: string
+ *                             example: "string"
+ *                     createdAt:
+ *                       type: string
+ *                       example: "string"
+ *                     updatedAt:
+ *                       type: string
+ *                       example: "string"
+ *                 carouselImages:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                       example: "string"
+ *                     images:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                       example: ["string", "string", "string", "string", "string", "string"]
+ *                     createdAt:
+ *                       type: string
+ *                       example: "string"
+ *                     updatedAt:
+ *                       type: string
+ *                       example: "string"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "string"
+ */
 router.get("/", getAllData);
 
 // ========== Banner ============ //
