@@ -253,9 +253,11 @@ exports.updateGudauriCarouselImage = async (req, res) => {
     const { index } = req.query;
     const { imgUrl } = req.body;
 
+    const images = await GudauriImageCarousel.findOne();
+    if (!images) return res.status(404).json({ message: "Images not found" });
+
     let carouselImages;
     if (index) {
-      const images = await GudauriImageCarousel.findOne();
       if (index > images.images.length - 1 || index < 0) {
         return res.status(400).json({ message: "Invalid index" });
       }
