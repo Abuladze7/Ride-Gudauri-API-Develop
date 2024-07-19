@@ -193,7 +193,7 @@ router.get("/", getAllData);
 // ========== Banner ========== //
 /**
  * @swagger
- * /api/skiSchoolPage/bannerSection:
+ * /api/skiSchoolPage/banner:
  *   post:
  *     summary: Creates a new Ski School Page Banner section
  *     tags:
@@ -238,7 +238,7 @@ router.get("/", getAllData);
  *       500:
  *         description: Internal server error
  *
- * /api/skiSchoolPage/bannerSection/add-image:
+ * /api/skiSchoolPage/banner/add-image:
  *   post:
  *     summary: Adds an image to the existing Ski School Page Banner
  *     tags:
@@ -279,7 +279,7 @@ router.get("/", getAllData);
  *       500:
  *         description: Internal server error
  *
- * /api/skiSchoolPage/bannerSection/{id}:
+ * /api/skiSchoolPage/banner/{id}:
  *   put:
  *     summary: Updates an existing Ski School Page Banner
  *     tags:
