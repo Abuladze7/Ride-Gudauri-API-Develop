@@ -333,13 +333,17 @@ exports.updateOtherActivitiesCarouselImage = async (req, res) => {
 
 exports.getAllData = async (req, res) => {
   try {
-    const banner = await OtherActivitiesPageBanner.findOne();
-    const mainSection = await OtherActivitiesPageMainSection.findOne();
-    const transfersForm = await OtherActivitiesPageTransfersForm.findOne();
-    const snowMobileForm = await OtherActivitiesPageSnowMobileForm.findOne();
-    const horseRidingForm = await OtherActivitiesPageHorseRidingForm.findOne();
-    const quadBikeForm = await OtherActivitiesPageQuadBikeForm.findOne();
-    const carouselImages = await OtherActivitiesPageCarouselImages.findOne();
+    const banner = await OtherActivitiesPageBanner.findOne().lean();
+    const mainSection = await OtherActivitiesPageMainSection.findOne().lean();
+    const transfersForm =
+      await OtherActivitiesPageTransfersForm.findOne().lean();
+    const snowMobileForm =
+      await OtherActivitiesPageSnowMobileForm.findOne().lean();
+    const horseRidingForm =
+      await OtherActivitiesPageHorseRidingForm.findOne().lean();
+    const quadBikeForm = await OtherActivitiesPageQuadBikeForm.findOne().lean();
+    const carouselImages =
+      await OtherActivitiesPageCarouselImages.findOne().lean();
 
     const activities = {
       transfersForm,
