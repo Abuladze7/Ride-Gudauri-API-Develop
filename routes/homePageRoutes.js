@@ -146,7 +146,7 @@ const {
  *                   properties:
  *                     _id:
  *                       type: string
- *                     imgUrls:
+ *                     images:
  *                       type: array
  *                       items:
  *                         type: string
