@@ -1,0 +1,36 @@
+[{
+  "_id": {
+    "$oid": "669a655888bb80bc2ae0e649"
+  },
+  "title": "General",
+  "createdAt": {
+    "$date": "2024-07-19T13:08:40.854Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-19T13:09:07.002Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "669df3d830e857ca65fb3f05"
+  },
+  "title": "Ski school",
+  "createdAt": {
+    "$date": "2024-07-22T05:53:28.274Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-22T05:53:28.274Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "669df9a00e83df735878f929"
+  },
+  "title": "Paragliding",
+  "createdAt": {
+    "$date": "2024-07-22T06:18:08.684Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-22T06:18:08.684Z"
+  }
+}]

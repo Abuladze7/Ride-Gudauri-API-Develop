@@ -16,6 +16,7 @@ const gudauriPageRoutes = require("../routes/gudauriPageRoutes");
 const skiSchoolPageRoutes = require("../routes/skiSchoolPageRoutes");
 const paraglidingPageRoutes = require("../routes/paraglidingPageRoutes");
 const otherActivitiesPageRoutes = require("../routes/otherActivitiesPageRoutes");
+const contactPageRoutes = require("../routes/contactPageRoutes");
 const { swaggerUi, specs, CSS_URL, customCss } = require("../config/swagger");
 
 connectDB();
@@ -59,6 +60,7 @@ app.use("/api/gudauriPage", gudauriPageRoutes);
 app.use("/api/skiSchoolPage", skiSchoolPageRoutes);
 app.use("/api/paraglidingPage", paraglidingPageRoutes);
 app.use("/api/otherActivitiesPage", otherActivitiesPageRoutes);
+app.use("/api/contactPage", contactPageRoutes);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/contact", contactRoutes);

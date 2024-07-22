@@ -1,0 +1,82 @@
+[
+  {
+    "_id": { "$oid": "669a74f5345907206447d230" },
+    "question": "How do I book activities with Ride Gudauri?",
+    "answer": "Booking with Ride Gudauri is easy. Simply visit our website and fill out the reservation form with your preferred activity, date, and time. Our team will confirm your reservation details through email or phone.",
+    "titleId": { "$oid": "669a655888bb80bc2ae0e649" },
+    "createdAt": { "$date": "2024-07-19T14:15:17.910Z" },
+    "updatedAt": { "$date": "2024-07-22T05:57:25.019Z" }
+  },
+  {
+    "_id": { "$oid": "669df4fd490628109a2e4ab1" },
+    "question": "Can I book multiple activities in one reservation??",
+    "answer": "Booking with Ride Gudauri is easy. Simply visit our website and fill out the reservation form with your preferred activity, date, and time. Our team will confirm your reservation details through email or phone.",
+    "titleId": { "$oid": "669a655888bb80bc2ae0e649" },
+    "createdAt": { "$date": "2024-07-22T05:58:21.931Z" },
+    "updatedAt": { "$date": "2024-07-22T05:58:21.931Z" }
+  },
+  {
+    "_id": { "$oid": "669df51a490628109a2e4ab6" },
+    "question": "What should I wear and bring for my outdoor activities?",
+    "answer": "Dress appropriately for the activity and weather conditions. For skiing, wear layers and bring waterproof clothing. If you're paragliding, wear comfortable clothing. Specific requirements will be provided upon reservation.",
+    "titleId": { "$oid": "669a655888bb80bc2ae0e649" },
+    "createdAt": { "$date": "2024-07-22T05:58:50.428Z" },
+    "updatedAt": { "$date": "2024-07-22T05:58:50.428Z" }
+  },
+  {
+    "_id": { "$oid": "669df52f490628109a2e4ab9" },
+    "question": "Is prior experience required for activities?",
+    "answer": "No prior experience is necessary for most activities. Our certified instructors and guides cater to all skill levels, ensuring a safe and enjoyable experience for everyone.",
+    "titleId": { "$oid": "669a655888bb80bc2ae0e649" },
+    "createdAt": { "$date": "2024-07-22T05:59:11.023Z" },
+    "updatedAt": { "$date": "2024-07-22T05:59:11.023Z" }
+  },
+  {
+    "_id": { "$oid": "669df6c20e83df735878f8f4" },
+    "question": "What happens in case of bad weather on the day of my reservation?",
+    "answer": "Your safety is our priority. In case of unfavorable weather conditions, we may need to reschedule or, if necessary, cancel the activity. We'll communicate any changes well in advance.",
+    "titleId": { "$oid": "669a655888bb80bc2ae0e649" },
+    "createdAt": { "$date": "2024-07-22T06:05:54.705Z" },
+    "updatedAt": { "$date": "2024-07-22T06:05:54.705Z" }
+  },
+  {
+    "_id": { "$oid": "669df6d30e83df735878f8f7" },
+    "question": "Can I rent equipment from Ride Gudauri?",
+    "answer": "Yes, we offer equipment rentals for various activities. Skiing, paragliding, and other necessary gear can be rented from our on-site facilities.",
+    "titleId": { "$oid": "669a655888bb80bc2ae0e649" },
+    "createdAt": { "$date": "2024-07-22T06:06:11.651Z" },
+    "updatedAt": { "$date": "2024-07-22T06:06:11.651Z" }
+  },
+  {
+    "_id": { "$oid": "669df6e70e83df735878f8fa" },
+    "question": "How do I pay for my lesson, tour, or equipment rental?",
+    "answer": "Payment is made in person at the meeting spot before the activity begins. We accept cash and credit/debit cards. Please check with our team for specific payment details related to your reservation.",
+    "titleId": { "$oid": "669a655888bb80bc2ae0e649" },
+    "createdAt": { "$date": "2024-07-22T06:06:31.924Z" },
+    "updatedAt": { "$date": "2024-07-22T06:06:31.924Z" }
+  },
+  {
+    "_id": { "$oid": "669df6fa0e83df735878f8fd" },
+    "question": "Is there an age limit for activities?",
+    "answer": "Ride Gudauri welcomes participants of all ages. Specific age requirements for each activity will be provided upon reservation.",
+    "titleId": { "$oid": "669a655888bb80bc2ae0e649" },
+    "createdAt": { "$date": "2024-07-22T06:06:50.418Z" },
+    "updatedAt": { "$date": "2024-07-22T06:06:50.418Z" }
+  },
+  {
+    "_id": { "$oid": "669df70a0e83df735878f900" },
+    "question": "Can I bring my own equipment?",
+    "answer": "Yes, you're welcome to bring your own equipment. However, if you need to rent, we provide high-quality gear to ensure a comfortable and enjoyable experience.",
+    "titleId": { "$oid": "669a655888bb80bc2ae0e649" },
+    "createdAt": { "$date": "2024-07-22T06:07:06.097Z" },
+    "updatedAt": { "$date": "2024-07-22T06:07:06.097Z" }
+  },
+  {
+    "_id": { "$oid": "669df71d0e83df735878f903" },
+    "question": "How do I get in touch with Ride Gudauri for additional questions or concerns?",
+    "answer": "If you have any further inquiries, feel free to contact our team through the provided contact information on our website. We're here to assist you and make your experience with Ride Gudauri memorable.",
+    "titleId": { "$oid": "669a655888bb80bc2ae0e649" },
+    "createdAt": { "$date": "2024-07-22T06:07:25.039Z" },
+    "updatedAt": { "$date": "2024-07-22T06:07:25.039Z" }
+  }
+]
