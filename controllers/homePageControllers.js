@@ -19,15 +19,11 @@ exports.createBanner = async (req, res) => {
 
 exports.updateBanner = async (req, res) => {
   try {
-    const updatedBanner = await Banner.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
-    res.status(200).json(updatedBanner);
+    await Banner.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    res.status(200).json({ message: "Banner updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
