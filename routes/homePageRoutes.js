@@ -205,23 +205,17 @@ router.put("/banner/:id", updateBanner);
 router.post("/ourActivitiesSection", createActivitiesSection);
 /**
  * @swagger
- * title: homepage
  * /api/homepage/ourActivitiesSection:
  *   put:
- *     summary: Updates an activity section
+ *     summary: Updates the "Our Activities" section
  *     tags:
  *       - Home Page
  *     parameters:
  *       - in: query
- *         name: titleId
- *         schema:
- *           type: string
- *         description: The ID of the activity section title to update
- *       - in: query
  *         name: itemId
  *         schema:
  *           type: string
- *         description: The ID of the activity item to update
+ *         description: The ID of the item to update
  *     requestBody:
  *       required: true
  *       content:
@@ -231,44 +225,77 @@ router.post("/ourActivitiesSection", createActivitiesSection);
  *             properties:
  *               sectionTitle:
  *                 type: string
- *                 description: The new title for the activity section
+ *                 description: The new title for the section
+ *                 example: "string"
  *               itemTitle:
  *                 type: string
- *                 description: The new title for the activity item
+ *                 description: The new title for the item
+ *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The new subtitle for the activity item
+ *                 description: The new subtitle for the item
+ *                 example: "string"
  *               imgUrl:
  *                 type: string
- *                 description: The new image URL for the activity item
+ *                 description: The new image URL for the item
+ *                 example: "string"
  *     responses:
  *       200:
- *         description: Successfully updated the activity section
+ *         description: Successfully updated the section
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
+ *                 _id:
+ *                   type: string
+ *                   example: "string"
  *                 title:
  *                   type: string
- *                   description: The updated title of the activity section
- *                 item:
- *                   type: object
- *                   properties:
- *                     _id:
- *                       type: string
- *                     title:
- *                       type: string
- *                     subtitle:
- *                       type: string
- *                     imgUrl:
- *                       type: string
- *       400:
- *         description: Invalid ID supplied
+ *                   example: "string"
+ *                 items:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       _id:
+ *                         type: string
+ *                         example: "string"
+ *                       title:
+ *                         type: string
+ *                         example: "string"
+ *                       subtitle:
+ *                         type: string
+ *                         example: "string"
+ *                       imgUrl:
+ *                         type: string
+ *                         example: "string"
+ *                 createdAt:
+ *                   type: string
+ *                   example: "string"
+ *                 updatedAt:
+ *                   type: string
+ *                   example: "string"
  *       404:
- *         description: Activity section or item not found
+ *         description: Section or item not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "string"
  *       500:
  *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "string"
  */
 router.put("/ourActivitiesSection", updateActivitySection);
 
