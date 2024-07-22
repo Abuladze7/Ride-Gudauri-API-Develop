@@ -416,17 +416,12 @@ router.put("/welcomeSection/:id", updateWelcomeSection);
 router.post("/whatSetsApart", createWhatSetsApartSection);
 /**
  * @swagger
- * /api/homepage/whatSetsApart/{id}:
+ * /api/homepage/whatSetsApart:
  *   put:
  *     summary: Updates the "What Sets Us Apart" section
  *     tags:
  *       - Home Page
  *     parameters:
- *       - in: query
- *         name: titleId
- *         schema:
- *           type: string
- *         description: The ID of the section title to update
  *       - in: query
  *         name: itemId
  *         schema:
@@ -442,15 +437,19 @@ router.post("/whatSetsApart", createWhatSetsApartSection);
  *               sectionTitle:
  *                 type: string
  *                 description: The new title for the section
+ *                 example: "string"
  *               itemTitle:
  *                 type: string
  *                 description: The new title for the item
+ *                 example: "string"
  *               subtitle:
  *                 type: string
  *                 description: The new subtitle for the item
+ *                 example: "string"
  *               imgUrl:
  *                 type: string
  *                 description: The new image URL for the item
+ *                 example: "string"
  *     responses:
  *       200:
  *         description: Successfully updated the section
@@ -459,26 +458,57 @@ router.post("/whatSetsApart", createWhatSetsApartSection);
  *             schema:
  *               type: object
  *               properties:
+ *                 _id:
+ *                   type: string
+ *                   example: "string"
  *                 title:
  *                   type: string
- *                   description: The updated title of the section
- *                 item:
- *                   type: object
- *                   properties:
- *                     _id:
- *                       type: string
- *                     title:
- *                       type: string
- *                     subtitle:
- *                       type: string
- *                     imgUrl:
- *                       type: string
+ *                   example: "string"
+ *                 items:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       _id:
+ *                         type: string
+ *                         example: "string"
+ *                       title:
+ *                         type: string
+ *                         example: "string"
+ *                       subtitle:
+ *                         type: string
+ *                         example: "string"
+ *                       imgUrl:
+ *                         type: string
+ *                         example: "string"
+ *                 createdAt:
+ *                   type: string
+ *                   example: "string"
+ *                 updatedAt:
+ *                   type: string
+ *                   example: "string"
  *       404:
  *         description: Section or item not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "string"
  *       500:
  *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "string"
  */
-router.put("/whatSetsApart/:id", updateWhatSetsApartSection);
+router.put("/whatSetsApart", updateWhatSetsApartSection);
 
 // ========== Wonderland Section =========== //
 router.post("/wonderlandSection", createWonderlandSection);

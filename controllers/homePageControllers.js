@@ -1,9 +1,7 @@
 const Banner = require("../models/homePage/bannerSchema");
-const OurActivities = require("../models/homePage/activitiesSection");
 const Activity = require("../models/homePage/activitySchema");
 const DiscountCoupon = require("../models/homePage/discountCoupon");
-const WhatSetsApartSectionTitle = require("../models/homePage/whatSetsApartSection");
-const WhatSetsApartItem = require("../models/homePage/whatSetsApartItem");
+const HomePageWhatSetsApartSection = require("../models/homePage/whatSetsApartSection");
 const WelcomeSection = require("../models/homePage/welcomeSection");
 const WonderlandSection = require("../models/homePage/wonderlandSection");
 const HomepageCarouselImages = require("../models/homePage/carouselImages");
@@ -39,22 +37,9 @@ exports.updateBanner = async (req, res) => {
 
 exports.createActivitiesSection = async (req, res) => {
   try {
-    const { title, items } = req.body;
-    let activityTitle;
+    const section = await Activity.create(req.body);
 
-    if (title) {
-      activityTitle = await OurActivities.create({ title });
-    }
-
-    let activitiesData;
-    if (items) {
-      activitiesData = await Activity.create([...items]);
-    }
-
-    res.status(201).json({
-      title: title && activityTitle.title,
-      items: activitiesData,
-    });
+    res.status(201).json(section);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -62,33 +47,27 @@ exports.createActivitiesSection = async (req, res) => {
 
 exports.updateActivitySection = async (req, res) => {
   try {
-    const { titleId, itemId } = req.query;
+    const { itemId } = req.query;
     const { sectionTitle, itemTitle, subtitle, imgUrl } = req.body;
 
-    let activitySectionTitle;
-    if (titleId) {
-      activitySectionTitle = await OurActivities.findByIdAndUpdate(
-        titleId,
-        { title: sectionTitle },
-        { new: true, runValidators: true }
-      );
-    }
+    const section = await Activity.findOne();
+
+    if (!section) return res.status(404).json({ message: "Section not found" });
+
     let item;
     if (itemId) {
-      item = await Activity.findByIdAndUpdate(
-        itemId,
-        {
-          title: itemTitle,
-          subtitle,
-          imgUrl,
-        },
-        { new: true, runValidators: true }
-      );
+      item = section.items.id(itemId);
+      if (!item) return res.status(404).json({ message: "Item not found" });
+
+      if (itemTitle) item.title = itemTitle;
+      if (subtitle) item.subtitle = subtitle;
+      if (imgUrl) item.imgUrl = imgUrl;
     }
-    res.status(200).json({
-      title: activitySectionTitle?.title,
-      item,
-    });
+
+    if (sectionTitle) section.title = sectionTitle;
+
+    const updatedSection = await section.save();
+    res.status(200).json(updatedSection);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -181,22 +160,9 @@ exports.updateWelcomeSection = async (req, res) => {
 
 exports.createWhatSetsApartSection = async (req, res) => {
   try {
-    const { title, items } = req.body;
-    let setApartTitle;
+    const section = await HomePageWhatSetsApartSection.create(req.body);
 
-    if (title) {
-      setApartTitle = await WhatSetsApartSectionTitle.create({ title });
-    }
-
-    let setsApartItems;
-    if (items) {
-      setsApartItems = await WhatSetsApartItem.create([...items]);
-    }
-
-    res.status(201).json({
-      title: title && setApartTitle.title,
-      items: setsApartItems,
-    });
+    res.status(201).json(section);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -204,33 +170,27 @@ exports.createWhatSetsApartSection = async (req, res) => {
 
 exports.updateWhatSetsApartSection = async (req, res) => {
   try {
-    const { titleId, itemId } = req.query;
+    const { itemId } = req.query;
     const { sectionTitle, itemTitle, subtitle, imgUrl } = req.body;
 
-    let setsApartTitle;
-    if (titleId) {
-      setsApartTitle = await WhatSetsApartSectionTitle.findByIdAndUpdate(
-        titleId,
-        { title: sectionTitle },
-        { new: true, runValidators: true }
-      );
-    }
+    const section = await HomePageWhatSetsApartSection.findOne();
+
+    if (!section) return res.status(404).json({ message: "Section not found" });
+
     let item;
     if (itemId) {
-      item = await WhatSetsApartItem.findByIdAndUpdate(
-        itemId,
-        {
-          title: itemTitle,
-          subtitle,
-          imgUrl,
-        },
-        { new: true, runValidators: true }
-      );
+      item = section.items.id(itemId);
+      if (!item) return res.status(404).json({ message: "Item not found" });
+
+      if (itemTitle) item.title = itemTitle;
+      if (subtitle) item.subtitle = subtitle;
+      if (imgUrl) item.imgUrl = imgUrl;
     }
-    res.status(200).json({
-      title: setsApartTitle?.title,
-      item,
-    });
+
+    if (sectionTitle) section.title = sectionTitle;
+
+    const updatedSection = await section.save();
+    res.status(200).json(updatedSection);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -321,29 +281,19 @@ exports.updateCarouselImage = async (req, res) => {
 exports.getAllData = async (req, res) => {
   try {
     const banner = await Banner.find().lean();
-    const activitiesSectionTitle = await OurActivities.findOne().lean();
-    const activities = await Activity.find();
+    const ourActivities = await Activity.findOne();
     const discountCoupon = await DiscountCoupon.findOne().lean();
-    const setsApart = await WhatSetsApartSectionTitle.findOne().lean();
-    const apartItems = await WhatSetsApartItem.find().lean();
+    const whatSetsApart = await HomePageWhatSetsApartSection.findOne().lean();
     const welcomeSection = await WelcomeSection.findOne().lean();
     const wonderlandSection = await WonderlandSection.findOne().lean();
     const carouselImages = await HomepageCarouselImages.findOne().lean();
 
     const homePage = {
       banner,
-      ourActivities: {
-        title: activitiesSectionTitle.title,
-        _id: activitiesSectionTitle._id,
-        items: activities,
-      },
+      ourActivities,
       discountCoupon,
       welcomeSection,
-      whatSetsApart: {
-        title: setsApart.title,
-        _id: setsApart._id,
-        items: apartItems,
-      },
+      whatSetsApart,
       wonderlandSection,
       carouselImages,
     };

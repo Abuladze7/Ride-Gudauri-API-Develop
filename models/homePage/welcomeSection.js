@@ -13,4 +13,4 @@ const welcomeSectionSchema = new Schema(
   }
 );
 
-module.exports = mongoose.model("WelcomeSection", welcomeSectionSchema);
+module.exports = mongoose.model("HomePageWelcomeSection", welcomeSectionSchema);

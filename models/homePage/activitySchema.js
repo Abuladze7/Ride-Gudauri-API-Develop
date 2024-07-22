@@ -3,11 +3,16 @@ const { Schema } = mongoose;
 
 const activitySchema = new Schema(
   {
-    imgUrl: { type: String, required: true },
     title: { type: String, required: true },
-    subtitle: { type: String, required: true },
+    items: [
+      {
+        title: { type: String, required: true },
+        subtitle: { type: String, required: true },
+        imgUrl: { type: String, required: true },
+      },
+    ],
   },
   { versionKey: false, timestamps: true }
 );
 
-module.exports = mongoose.model("Activity", activitySchema);
+module.exports = mongoose.model("HomePageOurActivitiesSection", activitySchema);

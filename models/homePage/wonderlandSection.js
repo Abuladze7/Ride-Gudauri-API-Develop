@@ -13,4 +13,7 @@ const wonderlandSectionSchema = new Schema(
   }
 );
 
-module.exports = mongoose.model("WonderlandSection", wonderlandSectionSchema);
+module.exports = mongoose.model(
+  "HomePageWonderlandSection",
+  wonderlandSectionSchema
+);
