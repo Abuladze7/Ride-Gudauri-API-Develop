@@ -441,7 +441,7 @@ router.put("/welcomeSection/:id", updateWelcomeSection);
 router.post("/whatSetsApart", createWhatSetsApartSection);
 /**
  * @swagger
- * /api/homepage/whatSetsApart/add-item:
+ * /api/homepage/whatSetsApart/item:
  *   post:
  *     summary: Adds a new item to the "What Sets Us Apart" section
  *     tags:
@@ -607,7 +607,7 @@ router.post("/whatSetsApart", createWhatSetsApartSection);
  *                   type: string
  *                   example: "Internal server error"
  */
-router.post("/whatSetsApart/add-item", addApartItemToSection);
+router.post("/whatSetsApart/item", addApartItemToSection);
 router.put("/whatSetsApart", updateWhatSetsApartSection);
 router.delete("/whatSetsApart/item/:id", deleteItemFromSection);
 
