@@ -441,62 +441,6 @@ router.put("/welcomeSection/:id", updateWelcomeSection);
 router.post("/whatSetsApart", createWhatSetsApartSection);
 /**
  * @swagger
- * /api/homepage/whatSetsApart/item:
- *   post:
- *     summary: Adds a new item to the "What Sets Us Apart" section
- *     tags:
- *       - Home Page
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *                 description: The title of the new item
- *                 example: "string"
- *               subtitle:
- *                 type: string
- *                 description: The subtitle of the new item
- *                 example: "string"
- *               imgUrl:
- *                 type: string
- *                 description: The image URL for the new item
- *                 example: "string"
- *     responses:
- *       200:
- *         description: Item added successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Item added successfully"
- *       404:
- *         description: Section not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Section not found"
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Internal server error"
- *
  * /api/homepage/whatSetsApart:
  *   put:
  *     summary: Updates the "What Sets Us Apart" section
@@ -552,6 +496,62 @@ router.post("/whatSetsApart", createWhatSetsApartSection);
  *                 message:
  *                   type: string
  *                   example: "Section or item not found"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Internal server error"
+ *
+ * /api/homepage/whatSetsApart/item:
+ *   post:
+ *     summary: Adds a new item to the "What Sets Us Apart" section
+ *     tags:
+ *       - Home Page
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: The title of the new item
+ *                 example: "string"
+ *               subtitle:
+ *                 type: string
+ *                 description: The subtitle of the new item
+ *                 example: "string"
+ *               imgUrl:
+ *                 type: string
+ *                 description: The image URL for the new item
+ *                 example: "string"
+ *     responses:
+ *       200:
+ *         description: Item added successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Item added successfully"
+ *       404:
+ *         description: Section not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Section not found"
  *       500:
  *         description: Internal server error
  *         content:
