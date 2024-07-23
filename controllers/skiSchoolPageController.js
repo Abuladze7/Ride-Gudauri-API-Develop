@@ -28,9 +28,9 @@ exports.addImageToBanner = async (req, res) => {
 
     banner.images.push(imgUrl);
 
-    const updatedBanner = await banner.save();
+    await banner.save();
 
-    res.status(200).json(updatedBanner);
+    res.status(200).json({ message: "Image added successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -56,9 +56,9 @@ exports.updateSkiSchoolPageBanner = async (req, res) => {
 
     if (subtitle) banner.subtitle = subtitle;
 
-    const updatedBanner = await banner.save();
+    await banner.save();
 
-    res.status(200).json(updatedBanner);
+    res.status(200).json({ message: "Banner updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -86,7 +86,7 @@ exports.updateSkiSchoolPageAbout = async (req, res) => {
 
     if (!about) return res.status(404).json({ message: "About not found" });
 
-    res.status(200).json(about);
+    res.status(200).json({ message: "Section updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -131,9 +131,9 @@ exports.updateSkiSchoolIndividualLesson = async (req, res) => {
       }
     }
 
-    const updatedLesson = await lesson.save();
+    await lesson.save();
 
-    res.status(200).json(updatedLesson);
+    res.status(200).json({ message: "Section updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -178,9 +178,9 @@ exports.updateSkiSchoolPrivateGroupLesson = async (req, res) => {
       }
     }
 
-    const updatedLesson = await lesson.save();
+    await lesson.save();
 
-    res.status(200).json(updatedLesson);
+    res.status(200).json({ message: "Section updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -222,8 +222,8 @@ exports.updateSkiSchoolPageBenefits = async (req, res) => {
       }
     }
 
-    const updatedBenefits = await benefits.save();
-    res.status(200).json(updatedBenefits);
+    await benefits.save();
+    res.status(200).json({ message: "Section updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -255,7 +255,7 @@ exports.updateSkiSchoolRentalShopSection = async (req, res) => {
     if (!repairSection)
       return res.status(404).json({ message: "Section not found" });
 
-    res.status(200).json(repairSection);
+    res.status(200).json({ message: "Section updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -287,7 +287,7 @@ exports.updateSkiSchoolRepairSection = async (req, res) => {
     if (!repairSection)
       return res.status(404).json({ message: "Section not found" });
 
-    res.status(200).json(repairSection);
+    res.status(200).json({ message: "Section updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -338,8 +338,8 @@ exports.updateSkiSchoolTEamSection = async (req, res) => {
       }
     }
 
-    const updatedTeamSection = await teamSection.save();
-    res.status(200).json(updatedTeamSection);
+    await teamSection.save();
+    res.status(200).json({ message: "Section updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

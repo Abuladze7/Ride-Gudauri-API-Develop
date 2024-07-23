@@ -25,7 +25,7 @@ exports.updateContactPageFaqTitle = async (req, res) => {
       return res.status(404).json({ message: "FAQ not found" });
     }
 
-    res.json(faq);
+    res.json({ message: "FAQ title added successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -59,13 +59,14 @@ exports.createContactPageFaqQuestion = async (req, res) => {
         .status(404)
         .json({ message: "FAQ Title with this id not found. Enter valid id" });
     }
-    const faqQuestion = await ContactPageFaqQuestion.create({
+
+    await ContactPageFaqQuestion.create({
       question,
       answer,
       titleId,
     });
 
-    res.status(201).json(faqQuestion);
+    res.status(201).json({ message: "FAQ question created successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -83,7 +84,7 @@ exports.updateContactPageFaqQuestion = async (req, res) => {
       return res.status(404).json({ message: "FAQ Question not found" });
     }
 
-    res.status(200).json(question);
+    res.status(200).json({ message: "FAQ Question updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -114,18 +115,22 @@ exports.createContactPageCarouselImage = async (req, res) => {
       carouselImages = await ContactPageCarouselImage.create({
         images: [...images],
       });
-      return res.status(201).json(carouselImages);
+      return res
+        .status(201)
+        .json({ message: "Carousel Image created successfully" });
     }
 
     if (!Array.isArray(images) && typeof images === "string") {
       carouselImages.images.push(images);
-      const updatedCarouselImages = await carouselImages.save();
-      return res.status(201).json(updatedCarouselImages);
+
+      await carouselImages.save();
+      return res.status(201).json({ message: "Image added successfully" });
     }
 
     carouselImages.images = [...carouselImages.images, ...images];
-    const updatedCarouselImages = await carouselImages.save();
-    res.status(201).json(updatedCarouselImages);
+
+    await carouselImages.save();
+    res.status(201).json({ message: "Images added successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -140,16 +145,15 @@ exports.updateContactPageCarouselImage = async (req, res) => {
 
     if (!images) return res.status(404).json({ message: "Images not found" });
 
-    let carouselImages;
     if (index) {
       if (index > images.images.length - 1 || index < 0) {
         return res.status(400).json({ message: "Invalid index" });
       }
       images.images[index] = imgUrl;
-      carouselImages = await images.save();
+      await images.save();
     }
 
-    res.status(200).json(carouselImages);
+    res.status(200).json({ message: "Image updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

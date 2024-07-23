@@ -26,9 +26,9 @@ exports.addImageToBanner = async (req, res) => {
 
     banner.images.push(imgUrl);
 
-    const updatedBanner = await banner.save();
+    await banner.save();
 
-    res.status(200).json({ banner: updatedBanner });
+    res.status(200).json({ message: "Image added successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -54,9 +54,9 @@ exports.updateBanner = async (req, res) => {
 
     if (title) banner.title = title;
 
-    const updatedBanner = await banner.save();
+    await banner.save();
 
-    res.status(200).json({ banner: updatedBanner });
+    res.status(200).json({ message: "Banner updated successfuly" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -82,7 +82,7 @@ exports.updateHowStartedSection = async (req, res) => {
     if (!howStartedSection)
       return res.status(404).json({ message: "Section not found" });
 
-    res.json(howStartedSection);
+    res.json({ message: "Section updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -111,7 +111,7 @@ exports.updateHowStartedMiddleSection = async (req, res) => {
     if (!middleSection)
       return res.status(404).json({ message: "Section not found" });
 
-    res.json(middleSection);
+    res.json({ message: "Section updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -142,7 +142,7 @@ exports.updateParaglidingSection = async (req, res) => {
     if (!paraglidingSection)
       return res.status(404).json({ message: "Section not found" });
 
-    res.status(200).json(paraglidingSection);
+    res.status(200).json({ message: "Section updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -158,18 +158,22 @@ exports.createOurStoryCarouselImage = async (req, res) => {
       carouselImages = await OurStoryCarouselImages.create({
         images: [...images],
       });
-      return res.status(201).json(carouselImages);
+      return res
+        .status(201)
+        .json({ message: "Carousel images created successfully" });
     }
 
     if (!Array.isArray(images) && typeof images === "string") {
       carouselImages.images.push(images);
-      const updatedCarouselImages = await carouselImages.save();
-      return res.status(201).json(updatedCarouselImages);
+
+      await carouselImages.save();
+      return res.status(201).json({ message: "Image added successfully" });
     }
 
     carouselImages.images = [...carouselImages.images, ...images];
-    const updatedCarouselImages = await carouselImages.save();
-    res.status(201).json(updatedCarouselImages);
+
+    await carouselImages.save();
+    res.status(201).json({ message: "Images added successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -183,17 +187,16 @@ exports.updateOurStoryCarouselImage = async (req, res) => {
     const images = await OurStoryCarouselImages.findOne();
     if (!images) return res.status(404).json({ message: "Images not found" });
 
-    let carouselImages;
     if (index) {
       if (index > images.images.length - 1 || index < 0) {
         return res.status(400).json({ message: "Invalid index" });
       }
 
       images.images[index] = imgUrl;
-      carouselImages = await images.save();
+      await images.save();
     }
 
-    res.status(200).json(carouselImages);
+    res.status(200).json({ message: "Images updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

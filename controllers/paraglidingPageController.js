@@ -24,8 +24,8 @@ exports.addImageToBanner = async (req, res) => {
 
     banner.images.push(imgUrl);
 
-    const updatedBanner = await banner.save();
-    res.status(200).json(updatedBanner);
+    await banner.save();
+    res.status(200).json({ message: "Image Added successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -51,9 +51,9 @@ exports.updateParaglidingPageBanner = async (req, res) => {
 
     if (subtitle) banner.subtitle = subtitle;
 
-    const updatedBanner = await banner.save();
+    await banner.save();
 
-    res.status(200).json(updatedBanner);
+    res.status(200).json({ message: "Banner updated successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -83,7 +83,7 @@ exports.updateParaglidingMainSectionSection = async (req, res) => {
       return res.status(404).json({ message: "Section not found" });
     }
 
-    res.status(200).json(section);
+    res.status(200).json({ message: "Sections updated successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -129,9 +129,9 @@ exports.updateParaglidingFormSection = async (req, res) => {
       }
     }
 
-    const updatedFormSection = await formSection.save();
+    await formSection.save();
 
-    res.status(200).json(updatedFormSection);
+    res.status(200).json({ message: "Section updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -147,18 +147,21 @@ exports.createParaglidingCarouselImage = async (req, res) => {
       carouselImages = await ParaglidingPageCarouselImage.create({
         images: [...images],
       });
-      return res.status(201).json(carouselImages);
+      return res
+        .status(201)
+        .json({ message: "Carousel Images Created Successfully" });
     }
 
     if (!Array.isArray(images) && typeof images === "string") {
       carouselImages.images.push(images);
-      const updatedCarouselImages = await carouselImages.save();
-      return res.status(201).json(updatedCarouselImages);
+
+      await carouselImages.save();
+      return res.status(201).json({ message: "Image added successfully" });
     }
 
     carouselImages.images = [...carouselImages.images, ...images];
-    const updatedCarouselImages = await carouselImages.save();
-    res.status(201).json(updatedCarouselImages);
+    await carouselImages.save();
+    res.status(201).json({ message: "Images added successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

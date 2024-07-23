@@ -62,8 +62,8 @@ exports.updateActivitySection = async (req, res) => {
 
     if (sectionTitle) section.title = sectionTitle;
 
-    const updatedSection = await section.save();
-    res.status(200).json(updatedSection);
+    await section.save();
+    res.status(200).json({ message: "Section updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -117,7 +117,7 @@ exports.updateDiscountCoupon = async (req, res) => {
       return res.status(404).json({ message: "Discount coupon not found" });
     }
 
-    res.status(200).json(discountCoupon);
+    res.status(200).json({ message: "Discount coupon updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -146,7 +146,7 @@ exports.updateWelcomeSection = async (req, res) => {
       return res.status(404).json({ message: "Welcome section not found" });
     }
 
-    res.status(200).json(welcomeSection);
+    res.status(200).json({ message: "Section updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -185,8 +185,8 @@ exports.updateWhatSetsApartSection = async (req, res) => {
 
     if (sectionTitle) section.title = sectionTitle;
 
-    const updatedSection = await section.save();
-    res.status(200).json(updatedSection);
+    await section.save();
+    res.status(200).json({ message: "Section updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -215,7 +215,7 @@ exports.updateWonderlandSection = async (req, res) => {
       return res.status(404).json({ message: "Wonderland section not found" });
     }
 
-    res.status(200).json(wonderlandSection);
+    res.status(200).json({ message: "Section updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -231,18 +231,18 @@ exports.createCarouselImage = async (req, res) => {
       carouselImages = await HomepageCarouselImages.create({
         images: [...images],
       });
-      return res.status(201).json(carouselImages);
+      return res.status(201).json({ message: "Images Created successfully" });
     }
 
     if (!Array.isArray(images) && typeof images === "string") {
       carouselImages.images.push(images);
-      const updatedCarouselImages = await carouselImages.save();
-      return res.status(201).json(updatedCarouselImages);
+      await carouselImages.save();
+      return res.status(201).json("Image added successfully");
     }
 
     carouselImages.images = [...carouselImages.images, ...images];
-    const updatedCarouselImages = await carouselImages.save();
-    res.status(201).json(updatedCarouselImages);
+    await carouselImages.save();
+    res.status(201).json({ message: "Images added successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -256,17 +256,16 @@ exports.updateCarouselImage = async (req, res) => {
     const images = await HomepageCarouselImages.findOne();
     if (!images) return res.status(404).json({ message: "Images not found" });
 
-    let carouselImages;
     if (index) {
       if (index > images.images.length - 1 || index < 0) {
         return res.status(400).json({ message: "Invalid index" });
       }
 
       images.images[index] = imgUrl;
-      carouselImages = await images.save();
+      await images.save();
     }
 
-    res.status(200).json(carouselImages);
+    res.status(200).json({ message: "Image updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

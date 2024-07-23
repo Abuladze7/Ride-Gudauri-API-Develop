@@ -28,9 +28,9 @@ exports.addImageToBanner = async (req, res) => {
 
     banner.images.push(imgUrl);
 
-    const updatedBanner = await banner.save();
+    await banner.save();
 
-    res.status(200).json(updatedBanner);
+    res.status(200).json({ message: "Image Added successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -56,9 +56,9 @@ exports.updateGudauriBanner = async (req, res) => {
 
     if (title) banner.title = title;
 
-    const updatedBanner = await banner.save();
+    await banner.save();
 
-    res.status(200).json(updatedBanner);
+    res.status(200).json({ message: "Banner updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -88,7 +88,7 @@ exports.updateGudauriWonderlandSection = async (req, res) => {
       return res.status(404).json({ message: "Wonderland section not found" });
     }
 
-    res.status(200).json(wonderlandSection);
+    res.status(200).json({ message: "Sections updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -118,7 +118,7 @@ exports.updatePlanTripSection = async (req, res) => {
       return res.status(404).json({ message: "Plan trip section not found" });
     }
 
-    res.status(200).json(planTripSection);
+    res.status(200).json({ message: "Section updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -148,7 +148,7 @@ exports.updateWhyGudauriSection = async (req, res) => {
       return res.status(404).json({ message: "Why Gudauri section not found" });
     }
 
-    res.status(200).json(whyGudauriSection);
+    res.status(200).json({ message: "Sections updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -180,7 +180,7 @@ exports.updateGudauriSpiritSection = async (req, res) => {
         .json({ message: "Gudauri spirit section not found" });
     }
 
-    res.status(200).json(spiritSection);
+    res.status(200).json({ message: "Section updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -210,12 +210,10 @@ exports.updateHowToGetThereSection = async (req, res) => {
       );
 
     if (!howToGetThereSection) {
-      return res
-        .status(404)
-        .json({ message: "How to get there section not found" });
+      return res.status(404).json({ message: "Section not found" });
     }
 
-    res.status(200).json(howToGetThereSection);
+    res.status(200).json({ message: "Section updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -231,18 +229,20 @@ exports.createGudauriCarouselImage = async (req, res) => {
       carouselImages = await GudauriImageCarousel.create({
         images: [...images],
       });
-      return res.status(201).json(carouselImages);
+
+      return res.status(201).json({ message: "Images added successfully" });
     }
 
     if (!Array.isArray(images) && typeof images === "string") {
       carouselImages.images.push(images);
-      const updatedCarouselImages = await carouselImages.save();
-      return res.status(201).json(updatedCarouselImages);
+      await carouselImages.save();
+
+      return res.status(201).json({ message: "Image added successfully" });
     }
 
     carouselImages.images = [...carouselImages.images, ...images];
-    const updatedCarouselImages = await carouselImages.save();
-    res.status(201).json(updatedCarouselImages);
+    await carouselImages.save();
+    res.status(201).json({ message: "Images added successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
