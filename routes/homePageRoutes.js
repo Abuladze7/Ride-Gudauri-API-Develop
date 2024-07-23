@@ -15,6 +15,8 @@ const {
   updateWonderlandSection,
   createCarouselImage,
   updateCarouselImage,
+  addApartItemToSection,
+  deleteItemFromSection,
 } = require("../controllers/homePageControllers");
 /**
  * @swagger
@@ -299,10 +301,6 @@ router.post("/ourActivitiesSection", createActivitiesSection);
  */
 router.put("/ourActivitiesSection", updateActivitySection);
 
-// Create/Update activity
-// router.post("/ourActivitiesSection/activity", createActivity);
-// router.put("/ourActivitiesSection/activity/:id", updateActivity);
-
 // ========== Discount Coupon ========== //
 router.post("/discountCoupon", createDiscountCoupon);
 /**
@@ -443,6 +441,62 @@ router.put("/welcomeSection/:id", updateWelcomeSection);
 router.post("/whatSetsApart", createWhatSetsApartSection);
 /**
  * @swagger
+ * /api/homepage/whatSetsApart/add-item:
+ *   post:
+ *     summary: Adds a new item to the "What Sets Us Apart" section
+ *     tags:
+ *       - Home Page
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: The title of the new item
+ *                 example: "string"
+ *               subtitle:
+ *                 type: string
+ *                 description: The subtitle of the new item
+ *                 example: "string"
+ *               imgUrl:
+ *                 type: string
+ *                 description: The image URL for the new item
+ *                 example: "string"
+ *     responses:
+ *       200:
+ *         description: Item added successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Item added successfully"
+ *       404:
+ *         description: Section not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Section not found"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Internal server error"
+ *
  * /api/homepage/whatSetsApart:
  *   put:
  *     summary: Updates the "What Sets Us Apart" section
@@ -485,35 +539,9 @@ router.post("/whatSetsApart", createWhatSetsApartSection);
  *             schema:
  *               type: object
  *               properties:
- *                 _id:
+ *                 message:
  *                   type: string
- *                   example: "string"
- *                 title:
- *                   type: string
- *                   example: "string"
- *                 items:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       _id:
- *                         type: string
- *                         example: "string"
- *                       title:
- *                         type: string
- *                         example: "string"
- *                       subtitle:
- *                         type: string
- *                         example: "string"
- *                       imgUrl:
- *                         type: string
- *                         example: "string"
- *                 createdAt:
- *                   type: string
- *                   example: "string"
- *                 updatedAt:
- *                   type: string
- *                   example: "string"
+ *                   example: "Section updated successfully"
  *       404:
  *         description: Section or item not found
  *         content:
@@ -523,7 +551,7 @@ router.post("/whatSetsApart", createWhatSetsApartSection);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "string"
+ *                   example: "Section or item not found"
  *       500:
  *         description: Internal server error
  *         content:
@@ -533,9 +561,55 @@ router.post("/whatSetsApart", createWhatSetsApartSection);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "string"
+ *                   example: "Internal server error"
+ *
+ * /api/homepage/whatSetsApart/item/{id}:
+ *   delete:
+ *     summary: Deletes an item from the "What Sets Us Apart" section
+ *     tags:
+ *       - Home Page
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the item to delete
+ *     responses:
+ *       200:
+ *         description: Item deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Item deleted successfully"
+ *       404:
+ *         description: Section not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Section not found"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Internal server error"
  */
+router.post("/whatSetsApart/add-item", addApartItemToSection);
 router.put("/whatSetsApart", updateWhatSetsApartSection);
+router.delete("/whatSetsApart/item/:id", deleteItemFromSection);
 
 // ========== Wonderland Section =========== //
 router.post("/wonderlandSection", createWonderlandSection);

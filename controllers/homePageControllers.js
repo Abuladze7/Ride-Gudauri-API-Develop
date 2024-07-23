@@ -164,6 +164,43 @@ exports.createWhatSetsApartSection = async (req, res) => {
   }
 };
 
+exports.addApartItemToSection = async (req, res) => {
+  try {
+    const { title, subtitle, imgUrl } = req.body;
+    const section = await HomePageWhatSetsApartSection.findOne();
+
+    if (!section) res.status(404).json({ message: "Section not found" });
+
+    const newItem = { title, subtitle, imgUrl };
+    section.items.push(newItem);
+    await section.save();
+
+    res.status(200).json({ message: "Item added successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.deleteItemFromSection = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const section = await HomePageWhatSetsApartSection.findOne();
+
+    if (!section) res.status(404).json({ message: "Section not found" });
+
+    const itemIndex = section.items.findIndex((e) => e._id.toString() === id);
+    if (itemIndex === -1)
+      return res.status(404).json({ message: "Item not found" });
+
+    section.items.splice(itemIndex, 1);
+    await section.save();
+
+    res.status(200).json({ message: "Item deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 exports.updateWhatSetsApartSection = async (req, res) => {
   try {
     const { itemId } = req.query;
