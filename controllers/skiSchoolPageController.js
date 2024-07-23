@@ -348,15 +348,25 @@ exports.updateSkiSchoolTEamSection = async (req, res) => {
 // ========== All Data =========== //
 exports.getAllData = async (req, res) => {
   try {
-    const banner = await SkiSchoolPageBanner.findOne().lean();
-    const aboutSection = await SkiSchoolPageAbout.findOne().lean();
-    const individualLesson =
-      await SkiSchoolPageIndividualLesson.findOne().lean();
-    const groupLesson = await SkiSchoolPagePrivateGroupLesson.findOne().lean();
-    const benefitsSection = await SkiSchoolPageBenefits.findOne().lean();
-    const rentalShopSection = await SkiSchoolPageRentalShop.findOne().lean();
-    const repairSection = await SkiSchoolPageRepair.findOne().lean();
-    const teamSection = await SkiSchoolPageTeam.findOne().lean();
+    const [
+      banner,
+      aboutSection,
+      individualLesson,
+      groupLesson,
+      benefitsSection,
+      rentalShopSection,
+      repairSection,
+      teamSection,
+    ] = await Promise.all([
+      SkiSchoolPageBanner.findOne().lean(),
+      SkiSchoolPageAbout.findOne().lean(),
+      SkiSchoolPageIndividualLesson.findOne().lean(),
+      SkiSchoolPagePrivateGroupLesson.findOne().lean(),
+      SkiSchoolPageBenefits.findOne().lean(),
+      SkiSchoolPageRentalShop.findOne().lean(),
+      SkiSchoolPageRepair.findOne().lean(),
+      SkiSchoolPageTeam.findOne().lean(),
+    ]);
 
     const skiSchoolPage = {
       banner,

@@ -163,9 +163,11 @@ exports.updateContactPageCarouselImage = async (req, res) => {
 
 exports.getAllData = async (req, res) => {
   try {
-    const faqTitles = await ContactPageFaqTitles.find();
-    const faqQuestions = await ContactPageFaqQuestion.find().lean();
-    const carouselImages = await ContactPageCarouselImage.findOne().lean();
+    const [faqTitles, faqQuestions, carouselImages] = await Promise.all([
+      ContactPageFaqTitles.find().lean(),
+      ContactPageFaqQuestion.find().lean(),
+      ContactPageCarouselImage.findOne().lean(),
+    ]);
 
     const faq = faqTitles.map((e) => ({
       _id: e._id,

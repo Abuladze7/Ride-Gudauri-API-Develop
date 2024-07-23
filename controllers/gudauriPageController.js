@@ -274,13 +274,23 @@ exports.updateGudauriCarouselImage = async (req, res) => {
 
 exports.getAllData = async (req, res) => {
   try {
-    const banner = await GudauriBanner.findOne();
-    const wonderlandSection = await GudauriWonderlandSection.findOne();
-    const planTripSection = await PlanTripSection.findOne();
-    const whyGudauriSection = await WhyGudauriSection.find();
-    const spiritSection = await GudauriSpiritSection.findOne();
-    const howToGetThereSection = await GudauriHowToGetThereSection.findOne();
-    const carouselImages = await GudauriImageCarousel.findOne();
+    const [
+      banner,
+      wonderlandSection,
+      planTripSection,
+      whyGudauriSection,
+      spiritSection,
+      howToGetThereSection,
+      carouselImages,
+    ] = await Promise.all([
+      GudauriBanner.findOne().lean(),
+      GudauriWonderlandSection.findOne().lean(),
+      PlanTripSection.findOne().lean(),
+      WhyGudauriSection.find().lean(),
+      GudauriSpiritSection.findOne().lean(),
+      GudauriHowToGetThereSection.findOne().lean(),
+      GudauriImageCarousel.findOne().lean(),
+    ]);
 
     const gudauriPage = {
       banner,

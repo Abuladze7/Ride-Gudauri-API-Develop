@@ -275,13 +275,23 @@ exports.updateCarouselImage = async (req, res) => {
 
 exports.getAllData = async (req, res) => {
   try {
-    const banner = await Banner.find().lean();
-    const ourActivities = await Activity.findOne();
-    const discountCoupon = await DiscountCoupon.findOne().lean();
-    const whatSetsApart = await HomePageWhatSetsApartSection.findOne().lean();
-    const welcomeSection = await WelcomeSection.findOne().lean();
-    const wonderlandSection = await WonderlandSection.findOne().lean();
-    const carouselImages = await HomepageCarouselImages.findOne().lean();
+    const [
+      banner,
+      ourActivities,
+      discountCoupon,
+      whatSetsApart,
+      welcomeSection,
+      wonderlandSection,
+      carouselImages,
+    ] = await Promise.all([
+      Banner.find().lean(),
+      Activity.findOne(),
+      DiscountCoupon.findOne().lean(),
+      HomePageWhatSetsApartSection.findOne().lean(),
+      WelcomeSection.findOne().lean(),
+      WonderlandSection.findOne().lean(),
+      HomepageCarouselImages.findOne().lean(),
+    ]);
 
     const homePage = {
       banner,

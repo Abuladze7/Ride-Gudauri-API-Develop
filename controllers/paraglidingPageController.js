@@ -193,10 +193,13 @@ exports.updateParaglidingCarouselImage = async (req, res) => {
 
 exports.getAllData = async (req, res) => {
   try {
-    const banner = await ParaglidingPageBanner.findOne().lean();
-    const mainSection = await ParaglidingPageMainSection.findOne().lean();
-    const formSection = await ParaglidingPageFormSection.findOne().lean();
-    const carouselImages = await ParaglidingPageCarouselImage.findOne().lean();
+    const [banner, mainSection, formSection, carouselImages] =
+      await Promise.all([
+        ParaglidingPageBanner.findOne().lean(),
+        ParaglidingPageMainSection.findOne().lean(),
+        ParaglidingPageFormSection.findOne().lean(),
+        ParaglidingPageCarouselImage.findOne().lean(),
+      ]);
 
     const allData = {
       banner,

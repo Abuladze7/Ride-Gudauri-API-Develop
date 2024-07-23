@@ -204,13 +204,19 @@ exports.updateOurStoryCarouselImage = async (req, res) => {
 
 exports.getAllData = async (req, res) => {
   try {
-    const banner = await OurStoryBanner.findOne();
-    const howStartedSection = await HowStartedSection.findOne();
-    const middleSections = await HowStartedMiddleSections.find();
-    const beginningOfParaglidingSection =
-      await BeginningOfParaglidingSection.findOne();
-
-    const carouselImages = await OurStoryCarouselImages.findOne();
+    const [
+      banner,
+      howStartedSection,
+      middleSections,
+      beginningOfParaglidingSection,
+      carouselImages,
+    ] = await Promise.all([
+      OurStoryBanner.findOne().lean(),
+      HowStartedSection.findOne().lean(),
+      HowStartedMiddleSections.find().lean(),
+      BeginningOfParaglidingSection.findOne().lean(),
+      OurStoryCarouselImages.findOne().lean(),
+    ]);
 
     const ourStory = {
       banner,
