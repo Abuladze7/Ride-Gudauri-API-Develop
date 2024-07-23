@@ -10,9 +10,9 @@ const GudauriImageCarousel = require("../models/gudauri-page/gudauriImageCarouse
 
 exports.createGudauriBanner = async (req, res) => {
   try {
-    const banner = await GudauriBanner.create(req.body);
+    await GudauriBanner.create(req.body);
 
-    res.status(201).json(banner);
+    res.status(201).json({ message: "Banner created successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
