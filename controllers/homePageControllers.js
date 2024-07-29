@@ -5,12 +5,19 @@ const HomePageWhatSetsApartSection = require("../models/homePage/whatSetsApartSe
 const WelcomeSection = require("../models/homePage/welcomeSection");
 const WonderlandSection = require("../models/homePage/wonderlandSection");
 const HomepageCarouselImages = require("../models/homePage/carouselImages");
+const cloudinary = require("../config/cloudinary");
 
 // ========= Hero Section ========== //
 
 exports.createBanner = async (req, res) => {
   try {
-    const banner = await Banner.create(req.body);
+    const { title, subtitle, image } = req.body;
+
+    const banner = await Banner.create({
+      title,
+      subtitle,
+      image,
+    });
     res.status(201).json(banner);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -19,10 +26,30 @@ exports.createBanner = async (req, res) => {
 
 exports.updateBanner = async (req, res) => {
   try {
-    await Banner.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const { title, subtitle, image } = req.body;
+    const banner = await Banner.findById(req.params.id);
+    if (!banner) return res.status(404).json({ message: "Banner not found" });
+
+    if (image) {
+      const imgId = banner.image.public_id;
+      if (imgId) {
+        await cloudinary.uploader.destroy(imgId);
+      }
+    }
+
+    await Banner.findByIdAndUpdate(
+      { _id: req.params.id },
+      {
+        title,
+        subtitle,
+        image,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
     res.status(200).json({ message: "Banner updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -44,7 +71,7 @@ exports.createActivitiesSection = async (req, res) => {
 exports.updateActivitySection = async (req, res) => {
   try {
     const { itemId } = req.query;
-    const { sectionTitle, itemTitle, subtitle, imgUrl } = req.body;
+    const { sectionTitle, itemTitle, subtitle, image } = req.body;
 
     const section = await Activity.findOne();
 
@@ -56,8 +83,18 @@ exports.updateActivitySection = async (req, res) => {
       if (!item) return res.status(404).json({ message: "Item not found" });
 
       if (itemTitle) item.title = itemTitle;
+
       if (subtitle) item.subtitle = subtitle;
-      if (imgUrl) item.imgUrl = imgUrl;
+
+      if (image) {
+        const imgId = item.image.public_id;
+
+        if (imgId) {
+          await cloudinary.uploader.destroy(imgId);
+        }
+
+        item.image = image;
+      }
     }
 
     if (sectionTitle) section.title = sectionTitle;
@@ -68,31 +105,6 @@ exports.updateActivitySection = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-
-exports.createActivity = async (req, res) => {
-  try {
-    const activity = await Activity.create(req.body);
-    res.status(201).json(activity);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
-
-// exports.updateActivity = async (req, res) => {
-//   try {
-//     const activity = await Activity.findByIdAndUpdate(req.params.id, req.body, {
-//       new: true,
-//       runValidators: true,
-//     });
-//     if (!activity) {
-//       return res.status(404).json({ message: "Activity not found" });
-//     }
-
-//     res.status(200).json(activity);
-//   } catch (err) {
-//     res.status(500).json({ message: err.message });
-//   }
-// };
 
 // ========== Discount Coupon ========== //
 
@@ -107,15 +119,32 @@ exports.createDiscountCoupon = async (req, res) => {
 
 exports.updateDiscountCoupon = async (req, res) => {
   try {
-    const discountCoupon = await DiscountCoupon.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true }
-    );
+    const { title, subtitle, image } = req.body;
 
-    if (!discountCoupon) {
-      return res.status(404).json({ message: "Discount coupon not found" });
+    const discountCoupon = await DiscountCoupon.findById(req.params.id);
+
+    if (!discountCoupon)
+      return res.status(404).json({ message: "Coupon not found" });
+
+    if (image) {
+      const imgId = discountCoupon.image.public_id;
+      if (imgId) {
+        await cloudinary.uploader.destroy(imgId);
+      }
     }
+
+    await DiscountCoupon.findByIdAndUpdate(
+      req.params.id,
+      {
+        title,
+        subtitle,
+        image,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
 
     res.status(200).json({ message: "Discount coupon updated successfully" });
   } catch (err) {
@@ -136,10 +165,23 @@ exports.createWelcomeSection = async (req, res) => {
 
 exports.updateWelcomeSection = async (req, res) => {
   try {
-    const welcomeSection = await WelcomeSection.findByIdAndUpdate(
+    const { title, subtitle, image } = req.body;
+    const welcomeSection = await WelcomeSection.findById(req.params.id);
+
+    if (image) {
+      const imgId = welcomeSection.image.public_id;
+      if (imgId) {
+        await cloudinary.uploader.destroy(imgId);
+      }
+    }
+
+    await WelcomeSection.findByIdAndUpdate(
       req.params.id,
-      req.body,
-      { new: true, runValidators: true }
+      { title, subtitle, image },
+      {
+        new: true,
+        runValidators: true,
+      }
     );
 
     if (!welcomeSection) {
@@ -166,12 +208,12 @@ exports.createWhatSetsApartSection = async (req, res) => {
 
 exports.addApartItemToSection = async (req, res) => {
   try {
-    const { title, subtitle, imgUrl } = req.body;
+    const { title, subtitle, image } = req.body;
     const section = await HomePageWhatSetsApartSection.findOne();
 
     if (!section) res.status(404).json({ message: "Section not found" });
 
-    const newItem = { title, subtitle, imgUrl };
+    const newItem = { title, subtitle, image };
     section.items.push(newItem);
     await section.save();
 
@@ -204,7 +246,7 @@ exports.deleteItemFromSection = async (req, res) => {
 exports.updateWhatSetsApartSection = async (req, res) => {
   try {
     const { itemId } = req.query;
-    const { sectionTitle, itemTitle, subtitle, imgUrl } = req.body;
+    const { sectionTitle, itemTitle, subtitle, image } = req.body;
 
     const section = await HomePageWhatSetsApartSection.findOne();
 
@@ -216,8 +258,18 @@ exports.updateWhatSetsApartSection = async (req, res) => {
       if (!item) return res.status(404).json({ message: "Item not found" });
 
       if (itemTitle) item.title = itemTitle;
+
       if (subtitle) item.subtitle = subtitle;
-      if (imgUrl) item.imgUrl = imgUrl;
+
+      if (image) {
+        const imageId = item.image.public_id;
+
+        if (imageId) {
+          await cloudinary.uploader.destroy(imageId);
+        }
+
+        item.image = image;
+      }
     }
 
     if (sectionTitle) section.title = sectionTitle;
@@ -242,10 +294,27 @@ exports.createWonderlandSection = async (req, res) => {
 
 exports.updateWonderlandSection = async (req, res) => {
   try {
-    const wonderlandSection = await WonderlandSection.findByIdAndUpdate(
+    const { title, subtitle, image } = req.body;
+    const wonderlandSection = await WonderlandSection.findById(req.params.id);
+
+    if (image) {
+      const imgId = wonderlandSection.image.public_id;
+      if (imgId) {
+        await cloudinary.uploader.destroy(imgId);
+      }
+    }
+
+    await WonderlandSection.findByIdAndUpdate(
       req.params.id,
-      req.body,
-      { new: true, runValidators: true }
+      {
+        title,
+        subtitle,
+        image,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
     );
 
     if (!wonderlandSection) {
@@ -271,7 +340,7 @@ exports.createCarouselImage = async (req, res) => {
       return res.status(201).json({ message: "Images Created successfully" });
     }
 
-    if (!Array.isArray(images) && typeof images === "string") {
+    if (!Array.isArray(images) && typeof images === "object") {
       carouselImages.images.push(images);
       await carouselImages.save();
       return res.status(201).json("Image added successfully");
@@ -287,22 +356,55 @@ exports.createCarouselImage = async (req, res) => {
 
 exports.updateCarouselImage = async (req, res) => {
   try {
-    const { index } = req.query;
-    const { imgUrl } = req.body;
+    const { id } = req.params;
+    const { image } = req.body;
 
-    const images = await HomepageCarouselImages.findOne();
-    if (!images) return res.status(404).json({ message: "Images not found" });
+    const carousel = await HomepageCarouselImages.findOne();
+    if (!carousel) return res.status(404).json({ message: "Images not found" });
 
-    if (index) {
-      if (index > images.images.length - 1 || index < 0) {
-        return res.status(400).json({ message: "Invalid index" });
-      }
+    const img = carousel.images.id(id);
+    if (!img) return res.status(404).json({ message: "Image not found" });
 
-      images.images[index] = imgUrl;
-      await images.save();
+    if (img.public_id) {
+      await cloudinary.uploader.destroy(img.public_id);
     }
 
+    img.public_id = image.public_id;
+    img.url = image.url;
+
+    await carousel.save();
+
     res.status(200).json({ message: "Image updated successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.deleteCarouselImage = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const carousel = await HomepageCarouselImages.findOne();
+    if (!carousel) {
+      return res.status(404).json({ message: "Images not found" });
+    }
+
+    const index = carousel.images.findIndex((img) => img._id.toString() === id);
+
+    if (index === -1) {
+      return res.status(404).json({ message: "Image not found" });
+    }
+
+    const img = carousel.images[index];
+
+    if (img.public_id) {
+      await cloudinary.uploader.destroy(img.public_id);
+    }
+
+    carousel.images.splice(index, 1);
+    await carousel.save();
+
+    res.status(200).json({ message: "Image deleted successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

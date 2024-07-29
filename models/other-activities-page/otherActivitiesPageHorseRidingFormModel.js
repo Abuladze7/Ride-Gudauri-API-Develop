@@ -8,7 +8,10 @@ const otherActivitiesPageHorseRidingSchema = new Schema(
     warning: String,
     items: [
       {
-        imgUrl: { type: String, required: true },
+        image: {
+          public_id: { type: String, required: true },
+          url: { type: String, required: true },
+        },
         description: { type: String, required: true },
       },
     ],

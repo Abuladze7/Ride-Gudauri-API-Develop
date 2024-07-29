@@ -9,7 +9,10 @@ const otherActivitiesPageQuadBikeForm = new Schema(
     items: [
       {
         description: { type: String, required: true },
-        imgUrl: { type: String, required: true },
+        image: {
+          public_id: { type: String, required: true },
+          url: { type: String, required: true },
+        },
       },
     ],
   },

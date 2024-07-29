@@ -8,21 +8,21 @@ const {
   getAllData,
   createContactPageCarouselImage,
   updateContactPageCarouselImage,
+  deleteContactPageCarouselImage,
 } = require("../controllers/contactPageController");
 
 const router = require("express").Router();
 
-// ========== All Data ========== //
 /**
  * @swagger
  * /api/contactPage:
  *   get:
- *     summary: Get all data for the contact page
+ *     summary: Retrieves all FAQ titles, FAQ questions, and carousel images
  *     tags:
  *       - Contact Page
  *     responses:
  *       200:
- *         description: Successfully retrieved all data
+ *         description: Successfully retrieved all FAQ titles, FAQ questions, and carousel images
  *         content:
  *           application/json:
  *             schema:
@@ -56,12 +56,6 @@ const router = require("express").Router();
  *                             titleId:
  *                               type: string
  *                               example: "string"
- *                             createdAt:
- *                               type: string
- *                               example: "string"
- *                             updatedAt:
- *                               type: string
- *                               example: "string"
  *                 carouselImages:
  *                   type: object
  *                   properties:
@@ -71,13 +65,24 @@ const router = require("express").Router();
  *                     images:
  *                       type: array
  *                       items:
- *                         type: string
- *                       example: ["string", "string", "string"]
+ *                         type: object
+ *                         properties:
+ *                           public_id:
+ *                             type: string
+ *                             example: "string"
+ *                           url:
+ *                             type: string
+ *                             example: "string"
+ *                           _id:
+ *                             type: string
+ *                             example: "string"
  *                     createdAt:
  *                       type: string
+ *                       format: date-time
  *                       example: "string"
  *                     updatedAt:
  *                       type: string
+ *                       format: date-time
  *                       example: "string"
  *       500:
  *         description: Internal server error
@@ -97,7 +102,7 @@ router.get("/", getAllData);
  * @swagger
  * /api/contactPage/faqTitle:
  *   post:
- *     summary: Creates a new FAQ title for the contact page
+ *     summary: Creates a new FAQ title
  *     tags:
  *       - Contact Page
  *     requestBody:
@@ -127,10 +132,12 @@ router.get("/", getAllData);
  *                   example: "string"
  *                 createdAt:
  *                   type: string
- *                   example: "string"
+ *                   format: date-time
+ *                   example: "2024-07-29T07:20:36.734Z"
  *                 updatedAt:
  *                   type: string
- *                   example: "string"
+ *                   format: date-time
+ *                   example: "2024-07-29T08:17:29.958Z"
  *       500:
  *         description: Internal server error
  *         content:
@@ -144,7 +151,7 @@ router.get("/", getAllData);
  *
  * /api/contactPage/faqTitle/{id}:
  *   put:
- *     summary: Updates an existing FAQ title for the contact page
+ *     summary: Updates an existing FAQ title
  *     tags:
  *       - Contact Page
  *     parameters:
@@ -163,7 +170,7 @@ router.get("/", getAllData);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the FAQ
+ *                 description: The updated title of the FAQ
  *                 example: "string"
  *     responses:
  *       200:
@@ -173,20 +180,11 @@ router.get("/", getAllData);
  *             schema:
  *               type: object
  *               properties:
- *                 _id:
- *                   type: string
- *                   example: "string"
- *                 title:
- *                   type: string
- *                   example: "string"
- *                 createdAt:
- *                   type: string
- *                   example: "string"
- *                 updatedAt:
+ *                 message:
  *                   type: string
  *                   example: "string"
  *       404:
- *         description: FAQ not found
+ *         description: FAQ title not found
  *         content:
  *           application/json:
  *             schema:
@@ -207,7 +205,7 @@ router.get("/", getAllData);
  *                   example: "string"
  *
  *   delete:
- *     summary: Deletes an existing FAQ title and its associated questions for the contact page
+ *     summary: Deletes an FAQ title
  *     tags:
  *       - Contact Page
  *     parameters:
@@ -219,7 +217,7 @@ router.get("/", getAllData);
  *         description: The ID of the FAQ title to delete
  *     responses:
  *       200:
- *         description: Successfully deleted the FAQ title and its questions
+ *         description: Successfully deleted the FAQ title and its associated questions
  *         content:
  *           application/json:
  *             schema:
@@ -260,7 +258,7 @@ router
  * @swagger
  * /api/contactPage/faqQuestion:
  *   post:
- *     summary: Creates a new FAQ question for the contact page
+ *     summary: Creates a new FAQ question
  *     tags:
  *       - Contact Page
  *     requestBody:
@@ -276,11 +274,11 @@ router
  *                 example: "string"
  *               answer:
  *                 type: string
- *                 description: The FAQ answer
+ *                 description: The answer to the FAQ question
  *                 example: "string"
  *               titleId:
  *                 type: string
- *                 description: The ID of the FAQ title this question belongs to
+ *                 description: The ID of the FAQ title associated with the question
  *                 example: "string"
  *     responses:
  *       201:
@@ -290,22 +288,17 @@ router
  *             schema:
  *               type: object
  *               properties:
- *                 _id:
+ *                 message:
  *                   type: string
  *                   example: "string"
- *                 question:
- *                   type: string
- *                   example: "string"
- *                 answer:
- *                   type: string
- *                   example: "string"
- *                 titleId:
- *                   type: string
- *                   example: "string"
- *                 createdAt:
- *                   type: string
- *                   example: "string"
- *                 updatedAt:
+ *       404:
+ *         description: FAQ title not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
  *                   type: string
  *                   example: "string"
  *       500:
@@ -321,7 +314,7 @@ router
  *
  * /api/contactPage/faqQuestion/{id}:
  *   put:
- *     summary: Updates an existing FAQ question for the contact page
+ *     summary: Updates an existing FAQ question
  *     tags:
  *       - Contact Page
  *     parameters:
@@ -340,15 +333,15 @@ router
  *             properties:
  *               question:
  *                 type: string
- *                 description: The FAQ question
+ *                 description: The updated FAQ question
  *                 example: "string"
  *               answer:
  *                 type: string
- *                 description: The FAQ answer
+ *                 description: The updated answer to the FAQ question
  *                 example: "string"
  *               titleId:
  *                 type: string
- *                 description: The ID of the FAQ title this question belongs to
+ *                 description: The ID of the FAQ title associated with the question
  *                 example: "string"
  *     responses:
  *       200:
@@ -358,26 +351,11 @@ router
  *             schema:
  *               type: object
  *               properties:
- *                 _id:
- *                   type: string
- *                   example: "string"
- *                 question:
- *                   type: string
- *                   example: "string"
- *                 answer:
- *                   type: string
- *                   example: "string"
- *                 titleId:
- *                   type: string
- *                   example: "string"
- *                 createdAt:
- *                   type: string
- *                   example: "string"
- *                 updatedAt:
+ *                 message:
  *                   type: string
  *                   example: "string"
  *       404:
- *         description: FAQ Question not found
+ *         description: FAQ question not found
  *         content:
  *           application/json:
  *             schema:
@@ -398,7 +376,7 @@ router
  *                   example: "string"
  *
  *   delete:
- *     summary: Deletes an existing FAQ question for the contact page
+ *     summary: Deletes an FAQ question
  *     tags:
  *       - Contact Page
  *     parameters:
@@ -420,7 +398,7 @@ router
  *                   type: string
  *                   example: "string"
  *       404:
- *         description: FAQ Question not found
+ *         description: FAQ question not found
  *         content:
  *           application/json:
  *             schema:
@@ -451,7 +429,7 @@ router
  * @swagger
  * /api/contactPage/carouselImage:
  *   post:
- *     summary: Creates new carousel images for the contact page
+ *     summary: Create or Add Carousel Images
  *     tags:
  *       - Contact Page
  *     requestBody:
@@ -464,31 +442,29 @@ router
  *               images:
  *                 type: array
  *                 items:
- *                   type: string
- *                 description: List of image URLs to be added to the carousel
- *                 example: ["string", "string"]
+ *                   type: object
+ *                   properties:
+ *                     public_id:
+ *                       type: string
+ *                       description: The public ID of the image
+ *                       example: "string"
+ *                     url:
+ *                       type: string
+ *                       description: The URL of the image
+ *                       example: "string"
+ *             required:
+ *               - images
  *     responses:
  *       201:
- *         description: Successfully created carousel images
+ *         description: Carousel image(s) created or added successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 _id:
+ *                 message:
  *                   type: string
- *                   example: "string"
- *                 images:
- *                   type: array
- *                   items:
- *                     type: string
- *                   example: ["string", "string", "string", "string"]
- *                 createdAt:
- *                   type: string
- *                   example: "string"
- *                 updatedAt:
- *                   type: string
- *                   example: "string"
+ *                   example: "Carousel Image created successfully"
  *       500:
  *         description: Internal server error
  *         content:
@@ -500,17 +476,18 @@ router
  *                   type: string
  *                   example: "string"
  *
+ * /api/contactPage/carouselImage/{id}:
  *   put:
- *     summary: Updates carousel images for the contact page
+ *     summary: Update Carousel Image
  *     tags:
  *       - Contact Page
  *     parameters:
- *       - in: query
- *         name: index
- *         schema:
- *           type: integer
+ *       - in: path
+ *         name: id
  *         required: true
- *         description: Index of the image to update
+ *         schema:
+ *           type: string
+ *         description: The ID of the image to update
  *     requestBody:
  *       required: true
  *       content:
@@ -518,34 +495,22 @@ router
  *           schema:
  *             type: object
  *             properties:
- *               imgUrl:
- *                 type: string
- *                 description: The new image URL to update
- *                 example: "string"
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                     description: The new public ID of the image
+ *                     example: "string"
+ *                   url:
+ *                     type: string
+ *                     description: The new URL of the image
+ *                     example: "string"
+ *             required:
+ *               - image
  *     responses:
  *       200:
- *         description: Successfully updated carousel image
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   example: "string"
- *                 images:
- *                   type: array
- *                   items:
- *                     type: string
- *                   example: ["string", "string", "string", "string"]
- *                 createdAt:
- *                   type: string
- *                   example: "string"
- *                 updatedAt:
- *                   type: string
- *                   example: "string"
- *       400:
- *         description: Invalid index
+ *         description: Image updated successfully
  *         content:
  *           application/json:
  *             schema:
@@ -553,9 +518,19 @@ router
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "string"
+ *                   example: "Image updated successfully"
  *       404:
- *         description: Images not found
+ *         description: Image not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Image not found"
+ *       500:
+ *         description: Internal server error
  *         content:
  *           application/json:
  *             schema:
@@ -564,6 +539,39 @@ router
  *                 message:
  *                   type: string
  *                   example: "string"
+ *
+ *   delete:
+ *     summary: Delete Carousel Image
+ *     tags:
+ *       - Contact Page
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the image to delete
+ *     responses:
+ *       200:
+ *         description: Image deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Image deleted successfully"
+ *       404:
+ *         description: Image not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Image not found"
  *       500:
  *         description: Internal server error
  *         content:
@@ -576,6 +584,9 @@ router
  *                   example: "string"
  */
 router.post("/carouselImage", createContactPageCarouselImage);
-router.put("/carouselImage", updateContactPageCarouselImage);
+router
+  .route("/carouselImage/:id")
+  .put(updateContactPageCarouselImage)
+  .delete(deleteContactPageCarouselImage);
 
 module.exports = router;

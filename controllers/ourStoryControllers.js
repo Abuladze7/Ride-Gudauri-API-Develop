@@ -3,6 +3,7 @@ const HowStartedMiddleSections = require("../models/our-story/startedMiddleSecti
 const BeginningOfParaglidingSection = require("../models/our-story/beginningOfParaglidingModel");
 const OurStoryBanner = require("../models/our-story/bannerModel");
 const OurStoryCarouselImages = require("../models/our-story/ourStoryImageCarouselModel");
+const cloudinary = require("../config/cloudinary");
 
 // ========== Banner ========== //
 
@@ -18,13 +19,13 @@ exports.createBanner = async (req, res) => {
 
 exports.addImageToBanner = async (req, res) => {
   try {
-    const { imgUrl } = req.body;
+    const { image } = req.body;
 
     const banner = await OurStoryBanner.findOne();
 
     if (!banner) return res.status(404).json({ message: "Banner not found" });
 
-    banner.images.push(imgUrl);
+    banner.images.push(image);
 
     await banner.save();
 
@@ -36,31 +37,70 @@ exports.addImageToBanner = async (req, res) => {
 
 exports.updateBanner = async (req, res) => {
   try {
-    const { title, imgUrl } = req.body;
-    const { imgIndex } = req.query;
+    const { title, image } = req.body;
+    const { imgId } = req.query;
 
-    const banner = await OurStoryBanner.findById(req.params.id);
+    const banner = await OurStoryBanner.findOne();
 
     if (!banner) return res.status(404).json({ message: "Banner not found" });
 
-    if (
-      imgIndex !== undefined &&
-      imgUrl &&
-      imgIndex >= 0 &&
-      imgIndex < banner.images.length
-    ) {
-      banner.images[Number(imgIndex)] = imgUrl;
+    if (imgId && image) {
+      const imgIndex = banner.images.findIndex(
+        (img) => img._id.toString() === imgId
+      );
+
+      if (imgIndex === -1)
+        return res.status(404).json({ message: "Image not found" });
+
+      const img = banner.images[imgIndex];
+
+      if (img && img.public_id) {
+        await cloudinary.uploader.destroy(img.public_id);
+      }
+
+      if (image.public_id) banner.images[imgIndex].public_id = image.public_id;
+
+      if (image.url) banner.images[imgIndex].url = image.url;
     }
 
     if (title) banner.title = title;
 
     await banner.save();
 
-    res.status(200).json({ message: "Banner updated successfuly" });
+    res.status(200).json({ message: "Banner updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
+
+exports.deleteImageToBanner = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const banner = await OurStoryBanner.findOne();
+
+    if (!banner) return res.status(404).json({ message: "Banner not found" });
+
+    const index = banner.images.findIndex((img) => img._id.toString() === id);
+
+    if (index === -1) {
+      return res.status(404).json({ message: "Image not found" });
+    }
+
+    const img = banner.images[index];
+    if (img && img.public_id) {
+      await cloudinary.uploader.destroy(img.public_id);
+    }
+
+    banner.images.splice(index, 1);
+    await banner.save();
+
+    res.status(200).json({ message: "Image deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 // ========== How It Started Section ========== //
 exports.createHowStartedSection = async (req, res) => {
   try {
@@ -74,13 +114,31 @@ exports.createHowStartedSection = async (req, res) => {
 
 exports.updateHowStartedSection = async (req, res) => {
   try {
-    const howStartedSection = await HowStartedSection.findByIdAndUpdate(
+    const { title, subtitle, image } = req.body;
+
+    const section = HowStartedSection.findById(req.params.id);
+
+    if (!section) return res.status(404).json({ message: "Section not found" });
+
+    if (image) {
+      const imgId = section.image.public_id;
+      if (imgId) {
+        await cloudinary.uploader.destroy(imgId);
+      }
+    }
+
+    await HowStartedSection.findByIdAndUpdate(
       req.params.id,
-      req.body,
-      { new: true, runValidators: true }
+      {
+        title,
+        subtitle,
+        image,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
     );
-    if (!howStartedSection)
-      return res.status(404).json({ message: "Section not found" });
 
     res.json({ message: "Section updated successfully" });
   } catch (err) {
@@ -102,14 +160,29 @@ exports.createHowStartedMiddleSections = async (req, res) => {
 
 exports.updateHowStartedMiddleSection = async (req, res) => {
   try {
-    const middleSection = await HowStartedMiddleSections.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true }
-    );
+    const { subtitle, image } = req.body;
+    const section = HowStartedMiddleSections.findById(req.params.id);
 
-    if (!middleSection)
-      return res.status(404).json({ message: "Section not found" });
+    if (!section) return res.status(404).json({ message: "Section not found" });
+
+    if (image && section.image) {
+      const imgId = section.image.public_id;
+      if (imgId) {
+        await cloudinary.uploader.destroy(imgId);
+      }
+    }
+
+    await HowStartedMiddleSections.findByIdAndUpdate(
+      req.params.id,
+      {
+        subtitle,
+        image,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
 
     res.json({ message: "Section updated successfully" });
   } catch (err) {
@@ -133,14 +206,23 @@ exports.createParaglidingSection = async (req, res) => {
 
 exports.updateParaglidingSection = async (req, res) => {
   try {
-    const paraglidingSection =
-      await BeginningOfParaglidingSection.findByIdAndUpdate(
-        req.params.id,
-        req.body,
-        { new: true, runValidators: true }
-      );
-    if (!paraglidingSection)
-      return res.status(404).json({ message: "Section not found" });
+    const { title, subtitle, image } = req.body;
+    const section = await BeginningOfParaglidingSection.findById(req.params.id);
+
+    if (!section) return res.status(404).json({ message: "Section not found" });
+
+    if (image && section.image) {
+      const imgId = section.image.public_id;
+      if (imgId) {
+        await cloudinary.uploader.destroy(imgId);
+      }
+    }
+
+    await BeginningOfParaglidingSection.findByIdAndUpdate(
+      req.params.id,
+      { title, subtitle, image },
+      { new: true, runValidators: true }
+    );
 
     res.status(200).json({ message: "Section updated successfully" });
   } catch (err) {
@@ -181,22 +263,55 @@ exports.createOurStoryCarouselImage = async (req, res) => {
 
 exports.updateOurStoryCarouselImage = async (req, res) => {
   try {
-    const { index } = req.query;
-    const { imgUrl } = req.body;
+    const { id } = req.params;
+    const { image } = req.body;
 
-    const images = await OurStoryCarouselImages.findOne();
-    if (!images) return res.status(404).json({ message: "Images not found" });
+    const carousel = await OurStoryCarouselImages.findOne();
+    if (!carousel) return res.status(404).json({ message: "Images not found" });
 
-    if (index) {
-      if (index > images.images.length - 1 || index < 0) {
-        return res.status(400).json({ message: "Invalid index" });
-      }
+    const img = carousel.images.id(id);
+    if (!img) return res.status(404).json({ message: "Image not found" });
 
-      images.images[index] = imgUrl;
-      await images.save();
+    if (img.public_id) {
+      await cloudinary.uploader.destroy(img.public_id);
     }
 
-    res.status(200).json({ message: "Images updated successfully" });
+    img.public_id = image.public_id;
+    img.url = image.url;
+
+    await carousel.save();
+
+    res.status(200).json({ message: "Image updated successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.deleteOurStoryCarouselImage = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const carousel = await OurStoryCarouselImages.findOne();
+    if (!carousel) {
+      return res.status(404).json({ message: "Images not found" });
+    }
+
+    const index = carousel.images.findIndex((img) => img._id.toString() === id);
+
+    if (index === -1) {
+      return res.status(404).json({ message: "Image not found" });
+    }
+
+    const img = carousel.images[index];
+
+    if (img.public_id) {
+      await cloudinary.uploader.destroy(img.public_id);
+    }
+
+    carousel.images.splice(index, 1);
+    await carousel.save();
+
+    res.status(200).json({ message: "Image deleted successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

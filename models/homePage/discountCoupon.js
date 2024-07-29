@@ -11,7 +11,10 @@ const discountCouponSchema = new Schema(
       type: String,
       required: true,
     },
-    imgUrl: { type: String, required: true },
+    image: {
+      public_id: { type: String, required: true },
+      url: { type: String, required: true },
+    },
     addressLink: { type: String, required: true },
   },
   { versionKey: false, timestamps: true }

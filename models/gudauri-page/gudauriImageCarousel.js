@@ -3,7 +3,12 @@ const { Schema } = mongoose;
 
 const gudauriImageCarouselSchema = new Schema(
   {
-    images: [String],
+    images: [
+      {
+        public_id: { type: String, required: true },
+        url: { type: String, required: true },
+      },
+    ],
   },
   { versionKey: false, timestamps: true }
 );

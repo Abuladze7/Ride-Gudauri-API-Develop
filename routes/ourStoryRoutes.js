@@ -11,20 +11,21 @@ const {
   addImageToBanner,
   createOurStoryCarouselImage,
   updateOurStoryCarouselImage,
+  deleteImageToBanner,
+  deleteOurStoryCarouselImage,
 } = require("../controllers/ourStoryControllers");
 
 const router = require("express").Router();
 
 /**
  * @swagger
- * /api/ourstory:
+ * /api/ourStory:
  *   get:
- *     summary: Retrieves all data for the "Our Story" section
- *     tags:
- *       - Our Story
+ *     summary: Retrieves all data for the Our Story page
+ *     tags: [Our Story]
  *     responses:
  *       200:
- *         description: Successfully retrieved all data for the "Our Story" section
+ *         description: Successfully retrieved all data
  *         content:
  *           application/json:
  *             schema:
@@ -40,11 +41,20 @@ const router = require("express").Router();
  *                     images:
  *                       type: array
  *                       items:
- *                         type: string
+ *                         type: object
+ *                         properties:
+ *                           public_id:
+ *                             type: string
+ *                           url:
+ *                             type: string
+ *                           _id:
+ *                             type: string
  *                     createdAt:
  *                       type: string
+ *                       format: date-time
  *                     updatedAt:
  *                       type: string
+ *                       format: date-time
  *                 howStartedSection:
  *                   type: object
  *                   properties:
@@ -54,12 +64,19 @@ const router = require("express").Router();
  *                       type: string
  *                     subtitle:
  *                       type: string
- *                     imgUrl:
- *                       type: string
+ *                     image:
+ *                       type: object
+ *                       properties:
+ *                         public_id:
+ *                           type: string
+ *                         url:
+ *                           type: string
  *                     createdAt:
  *                       type: string
+ *                       format: date-time
  *                     updatedAt:
  *                       type: string
+ *                       format: date-time
  *                 middleSections:
  *                   type: array
  *                   items:
@@ -69,12 +86,19 @@ const router = require("express").Router();
  *                         type: string
  *                       subtitle:
  *                         type: string
- *                       imgUrl:
- *                         type: string
+ *                       image:
+ *                         type: object
+ *                         properties:
+ *                           public_id:
+ *                             type: string
+ *                           url:
+ *                             type: string
  *                       createdAt:
  *                         type: string
+ *                         format: date-time
  *                       updatedAt:
  *                         type: string
+ *                         format: date-time
  *                 beginningOfParaglidingSection:
  *                   type: object
  *                   properties:
@@ -84,25 +108,51 @@ const router = require("express").Router();
  *                       type: string
  *                     subtitle:
  *                       type: string
- *                     imgUrl:
- *                       type: string
+ *                     image:
+ *                       type: object
+ *                       properties:
+ *                         public_id:
+ *                           type: string
+ *                         url:
+ *                           type: string
  *                     createdAt:
  *                       type: string
+ *                       format: date-time
  *                     updatedAt:
  *                       type: string
- *       500:
- *         description: Internal server error
+ *                       format: date-time
+ *                 carouselImages:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     images:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           public_id:
+ *                             type: string
+ *                           url:
+ *                             type: string
+ *                           _id:
+ *                             type: string
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
  */
 router.get("/", getAllData);
 
 // ========== Banner =========== //
 /**
  * @swagger
- * /api/ourstory/banner:
+ * /api/ourStory/banner:
  *   post:
  *     summary: Creates a new banner
- *     tags:
- *       - Our Story
+ *     tags: [Our Story]
  *     requestBody:
  *       required: true
  *       content:
@@ -112,95 +162,31 @@ router.get("/", getAllData);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the banner
- *                 example: "string"
  *               images:
  *                 type: array
  *                 items:
- *                   type: string
- *                 description: The image URLs of the banner
- *                 example: ["string1", "string2"]
+ *                   type: object
+ *                   properties:
+ *                     public_id:
+ *                       type: string
+ *                     url:
+ *                       type: string
  *     responses:
  *       201:
- *         description: Successfully created the banner
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 title:
- *                   type: string
- *                 images:
- *                   type: array
- *                   items:
- *                     type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *         description: Banner created successfully
  *       500:
  *         description: Internal server error
  *
- * /api/ourstory/banner/add-image:
- *   post:
- *     summary: Adds an image to the existing banner
- *     tags:
- *       - Our Story
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               imgUrl:
- *                 type: string
- *                 description: The URL of the image to add
- *                 example: "string"
- *     responses:
- *       200:
- *         description: Successfully added the image to the banner
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 title:
- *                   type: string
- *                 images:
- *                   type: array
- *                   items:
- *                     type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
- *       404:
- *         description: Banner not found
- *       500:
- *         description: Internal server error
- *
- * /api/ourstory/banner/{id}:
  *   put:
  *     summary: Updates an existing banner
- *     tags:
- *       - Our Story
+ *     tags: [Our Story]
  *     parameters:
- *       - in: path
- *         name: id
- *         required: true
+ *       - in: query
+ *         name: imgId
  *         schema:
  *           type: string
- *         description: The ID of the banner to update
- *       - in: query
- *         name: imgIndex
- *         schema:
- *           type: integer
- *         description: The index of the image to update
+ *         required: false
+ *         description: The ID of the image to be updated
  *     requestBody:
  *       required: true
  *       content:
@@ -210,50 +196,78 @@ router.get("/", getAllData);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the banner
- *                 example: "string"
- *               imgUrl:
- *                 type: string
- *                 description: The new image URL to update
- *                 example: "string"
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       200:
- *         description: Successfully updated the banner
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 title:
- *                   type: string
- *                 images:
- *                   type: array
- *                   items:
+ *         description: Banner updated successfully
+ *       404:
+ *         description: Banner or image not found
+ *       500:
+ *         description: Internal server error
+ *
+ * /api/ourStory/banner/images/add:
+ *   post:
+ *     summary: Adds a new image to the banner
+ *     tags: [Our Story]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
  *                     type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *                   url:
+ *                     type: string
+ *     responses:
+ *       200:
+ *         description: Image added successfully
  *       404:
  *         description: Banner not found
+ *       500:
+ *         description: Internal server error
+ *
+ * /api/ourStory/banner/images/{id}:
+ *   delete:
+ *     summary: Deletes an image from the banner
+ *     tags: [Our Story]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the image to be deleted
+ *     responses:
+ *       200:
+ *         description: Image deleted successfully
+ *       404:
+ *         description: Banner or image not found
  *       500:
  *         description: Internal server error
  */
 router.post("/banner", createBanner);
-router.post("/banner/add-image", addImageToBanner);
-router.put("/banner/:id", updateBanner);
+router.put("/banner", updateBanner);
+router.post("/banner/images/add", addImageToBanner);
+router.delete("/banner/images/:id", deleteImageToBanner);
 
 // ========== How It Started Section ========== //
-
 /**
  * @swagger
- * /api/ourstory/howItStartedSection:
+ * /api/ourStory/howItStartedSection:
  *   post:
  *     summary: Creates a new "How It Started" section
- *     tags:
- *       - Our Story
+ *     tags: [Our Story]
  *     requestBody:
  *       required: true
  *       content:
@@ -263,51 +277,32 @@ router.put("/banner/:id", updateBanner);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the section
- *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the section
- *                 example: "string"
- *               imgUrl:
- *                 type: string
- *                 description: The image URL of the section
- *                 example: "string"
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       201:
- *         description: Successfully created the "How It Started" section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 title:
- *                   type: string
- *                 subtitle:
- *                   type: string
- *                 imgUrl:
- *                   type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *         description: Section created successfully
  *       500:
  *         description: Internal server error
  *
- * /api/ourstory/howItStartedSection/{id}:
+ * /api/ourStory/howItStartedSection/{id}:
  *   put:
  *     summary: Updates an existing "How It Started" section
- *     tags:
- *       - Our Story
+ *     tags: [Our Story]
  *     parameters:
  *       - in: path
  *         name: id
- *         required: true
  *         schema:
  *           type: string
- *         description: The ID of the section to update
+ *         required: true
+ *         description: The ID of the section to be updated
  *     requestBody:
  *       required: true
  *       content:
@@ -317,36 +312,18 @@ router.put("/banner/:id", updateBanner);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the section
- *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the section
- *                 example: "string"
- *               imgUrl:
- *                 type: string
- *                 description: The image URL of the section
- *                 example: "string"
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       200:
- *         description: Successfully updated the "How It Started" section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 title:
- *                   type: string
- *                 subtitle:
- *                   type: string
- *                 imgUrl:
- *                   type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *         description: Section updated successfully
  *       404:
  *         description: Section not found
  *       500:
@@ -356,14 +333,12 @@ router.post("/howItStartedSection", createHowStartedSection);
 router.put("/howItStartedSection/:id", updateHowStartedSection);
 
 // ========== How It Started Middle Sections ========== //
-
 /**
  * @swagger
- * /api/ourstory/howItStartedMiddleSection:
+ * /api/ourStory/howItStartedMiddleSection:
  *   post:
  *     summary: Creates a new "How It Started" middle section
- *     tags:
- *       - Our Story
+ *     tags: [Our Story]
  *     requestBody:
  *       required: true
  *       content:
@@ -373,45 +348,30 @@ router.put("/howItStartedSection/:id", updateHowStartedSection);
  *             properties:
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the section
- *                 example: "string"
- *               imgUrl:
- *                 type: string
- *                 description: The image URL of the section
- *                 example: "string"
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       201:
- *         description: Successfully created the "How It Started" middle section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 subtitle:
- *                   type: string
- *                 imgUrl:
- *                   type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *         description: Middle section created successfully
  *       500:
  *         description: Internal server error
  *
- * /api/ourstory/howItStartedMiddleSection/{id}:
+ * /api/ourStory/howItStartedMiddleSection/{id}:
  *   put:
  *     summary: Updates an existing "How It Started" middle section
- *     tags:
- *       - Our Story
+ *     tags: [Our Story]
  *     parameters:
  *       - in: path
  *         name: id
- *         required: true
  *         schema:
  *           type: string
- *         description: The ID of the section to update
+ *         required: true
+ *         description: The ID of the middle section to be updated
  *     requestBody:
  *       required: true
  *       content:
@@ -421,32 +381,18 @@ router.put("/howItStartedSection/:id", updateHowStartedSection);
  *             properties:
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the section
- *                 example: "string"
- *               imgUrl:
- *                 type: string
- *                 description: The image URL of the section
- *                 example: "string"
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       200:
- *         description: Successfully updated the "How It Started" middle section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 subtitle:
- *                   type: string
- *                 imgUrl:
- *                   type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *         description: Middle section updated successfully
  *       404:
- *         description: Section not found
+ *         description: Middle section not found
  *       500:
  *         description: Internal server error
  */
@@ -454,14 +400,12 @@ router.post("/howItStartedMiddleSection", createHowStartedMiddleSections);
 router.put("/howItStartedMiddleSection/:id", updateHowStartedMiddleSection);
 
 // ========== The Beginning of Paragliding ========== //
-
 /**
  * @swagger
- * /api/ourstory/beginningOfParagliding:
+ * /api/ourStory/beginningOfParagliding:
  *   post:
- *     summary: Creates a new "Beginning of Paragliding" section
- *     tags:
- *       - Our Story
+ *     summary: Creates a new "Beginning Of Paragliding" section
+ *     tags: [Our Story]
  *     requestBody:
  *       required: true
  *       content:
@@ -471,51 +415,32 @@ router.put("/howItStartedMiddleSection/:id", updateHowStartedMiddleSection);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the section
- *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the section
- *                 example: "string"
- *               imgUrl:
- *                 type: string
- *                 description: The image URL of the section
- *                 example: "string"
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       201:
- *         description: Successfully created the "Beginning of Paragliding" section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 title:
- *                   type: string
- *                 subtitle:
- *                   type: string
- *                 imgUrl:
- *                   type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *         description: Paragliding section created successfully
  *       500:
  *         description: Internal server error
  *
- * /beginningOfParagliding/{id}:
+ * /api/ourStory/beginningOfParagliding/{id}:
  *   put:
- *     summary: Updates an existing "Beginning of Paragliding" section
- *     tags:
- *       - Our Story
+ *     summary: Updates an existing "Beginning Of Paragliding" section
+ *     tags: [Our Story]
  *     parameters:
  *       - in: path
  *         name: id
- *         required: true
  *         schema:
  *           type: string
- *         description: The ID of the section to update
+ *         required: true
+ *         description: The ID of the paragliding section to be updated
  *     requestBody:
  *       required: true
  *       content:
@@ -525,38 +450,20 @@ router.put("/howItStartedMiddleSection/:id", updateHowStartedMiddleSection);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the section
- *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the section
- *                 example: "string"
- *               imgUrl:
- *                 type: string
- *                 description: The image URL of the section
- *                 example: "string"
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       200:
- *         description: Successfully updated the "Beginning of Paragliding" section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 title:
- *                   type: string
- *                 subtitle:
- *                   type: string
- *                 imgUrl:
- *                   type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *         description: Paragliding section updated successfully
  *       404:
- *         description: Section not found
+ *         description: Paragliding section not found
  *       500:
  *         description: Internal server error
  */
@@ -566,11 +473,10 @@ router.put("/beginningOfParagliding/:id", updateParaglidingSection);
 // ========== Carousel Images ========== //
 /**
  * @swagger
- * /api/ourstory/carouselImages:
+ * /api/ourStory/carouselImage:
  *   post:
- *     summary: Creates a new carousel image or updates existing ones
- *     tags:
- *       - Our Story
+ *     summary: Creates or adds images to the carousel
+ *     tags: [Our Story]
  *     requestBody:
  *       required: true
  *       content:
@@ -581,34 +487,29 @@ router.put("/beginningOfParagliding/:id", updateParaglidingSection);
  *               images:
  *                 type: array
  *                 items:
- *                   type: string
- *                 description: The URLs of the images to be added to the carousel
+ *                   type: object
+ *                   properties:
+ *                     public_id:
+ *                       type: string
+ *                     url:
+ *                       type: string
  *     responses:
  *       201:
- *         description: Successfully created or updated carousel images
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 images:
- *                   type: array
- *                   items:
- *                     type: string
+ *         description: Carousel images created/added successfully
  *       500:
  *         description: Internal server error
  *
+ * /api/ourStory/carouselImage/{id}:
  *   put:
- *     summary: Updates a carousel image by index
- *     tags:
- *       - Our Story
+ *     summary: Updates an existing carousel image
+ *     tags: [Our Story]
  *     parameters:
- *       - in: query
- *         name: index
- *         required: true
+ *       - in: path
+ *         name: id
  *         schema:
- *           type: integer
- *         description: The index of the image to update
+ *           type: string
+ *         required: true
+ *         description: The ID of the image to be updated
  *     requestBody:
  *       required: true
  *       content:
@@ -616,27 +517,43 @@ router.put("/beginningOfParagliding/:id", updateParaglidingSection);
  *           schema:
  *             type: object
  *             properties:
- *               imgUrl:
- *                 type: string
- *                 description: The new URL of the image
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       200:
- *         description: Successfully updated the carousel image
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 images:
- *                   type: array
- *                   items:
- *                     type: string
- *       400:
- *         description: Invalid index
+ *         description: Image updated successfully
+ *       404:
+ *         description: Image not found
+ *       500:
+ *         description: Internal server error
+ *
+ *   delete:
+ *     summary: Deletes an existing carousel image
+ *     tags: [Our Story]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the image to be deleted
+ *     responses:
+ *       200:
+ *         description: Image deleted successfully
+ *       404:
+ *         description: Image not found
  *       500:
  *         description: Internal server error
  */
-router.post("/carouselImages", createOurStoryCarouselImage);
-router.put("/carouselImages", updateOurStoryCarouselImage);
+router.post("/carouselImage", createOurStoryCarouselImage);
+router
+  .route("/carouselImage/:id")
+  .put(updateOurStoryCarouselImage)
+  .delete(deleteOurStoryCarouselImage);
 
 module.exports = router;

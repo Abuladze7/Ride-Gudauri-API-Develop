@@ -15,11 +15,235 @@ const {
   updateOtherActivitiesPageMainSection,
   createOtherActivitiesCarouselImage,
   updateOtherActivitiesCarouselImage,
+  deleteImageToBanner,
+  deleteOtherActivitiesPageCarouselImage,
 } = require("../controllers/otherActivitiesPageController");
 
 const router = require("express").Router();
 
 // ========== All Data =========== //
+/**
+ * @swagger
+ * /api/otherActivitiesPage:
+ *   get:
+ *     summary: Retrieves all data for the Other Activities page
+ *     tags: [Other Activities Page]
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved all data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 banner:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     title:
+ *                       type: string
+ *                     subtitle:
+ *                       type: string
+ *                     images:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           public_id:
+ *                             type: string
+ *                           url:
+ *                             type: string
+ *                           _id:
+ *                             type: string
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
+ *                 mainSection:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     title:
+ *                       type: string
+ *                     subtitle:
+ *                       type: string
+ *                     images:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           public_id:
+ *                             type: string
+ *                           url:
+ *                             type: string
+ *                           _id:
+ *                             type: string
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
+ *                 activities:
+ *                   type: object
+ *                   properties:
+ *                     transfersForm:
+ *                       type: object
+ *                       properties:
+ *                         _id:
+ *                           type: string
+ *                         title:
+ *                           type: string
+ *                         subtitle:
+ *                           type: string
+ *                         items:
+ *                           type: array
+ *                           items:
+ *                             type: object
+ *                             properties:
+ *                               description:
+ *                                 type: string
+ *                               image:
+ *                                 type: object
+ *                                 properties:
+ *                                   public_id:
+ *                                     type: string
+ *                                   url:
+ *                                     type: string
+ *                               _id:
+ *                                 type: string
+ *                         createdAt:
+ *                           type: string
+ *                           format: date-time
+ *                         updatedAt:
+ *                           type: string
+ *                           format: date-time
+ *                     snowMobileForm:
+ *                       type: object
+ *                       properties:
+ *                         _id:
+ *                           type: string
+ *                         title:
+ *                           type: string
+ *                         subtitle:
+ *                           type: string
+ *                         warning:
+ *                           type: string
+ *                         items:
+ *                           type: array
+ *                           items:
+ *                             type: object
+ *                             properties:
+ *                               description:
+ *                                 type: string
+ *                               image:
+ *                                 type: object
+ *                                 properties:
+ *                                   public_id:
+ *                                     type: string
+ *                                   url:
+ *                                     type: string
+ *                               _id:
+ *                                 type: string
+ *                         createdAt:
+ *                           type: string
+ *                           format: date-time
+ *                         updatedAt:
+ *                           type: string
+ *                           format: date-time
+ *                     horseRidingForm:
+ *                       type: object
+ *                       properties:
+ *                         _id:
+ *                           type: string
+ *                         title:
+ *                           type: string
+ *                         subtitle:
+ *                           type: string
+ *                         warning:
+ *                           type: string
+ *                         items:
+ *                           type: array
+ *                           items:
+ *                             type: object
+ *                             properties:
+ *                               description:
+ *                                 type: string
+ *                               image:
+ *                                 type: object
+ *                                 properties:
+ *                                   public_id:
+ *                                     type: string
+ *                                   url:
+ *                                     type: string
+ *                               _id:
+ *                                 type: string
+ *                         createdAt:
+ *                           type: string
+ *                           format: date-time
+ *                         updatedAt:
+ *                           type: string
+ *                           format: date-time
+ *                     quadBikeForm:
+ *                       type: object
+ *                       properties:
+ *                         _id:
+ *                           type: string
+ *                         title:
+ *                           type: string
+ *                         subtitle:
+ *                           type: string
+ *                         warning:
+ *                           type: string
+ *                         items:
+ *                           type: array
+ *                           items:
+ *                             type: object
+ *                             properties:
+ *                               description:
+ *                                 type: string
+ *                               image:
+ *                                 type: object
+ *                                 properties:
+ *                                   public_id:
+ *                                     type: string
+ *                                   url:
+ *                                     type: string
+ *                               _id:
+ *                                 type: string
+ *                         createdAt:
+ *                           type: string
+ *                           format: date-time
+ *                         updatedAt:
+ *                           type: string
+ *                           format: date-time
+ *                 carouselImages:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     images:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           public_id:
+ *                             type: string
+ *                           url:
+ *                             type: string
+ *                           _id:
+ *                             type: string
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
+ */
 router.get("/", getAllData);
 
 // ========== Banner =========== //
@@ -27,9 +251,8 @@ router.get("/", getAllData);
  * @swagger
  * /api/otherActivitiesPage/banner:
  *   post:
- *     summary: Creates a new Other Activities Page banner
- *     tags:
- *       - Other Activities Page
+ *     summary: Creates a new banner for the Other Activities page
+ *     tags: [Other Activities Page]
  *     requestBody:
  *       required: true
  *       content:
@@ -37,57 +260,35 @@ router.get("/", getAllData);
  *           schema:
  *             type: object
  *             properties:
+ *               title:
+ *                 type: string
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the banner
- *                 example: "string"
  *               images:
  *                 type: array
  *                 items:
- *                   type: string
- *                 description: The image URLs of the banner
- *                 example: ["string", "string"]
+ *                   type: object
+ *                   properties:
+ *                     public_id:
+ *                       type: string
+ *                     url:
+ *                       type: string
  *     responses:
  *       201:
- *         description: Successfully created the banner
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   example: "string"
- *                 subtitle:
- *                   type: string
- *                   example: "string"
- *                 images:
- *                   type: array
- *                   items:
- *                     type: string
- *                   example: ["string", "string"]
- *                 createdAt:
- *                   type: string
- *                   example: "string"
- *                 updatedAt:
- *                   type: string
- *                   example: "string"
+ *         description: Banner created successfully
  *       500:
  *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   example: "string"
  *
- * /api/otherActivitiesPage/banner/add-image:
- *   post:
- *     summary: Adds an image to the existing Other Activities Page banner
- *     tags:
- *       - Other Activities Page
+ *   put:
+ *     summary: Updates an existing banner for the Other Activities page
+ *     tags: [Other Activities Page]
+ *     parameters:
+ *       - in: query
+ *         name: imgId
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: The ID of the image to be updated
  *     requestBody:
  *       required: true
  *       content:
@@ -95,144 +296,82 @@ router.get("/", getAllData);
  *           schema:
  *             type: object
  *             properties:
- *               imgUrl:
+ *               title:
  *                 type: string
- *                 description: The URL of the image to add
- *                 example: "string"
+ *               subtitle:
+ *                 type: string
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       200:
- *         description: Successfully added the image to the banner
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   example: "string"
- *                 subtitle:
- *                   type: string
- *                   example: "string"
- *                 images:
- *                   type: array
- *                   items:
- *                     type: string
- *                   example: ["string", "string", "string"]
- *                 createdAt:
- *                   type: string
- *                   example: "string"
- *                 updatedAt:
- *                   type: string
- *                   example: "string"
+ *         description: Banner updated successfully
  *       404:
- *         description: Banner not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "string"
+ *         description: Banner or image not found
  *       500:
  *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
  *
- * /api/otherActivitiesPage/banner/{id}:
- *   put:
- *     summary: Updates an existing Other Activities Page banner
- *     tags:
- *       - Other Activities Page
+ * /api/otherActivitiesPage/banner/images/add:
+ *   post:
+ *     summary: Adds a new image to the banner
+ *     tags: [Other Activities Page]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
+ *     responses:
+ *       200:
+ *         description: Image added successfully
+ *       404:
+ *         description: Banner not found
+ *       500:
+ *         description: Internal server error
+ *
+ * /api/otherActivitiesPage/banner/images/{id}:
+ *   delete:
+ *     summary: Deletes an image from the banner
+ *     tags: [Other Activities Page]
  *     parameters:
  *       - in: path
  *         name: id
- *         required: true
  *         schema:
  *           type: string
- *         description: The ID of the banner to update
- *       - in: query
- *         name: imgIndex
- *         schema:
- *           type: integer
- *         description: The index of the image to update
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               subtitle:
- *                 type: string
- *                 description: The subtitle of the banner
- *                 example: "string"
- *               imgUrl:
- *                 type: string
- *                 description: The new image URL to update
- *                 example: "string"
+ *         required: true
+ *         description: The ID of the image to be deleted
  *     responses:
  *       200:
- *         description: Successfully updated the banner
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   example: "string"
- *                 subtitle:
- *                   type: string
- *                   example: "string"
- *                 images:
- *                   type: array
- *                   items:
- *                     type: string
- *                   example: ["string", "string", "string"]
- *                 createdAt:
- *                   type: string
- *                   example: "string"
- *                 updatedAt:
- *                   type: string
- *                   example: "string"
+ *         description: Image deleted successfully
  *       404:
- *         description: Banner not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "string"
+ *         description: Banner or image not found
  *       500:
  *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
  */
 router.post("/banner", createOtherActivitiesPageBanner);
-router.post("/banner/add-image", addImageToBanner);
-router.put("/banner/:id", updateOtherActivitiesPageBanner);
+router.put("/banner", updateOtherActivitiesPageBanner);
+router.post("/banner/images/add", addImageToBanner);
+router.delete("/banner/images/:id", deleteImageToBanner);
 
 // ========== Main Section =========== //
 /**
  * @swagger
  * /api/otherActivitiesPage/mainSection:
  *   post:
- *     summary: Creates a new Other Activities Page main section
- *     tags:
- *       - Other Activities Page
+ *     summary: Creates a new main section for the Other Activities page
+ *     tags: [Other Activities Page]
  *     requestBody:
  *       required: true
  *       content:
@@ -242,74 +381,33 @@ router.put("/banner/:id", updateOtherActivitiesPageBanner);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the main section
- *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the main section
- *                 example: "string"
  *               images:
  *                 type: array
  *                 items:
- *                   type: string
- *                 description: The image URLs of the main section
- *                 example: ["string", "string"]
+ *                   type: object
+ *                   properties:
+ *                     public_id:
+ *                       type: string
+ *                     url:
+ *                       type: string
  *     responses:
  *       201:
- *         description: Successfully created the main section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   example: "string"
- *                 title:
- *                   type: string
- *                   example: "string"
- *                 subtitle:
- *                   type: string
- *                   example: "string"
- *                 images:
- *                   type: array
- *                   items:
- *                     type: string
- *                   example: ["string", "string"]
- *                 createdAt:
- *                   type: string
- *                   example: "string"
- *                 updatedAt:
- *                   type: string
- *                   example: "string"
+ *         description: Main section created successfully
  *       500:
  *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "string"
  *
- * /api/otherActivitiesPage/mainSection/{id}:
  *   put:
- *     summary: Updates an existing Other Activities Page main section
- *     tags:
- *       - Other Activities Page
+ *     summary: Updates an existing main section for the Other Activities page
+ *     tags: [Other Activities Page]
  *     parameters:
- *       - in: path
- *         name: id
- *         required: true
+ *       - in: query
+ *         name: imgId
  *         schema:
  *           type: string
- *         description: The ID of the main section to update
- *       - in: query
- *         name: imgIndex
- *         schema:
- *           type: integer
- *         description: The index of the image to update
+ *         required: false
+ *         description: The ID of the image to be updated
  *     requestBody:
  *       required: true
  *       content:
@@ -319,75 +417,33 @@ router.put("/banner/:id", updateOtherActivitiesPageBanner);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the main section
- *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the main section
- *                 example: "string"
- *               imgUrl:
- *                 type: string
- *                 description: The new image URL to update
- *                 example: "string"
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       200:
- *         description: Successfully updated the main section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   example: "string"
- *                 title:
- *                   type: string
- *                   example: "string"
- *                 subtitle:
- *                   type: string
- *                   example: "string"
- *                 images:
- *                   type: array
- *                   items:
- *                     type: string
- *                   example: ["string", "string"]
- *                 createdAt:
- *                   type: string
- *                   example: "string"
- *                 updatedAt:
- *                   type: string
- *                   example: "string"
+ *         description: Main section updated successfully
  *       404:
- *         description: Section not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "string"
+ *         description: Section or image not found
  *       500:
  *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
  */
 router.post("/mainSection", createOtherActivitiesPageMainSection);
-router.put("/mainSection/:id", updateOtherActivitiesPageMainSection);
+router.put("/mainSection", updateOtherActivitiesPageMainSection);
 
-// ========== Transfers Form ========== //
+// ========== Transfers Form =========== //
 /**
  * @swagger
  * /api/otherActivitiesPage/transfersForm:
  *   post:
- *     summary: Creates a new Other Activities Page transfers form
- *     tags:
- *       - Other Activities Page
+ *     summary: Creates a new transfers form section for the Other Activities page
+ *     tags: [Other Activities Page]
  *     requestBody:
  *       required: true
  *       content:
@@ -397,16 +453,11 @@ router.put("/mainSection/:id", updateOtherActivitiesPageMainSection);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the transfers form
- *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the transfers form
- *                 example: "string"
  *               warning:
  *                 type: string
- *                 description: The warning of the transfers form
- *                 example: "string *OPTIONAL*"
+ *                 example: "string OPTIONAL"
  *               items:
  *                 type: array
  *                 items:
@@ -414,70 +465,29 @@ router.put("/mainSection/:id", updateOtherActivitiesPageMainSection);
  *                   properties:
  *                     description:
  *                       type: string
- *                       description: The description of the item
- *                       example: "string"
- *                     imgUrl:
- *                       type: string
- *                       description: The image URL of the item
- *                       example: "string"
+ *                     image:
+ *                       type: object
+ *                       properties:
+ *                         public_id:
+ *                           type: string
+ *                         url:
+ *                           type: string
  *     responses:
  *       201:
- *         description: Successfully created the transfers form
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   example: "string"
- *                 title:
- *                   type: string
- *                   example: "string"
- *                 subtitle:
- *                   type: string
- *                   example: "string"
- *                 warning:
- *                    type: string
- *                    example: "string"
- *                 items:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       description:
- *                         type: string
- *                         example: "string"
- *                       imgUrl:
- *                         type: string
- *                         example: "string"
- *                 createdAt:
- *                   type: string
- *                   example: "string"
- *                 updatedAt:
- *                   type: string
- *                   example: "string"
+ *         description: Transfers form section created successfully
  *       500:
  *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   example: "string"
  *
  *   put:
- *     summary: Updates an existing Other Activities Page transfers form
- *     tags:
- *       - Other Activities Page
+ *     summary: Updates an existing transfers form section for the Other Activities page
+ *     tags: [Other Activities Page]
  *     parameters:
  *       - in: query
  *         name: itemId
  *         schema:
  *           type: string
- *         description: The ID of the item to update
+ *         required: false
+ *         description: The ID of the item to be updated
  *     requestBody:
  *       required: true
  *       content:
@@ -487,90 +497,37 @@ router.put("/mainSection/:id", updateOtherActivitiesPageMainSection);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the transfers form
- *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the transfers form
- *                 example: "string"
  *               warning:
  *                 type: string
- *                 description: The warning of the transfers form
- *                 example: "string *OPTIONAL*"
  *               description:
  *                 type: string
- *                 description: The description of the item
- *                 example: "string"
- *               imgUrl:
- *                 type: string
- *                 description: The image URL of the item
- *                 example: "string"
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       200:
- *         description: Successfully updated the transfers form
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   example: "string"
- *                 title:
- *                   type: string
- *                   example: "string"
- *                 subtitle:
- *                   type: string
- *                   example: "string"
- *                 items:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       description:
- *                         type: string
- *                         example: "string"
- *                       imgUrl:
- *                         type: string
- *                         example: "string"
- *                 createdAt:
- *                   type: string
- *                   example: "string"
- *                 updatedAt:
- *                   type: string
- *                   example: "string"
+ *         description: Transfers form section updated successfully
  *       404:
- *         description: Section not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "string"
+ *         description: Section or item not found
  *       500:
  *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   example: "string"
  */
 router.post("/transfersForm", createOtherActivitiesPageTransfersForm);
 router.put("/transfersForm", updateOtherActivitiesPageTransfersForm);
 
-// ========== Snowmobile Form ========== //
+// ========== Snowmobile Form =========== //
 /**
  * @swagger
  * /api/otherActivitiesPage/snowmobileForm:
  *   post:
- *     summary: Creates a new Other Activities Page Snowmobile form
- *     tags:
- *       - Other Activities Page
+ *     summary: Creates a new snowmobile form section for the Other Activities page
+ *     tags: [Other Activities Page]
  *     requestBody:
  *       required: true
  *       content:
@@ -580,16 +537,10 @@ router.put("/transfersForm", updateOtherActivitiesPageTransfersForm);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the Snowmobile form
- *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the Snowmobile form
- *                 example: "string"
  *               warning:
  *                 type: string
- *                 description: The warning of the Snowmobile form
- *                 example: "string *OPTIONAL*"
  *               items:
  *                 type: array
  *                 items:
@@ -597,70 +548,29 @@ router.put("/transfersForm", updateOtherActivitiesPageTransfersForm);
  *                   properties:
  *                     description:
  *                       type: string
- *                       description: The description of the item
- *                       example: "string"
- *                     imgUrl:
- *                       type: string
- *                       description: The image URL of the item
- *                       example: "string"
+ *                     image:
+ *                       type: object
+ *                       properties:
+ *                         public_id:
+ *                           type: string
+ *                         url:
+ *                           type: string
  *     responses:
  *       201:
- *         description: Successfully created the Snowmobile form
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   example: "string"
- *                 title:
- *                   type: string
- *                   example: "string"
- *                 subtitle:
- *                   type: string
- *                   example: "string"
- *                 warning:
- *                    type: string
- *                    example: "string"
- *                 items:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       description:
- *                         type: string
- *                         example: "string"
- *                       imgUrl:
- *                         type: string
- *                         example: "string"
- *                 createdAt:
- *                   type: string
- *                   example: "string"
- *                 updatedAt:
- *                   type: string
- *                   example: "string"
+ *         description: Snowmobile form section created successfully
  *       500:
  *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   example: "string"
  *
  *   put:
- *     summary: Updates an existing Other Activities Page Snowmobile form
- *     tags:
- *       - Other Activities Page
+ *     summary: Updates an existing snowmobile form section for the Other Activities page
+ *     tags: [Other Activities Page]
  *     parameters:
  *       - in: query
  *         name: itemId
  *         schema:
  *           type: string
- *         description: The ID of the item to update
+ *         required: false
+ *         description: The ID of the item to be updated
  *     requestBody:
  *       required: true
  *       content:
@@ -670,90 +580,37 @@ router.put("/transfersForm", updateOtherActivitiesPageTransfersForm);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the Snowmobile form
- *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the Snowmobile form
- *                 example: "string"
  *               warning:
  *                 type: string
- *                 description: The warning of the Snowmobile form
- *                 example: "string *OPTIONAL*"
  *               description:
  *                 type: string
- *                 description: The description of the item
- *                 example: "string"
- *               imgUrl:
- *                 type: string
- *                 description: The image URL of the item
- *                 example: "string"
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       200:
- *         description: Successfully updated the Snowmobile form
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   example: "string"
- *                 title:
- *                   type: string
- *                   example: "string"
- *                 subtitle:
- *                   type: string
- *                   example: "string"
- *                 items:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       description:
- *                         type: string
- *                         example: "string"
- *                       imgUrl:
- *                         type: string
- *                         example: "string"
- *                 createdAt:
- *                   type: string
- *                   example: "string"
- *                 updatedAt:
- *                   type: string
- *                   example: "string"
+ *         description: Snowmobile form section updated successfully
  *       404:
- *         description: Section not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "string"
+ *         description: Section or item not found
  *       500:
  *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   example: "string"
  */
 router.post("/snowmobileForm", createOtherActivitiesPageSnowMobileForm);
 router.put("/snowmobileForm", updateOtherActivitiesPageSnowMobileForm);
 
-// ========== Horse riding form ========== //
+// ========== Horse riding form =========== //
 /**
  * @swagger
  * /api/otherActivitiesPage/horseRidingForm:
  *   post:
- *     summary: Creates a new Other Activities Page Horse Riding form
- *     tags:
- *       - Other Activities Page
+ *     summary: Creates a new horse riding form section for the Other Activities page
+ *     tags: [Other Activities Page]
  *     requestBody:
  *       required: true
  *       content:
@@ -763,16 +620,10 @@ router.put("/snowmobileForm", updateOtherActivitiesPageSnowMobileForm);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the Horse Riding form
- *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the Horse Riding form
- *                 example: "string"
  *               warning:
  *                 type: string
- *                 description: The warning of the Horse Riding form
- *                 example: "string *OPTIONAL*"
  *               items:
  *                 type: array
  *                 items:
@@ -780,70 +631,29 @@ router.put("/snowmobileForm", updateOtherActivitiesPageSnowMobileForm);
  *                   properties:
  *                     description:
  *                       type: string
- *                       description: The description of the item
- *                       example: "string"
- *                     imgUrl:
- *                       type: string
- *                       description: The image URL of the item
- *                       example: "string"
+ *                     image:
+ *                       type: object
+ *                       properties:
+ *                         public_id:
+ *                           type: string
+ *                         url:
+ *                           type: string
  *     responses:
  *       201:
- *         description: Successfully created the Horse Riding form
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   example: "string"
- *                 title:
- *                   type: string
- *                   example: "string"
- *                 subtitle:
- *                   type: string
- *                   example: "string"
- *                 warning:
- *                    type: string
- *                    example: "string"
- *                 items:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       description:
- *                         type: string
- *                         example: "string"
- *                       imgUrl:
- *                         type: string
- *                         example: "string"
- *                 createdAt:
- *                   type: string
- *                   example: "string"
- *                 updatedAt:
- *                   type: string
- *                   example: "string"
+ *         description: Horse riding form section created successfully
  *       500:
  *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   example: "string"
  *
  *   put:
- *     summary: Updates an existing Other Activities Page Horse Riding form
- *     tags:
- *       - Other Activities Page
+ *     summary: Updates an existing horse riding form section for the Other Activities page
+ *     tags: [Other Activities Page]
  *     parameters:
  *       - in: query
  *         name: itemId
  *         schema:
  *           type: string
- *         description: The ID of the item to update
+ *         required: false
+ *         description: The ID of the item to be updated
  *     requestBody:
  *       required: true
  *       content:
@@ -853,90 +663,37 @@ router.put("/snowmobileForm", updateOtherActivitiesPageSnowMobileForm);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the Horse Riding form
- *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the Horse Riding form
- *                 example: "string"
  *               warning:
  *                 type: string
- *                 description: The warning of the Horse Riding form
- *                 example: "string *OPTIONAL*"
  *               description:
  *                 type: string
- *                 description: The description of the item
- *                 example: "string"
- *               imgUrl:
- *                 type: string
- *                 description: The image URL of the item
- *                 example: "string"
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       200:
- *         description: Successfully updated the Horse Riding form
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   example: "string"
- *                 title:
- *                   type: string
- *                   example: "string"
- *                 subtitle:
- *                   type: string
- *                   example: "string"
- *                 items:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       description:
- *                         type: string
- *                         example: "string"
- *                       imgUrl:
- *                         type: string
- *                         example: "string"
- *                 createdAt:
- *                   type: string
- *                   example: "string"
- *                 updatedAt:
- *                   type: string
- *                   example: "string"
+ *         description: Horse riding form section updated successfully
  *       404:
- *         description: Section not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "string"
+ *         description: Section or item not found
  *       500:
  *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   example: "string"
  */
 router.post("/horseRidingForm", createOtherActivitiesPageHorseRidingForm);
 router.put("/horseRidingForm", updateOtherActivitiesPageHorseRidingForm);
 
-// ========== Quad Bike Form ========== //
+// ========== Quad Bike Form =========== //
 /**
  * @swagger
  * /api/otherActivitiesPage/quadBikeForm:
  *   post:
- *     summary: Creates a new Other Activities Page Quad Bike form
- *     tags:
- *       - Other Activities Page
+ *     summary: Creates a new quad bike form section for the Other Activities page
+ *     tags: [Other Activities Page]
  *     requestBody:
  *       required: true
  *       content:
@@ -946,16 +703,10 @@ router.put("/horseRidingForm", updateOtherActivitiesPageHorseRidingForm);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the Quad Bike form
- *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the Quad Bike form
- *                 example: "string"
  *               warning:
  *                 type: string
- *                 description: The warning of the Quad Bike form
- *                 example: "string *OPTIONAL*"
  *               items:
  *                 type: array
  *                 items:
@@ -963,70 +714,29 @@ router.put("/horseRidingForm", updateOtherActivitiesPageHorseRidingForm);
  *                   properties:
  *                     description:
  *                       type: string
- *                       description: The description of the item
- *                       example: "string"
- *                     imgUrl:
- *                       type: string
- *                       description: The image URL of the item
- *                       example: "string"
+ *                     image:
+ *                       type: object
+ *                       properties:
+ *                         public_id:
+ *                           type: string
+ *                         url:
+ *                           type: string
  *     responses:
  *       201:
- *         description: Successfully created the Quad Bike form
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   example: "string"
- *                 title:
- *                   type: string
- *                   example: "string"
- *                 subtitle:
- *                   type: string
- *                   example: "string"
- *                 warning:
- *                    type: string
- *                    example: "string"
- *                 items:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       description:
- *                         type: string
- *                         example: "string"
- *                       imgUrl:
- *                         type: string
- *                         example: "string"
- *                 createdAt:
- *                   type: string
- *                   example: "string"
- *                 updatedAt:
- *                   type: string
- *                   example: "string"
+ *         description: Quad bike form section created successfully
  *       500:
  *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   example: "string"
  *
  *   put:
- *     summary: Updates an existing Other Activities Page Quad Bike form
- *     tags:
- *       - Other Activities Page
+ *     summary: Updates an existing quad bike form section for the Other Activities page
+ *     tags: [Other Activities Page]
  *     parameters:
  *       - in: query
  *         name: itemId
  *         schema:
  *           type: string
- *         description: The ID of the item to update
+ *         required: false
+ *         description: The ID of the item to be updated
  *     requestBody:
  *       required: true
  *       content:
@@ -1036,90 +746,37 @@ router.put("/horseRidingForm", updateOtherActivitiesPageHorseRidingForm);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the Quad Bike form
- *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the Quad Bike form
- *                 example: "string"
  *               warning:
  *                 type: string
- *                 description: The warning of the Quad Bike form
- *                 example: "string *OPTIONAL*"
  *               description:
  *                 type: string
- *                 description: The description of the item
- *                 example: "string"
- *               imgUrl:
- *                 type: string
- *                 description: The image URL of the item
- *                 example: "string"
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       200:
- *         description: Successfully updated the Quad Bike form
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   example: "string"
- *                 title:
- *                   type: string
- *                   example: "string"
- *                 subtitle:
- *                   type: string
- *                   example: "string"
- *                 items:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       description:
- *                         type: string
- *                         example: "string"
- *                       imgUrl:
- *                         type: string
- *                         example: "string"
- *                 createdAt:
- *                   type: string
- *                   example: "string"
- *                 updatedAt:
- *                   type: string
- *                   example: "string"
+ *         description: Quad bike form section updated successfully
  *       404:
- *         description: Section not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "string"
+ *         description: Section or item not found
  *       500:
  *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   example: "string"
  */
 router.post("/quadBikeForm", createOtherActivitiesPageQuadBikeForm);
 router.put("/quadBikeForm", updateOtherActivitiesPageQuadBikeForm);
 
-// ========== Carousel Image ========== //
+// ========== Carousel Image =========== //
 /**
  * @swagger
  * /api/otherActivitiesPage/carouselImage:
  *   post:
- *     summary: Create new carousel images
- *     tags:
- *       - Other Activities Page
+ *     summary: Creates a new carousel image section for the Other Activities page
+ *     tags: [Other Activities Page]
  *     requestBody:
  *       required: true
  *       content:
@@ -1130,53 +787,29 @@ router.put("/quadBikeForm", updateOtherActivitiesPageQuadBikeForm);
  *               images:
  *                 type: array
  *                 items:
- *                   type: string
- *                 description: List of image URLs to be added to the carousel
- *                 example: ["string", "string"]
+ *                   type: object
+ *                   properties:
+ *                     public_id:
+ *                       type: string
+ *                     url:
+ *                       type: string
  *     responses:
  *       201:
- *         description: Successfully created carousel images
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   example: "string"
- *                 images:
- *                   type: array
- *                   items:
- *                     type: string
- *                   example: ["string", "string"]
- *                 createdAt:
- *                   type: string
- *                   example: "string"
- *                 updatedAt:
- *                   type: string
- *                   example: "string"
+ *         description: Carousel images created successfully
  *       500:
  *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "string"
  *
+ * /api/otherActivitiesPage/carouselImage/{id}:
  *   put:
- *     summary: Update carousel images
- *     tags:
- *       - Other Activities Page
+ *     summary: Updates an existing carousel image for the Other Activities page
+ *     tags: [Other Activities Page]
  *     parameters:
- *       - in: query
- *         name: index
+ *       - in: path
+ *         name: id
  *         schema:
- *           type: integer
+ *           type: string
  *         required: true
- *         description: Index of the image to update
+ *         description: The ID of the image to be updated
  *     requestBody:
  *       required: true
  *       content:
@@ -1184,62 +817,43 @@ router.put("/quadBikeForm", updateOtherActivitiesPageQuadBikeForm);
  *           schema:
  *             type: object
  *             properties:
- *               imgUrl:
- *                 type: string
- *                 description: The new image URL to update
- *                 example: "string"
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       200:
- *         description: Successfully updated carousel image
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   example: "string"
- *                 images:
- *                   type: array
- *                   items:
- *                     type: string
- *                   example: ["string", "string"]
- *                 createdAt:
- *                   type: string
- *                   example: "string"
- *                 updatedAt:
- *                   type: string
- *                   example: "string"
- *       400:
- *         description: Invalid index
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "string"
+ *         description: Image updated successfully
  *       404:
- *         description: Images not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
+ *         description: Images or image not found
  *       500:
  *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
+ *
+ *   delete:
+ *     summary: Deletes a carousel image from the Other Activities page
+ *     tags: [Other Activities Page]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the image to be deleted
+ *     responses:
+ *       200:
+ *         description: Image deleted successfully
+ *       404:
+ *         description: Images or image not found
+ *       500:
+ *         description: Internal server error
  */
 router.post("/carouselImage", createOtherActivitiesCarouselImage);
-router.put("/carouselImage", updateOtherActivitiesCarouselImage);
+router
+  .route("/carouselImage/:id")
+  .put(updateOtherActivitiesCarouselImage)
+  .delete(deleteOtherActivitiesPageCarouselImage);
 
 module.exports = router;

@@ -6,7 +6,7 @@ const SkiSchoolPagePrivateGroupLesson = require("../models/ski-school-page/skiSc
 const SkiSchoolPageRentalShop = require("../models/ski-school-page/skiSchoolShopModel");
 const SkiSchoolPageRepair = require("../models/ski-school-page/skiSchoolRepairModel");
 const SkiSchoolPageTeam = require("../models/ski-school-page/skiSchoolTeamModel");
-
+const cloudinary = require("../config/cloudinary");
 // ========== Banner ========== //
 
 exports.createSkiSchoolPageBanner = async (req, res) => {
@@ -23,7 +23,6 @@ exports.addImageToBanner = async (req, res) => {
   try {
     const { imgUrl } = req.body;
     const banner = await SkiSchoolPageBanner.findOne();
-
     if (!banner) return res.status(404).json({ message: "Banner not found" });
 
     banner.images.push(imgUrl);
@@ -38,27 +37,67 @@ exports.addImageToBanner = async (req, res) => {
 
 exports.updateSkiSchoolPageBanner = async (req, res) => {
   try {
-    const { subtitle, imgUrl } = req.body;
-    const { imgIndex } = req.query;
+    const { title, subtitle, image } = req.body;
+    const { imgId } = req.query;
 
-    const banner = await SkiSchoolPageBanner.findById(req.params.id);
+    const banner = await SkiSchoolPageBanner.findOne();
 
     if (!banner) return res.status(404).json({ message: "Banner not found" });
 
-    if (
-      imgIndex !== undefined &&
-      imgUrl &&
-      imgIndex >= 0 &&
-      imgIndex < banner.images.length
-    ) {
-      banner.images[Number(imgIndex)] = imgUrl;
+    if (imgId && image) {
+      const imgIndex = banner.images.findIndex(
+        (img) => img._id.toString() === imgId
+      );
+
+      if (imgIndex === -1)
+        return res.status(404).json({ message: "Image not found" });
+
+      const img = banner.images[imgIndex];
+
+      if (img && img.public_id) {
+        await cloudinary.uploader.destroy(img.public_id);
+      }
+
+      if (image.public_id) banner.images[imgIndex].public_id = image.public_id;
+
+      if (image.url) banner.images[imgIndex].url = image.url;
     }
+
+    if (title) banner.title = title;
 
     if (subtitle) banner.subtitle = subtitle;
 
     await banner.save();
 
     res.status(200).json({ message: "Banner updated successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.deleteImageToSkiSchoolPageBanner = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const banner = await SkiSchoolPageBanner.findOne();
+
+    if (!banner) return res.status(404).json({ message: "Banner not found" });
+
+    const index = banner.images.findIndex((img) => img._id.toString() === id);
+
+    if (index === -1) {
+      return res.status(404).json({ message: "Image not found" });
+    }
+
+    const img = banner.images[index];
+    if (img && img.public_id) {
+      await cloudinary.uploader.destroy(img.public_id);
+    }
+
+    banner.images.splice(index, 1);
+    await banner.save();
+
+    res.status(200).json({ message: "Image deleted successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -78,13 +117,29 @@ exports.createSkiSchoolPageAbout = async (req, res) => {
 
 exports.updateSkiSchoolPageAbout = async (req, res) => {
   try {
-    const about = await SkiSchoolPageAbout.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
+    const { title, subtitle, image } = req.body;
+    const about = await SkiSchoolPageAbout.findById(req.params.id);
 
     if (!about) return res.status(404).json({ message: "About not found" });
+
+    if (image) {
+      const imgId = about.image.public_id;
+      if (imgId) {
+        await cloudinary.uploader.destroy(imgId);
+      }
+    }
+
+    await SkiSchoolPageAbout.findByIdAndUpdate(
+      req.params.id,
+      {
+        title,
+        subtitle,
+        image,
+      },
+      {
+        new: true,
+      }
+    );
 
     res.status(200).json({ message: "Section updated successfully" });
   } catch (err) {
@@ -106,7 +161,7 @@ exports.createSkiSchoolIndividualLesson = async (req, res) => {
 
 exports.updateSkiSchoolIndividualLesson = async (req, res) => {
   try {
-    const { title, subtitle, imgUrl, description } = req.body;
+    const { title, subtitle, image, description } = req.body;
     const { itemId } = req.query;
 
     const lesson = await SkiSchoolPageIndividualLesson.findOne();
@@ -119,12 +174,20 @@ exports.updateSkiSchoolIndividualLesson = async (req, res) => {
 
     if (itemId) {
       const item = lesson.items.id(itemId);
+
       if (item) {
         if (description) {
           item.description = description;
         }
-        if (imgUrl) {
-          item.imgUrl = imgUrl;
+
+        if (image) {
+          const imgId = item.image.public_id;
+
+          if (imgId) {
+            await cloudinary.uploader.destroy(imgId);
+          }
+
+          item.image = image;
         }
       } else {
         return res.status(404).json({ message: "Item not found" });
@@ -153,7 +216,7 @@ exports.createSkiSchoolPrivateGroupLesson = async (req, res) => {
 
 exports.updateSkiSchoolPrivateGroupLesson = async (req, res) => {
   try {
-    const { title, subtitle, imgUrl, description } = req.body;
+    const { title, subtitle, image, description } = req.body;
     const { itemId } = req.query;
 
     const lesson = await SkiSchoolPagePrivateGroupLesson.findOne();
@@ -170,8 +233,15 @@ exports.updateSkiSchoolPrivateGroupLesson = async (req, res) => {
         if (description) {
           item.description = description;
         }
-        if (imgUrl) {
-          item.imgUrl = imgUrl;
+
+        if (image) {
+          const imgId = item.image.public_id;
+
+          if (imgId) {
+            await cloudinary.uploader.destroy(imgId);
+          }
+
+          item.image = image;
         }
       } else {
         return res.status(404).json({ message: "Item not found" });
@@ -200,7 +270,7 @@ exports.createSkiSchoolPageBenefits = async (req, res) => {
 
 exports.updateSkiSchoolPageBenefits = async (req, res) => {
   try {
-    const { sectionTitle, subtitle, imgUrl } = req.body;
+    const { sectionTitle, subtitle, image } = req.body;
     const { itemId } = req.query;
     const benefits = await SkiSchoolPageBenefits.findOne();
 
@@ -214,8 +284,12 @@ exports.updateSkiSchoolPageBenefits = async (req, res) => {
         if (subtitle) {
           item.subtitle = subtitle;
         }
-        if (imgUrl) {
-          item.imgUrl = imgUrl;
+        if (image) {
+          const imgId = item.image.public_id;
+          if (imgId) {
+            await cloudinary.uploader.destroy(imgId);
+          }
+          item.image = image;
         }
       } else {
         return res.status(404).json({ message: "Item not found" });
@@ -243,17 +317,26 @@ exports.createSkiSchoolRentalShopSection = async (req, res) => {
 
 exports.updateSkiSchoolRentalShopSection = async (req, res) => {
   try {
-    const repairSection = await SkiSchoolPageRentalShop.findByIdAndUpdate(
+    const { title, subtitle, image } = req.body;
+    const section = await SkiSchoolPageRentalShop.findById(req.params.id);
+
+    if (!section) return res.status(404).json({ message: "Section not found" });
+
+    if (image) {
+      const imgId = section.image.public_id;
+      if (imgId) {
+        await cloudinary.uploader.destroy(imgId);
+      }
+    }
+
+    await SkiSchoolPageRentalShop.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      { title, subtitle, image },
       {
         new: true,
         runValidators: true,
       }
     );
-
-    if (!repairSection)
-      return res.status(404).json({ message: "Section not found" });
 
     res.status(200).json({ message: "Section updated successfully" });
   } catch (err) {
@@ -275,17 +358,30 @@ exports.createSkiSchoolRepairSection = async (req, res) => {
 
 exports.updateSkiSchoolRepairSection = async (req, res) => {
   try {
-    const repairSection = await SkiSchoolPageRepair.findByIdAndUpdate(
+    const { title, subtitle, image } = req.body;
+    const section = await SkiSchoolPageRepair.findById(req.params.id);
+
+    if (!section) return res.status(404).json({ message: "Section not found" });
+
+    if (image && section.image) {
+      const imgId = section.image.public_id;
+      if (imgId) {
+        await cloudinary.uploader.destroy(imgId);
+      }
+    }
+
+    await SkiSchoolPageRepair.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      {
+        title,
+        subtitle,
+        image,
+      },
       {
         new: true,
         runValidators: true,
       }
     );
-
-    if (!repairSection)
-      return res.status(404).json({ message: "Section not found" });
 
     res.status(200).json({ message: "Section updated successfully" });
   } catch (err) {
@@ -307,7 +403,7 @@ exports.createSkiSchoolTeamSection = async (req, res) => {
 
 exports.updateSkiSchoolTEamSection = async (req, res) => {
   try {
-    const { sectionTitle, itemTitle, subtitle, imgUrl } = req.body;
+    const { sectionTitle, itemTitle, subtitle, image } = req.body;
     const { itemId } = req.query;
     const teamSection = await SkiSchoolPageTeam.findOne();
 
@@ -330,8 +426,11 @@ exports.updateSkiSchoolTEamSection = async (req, res) => {
           item.subtitle = subtitle;
         }
 
-        if (imgUrl) {
-          item.imgUrl = imgUrl;
+        if (image) {
+          const imgId = item.image.public_id;
+          if (imgId) await cloudinary.uploader.destroy(imgId);
+
+          item.image = image;
         }
       } else {
         return res.status(404).json({ message: "Item not found" });
