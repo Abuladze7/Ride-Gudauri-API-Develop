@@ -5,7 +5,7 @@ const OtherActivitiesPageSnowMobileForm = require("../models/other-activities-pa
 const OtherActivitiesPageHorseRidingForm = require("../models/other-activities-page/otherActivitiesPageHorseRidingFormModel");
 const OtherActivitiesPageQuadBikeForm = require("../models/other-activities-page/otherActivitiesPageQuadBikeFormModel");
 const OtherActivitiesPageCarouselImages = require("../models/other-activities-page/otherActivitiesPageCarouselImagesModel");
-
+const cloudinary = require("../config/cloudinary");
 // ========== Banner ========== //
 
 exports.createOtherActivitiesPageBanner = async (req, res) => {
@@ -20,12 +20,12 @@ exports.createOtherActivitiesPageBanner = async (req, res) => {
 
 exports.addImageToBanner = async (req, res) => {
   try {
-    const { imgUrl } = req.body;
+    const { image } = req.body;
     const banner = await OtherActivitiesPageBanner.findOne();
 
     if (!banner) return res.status(404).json({ message: "Banner not found" });
 
-    banner.images.push(imgUrl);
+    banner.images.push(image);
 
     await banner.save();
 
@@ -37,27 +37,67 @@ exports.addImageToBanner = async (req, res) => {
 
 exports.updateOtherActivitiesPageBanner = async (req, res) => {
   try {
-    const { subtitle, imgUrl } = req.body;
-    const { imgIndex } = req.query;
+    const { title, subtitle, image } = req.body;
+    const { imgId } = req.query;
 
-    const banner = await OtherActivitiesPageBanner.findById(req.params.id);
+    const banner = await OtherActivitiesPageBanner.findOne();
 
     if (!banner) return res.status(404).json({ message: "Banner not found" });
 
-    if (
-      imgIndex !== undefined &&
-      imgUrl &&
-      imgIndex >= 0 &&
-      imgIndex < banner.images.length
-    ) {
-      banner.images[Number(imgIndex)] = imgUrl;
+    if (imgId && image) {
+      const imgIndex = banner.images.findIndex(
+        (img) => img._id.toString() === imgId
+      );
+
+      if (imgIndex === -1)
+        return res.status(404).json({ message: "Image not found" });
+
+      const img = banner.images[imgIndex];
+
+      if (img && img.public_id) {
+        await cloudinary.uploader.destroy(img.public_id);
+      }
+
+      if (image.public_id) banner.images[imgIndex].public_id = image.public_id;
+
+      if (image.url) banner.images[imgIndex].url = image.url;
     }
+
+    if (title) banner.title = title;
 
     if (subtitle) banner.subtitle = subtitle;
 
     await banner.save();
 
-    res.status(200).json({ message: "Image updated successfully" });
+    res.status(200).json({ message: "Banner updated successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.deleteImageToBanner = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const banner = await OtherActivitiesPageBanner.findOne();
+
+    if (!banner) return res.status(404).json({ message: "Banner not found" });
+
+    const index = banner.images.findIndex((img) => img._id.toString() === id);
+
+    if (index === -1) {
+      return res.status(404).json({ message: "Image not found" });
+    }
+
+    const img = banner.images[index];
+    if (img && img.public_id) {
+      await cloudinary.uploader.destroy(img.public_id);
+    }
+
+    banner.images.splice(index, 1);
+    await banner.save();
+
+    res.status(200).json({ message: "Image deleted successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -77,30 +117,35 @@ exports.createOtherActivitiesPageMainSection = async (req, res) => {
 
 exports.updateOtherActivitiesPageMainSection = async (req, res) => {
   try {
-    const { title, subtitle, imgUrl } = req.body;
-    const { imgIndex } = req.query;
+    const { title, subtitle, image } = req.body;
+    const { imgId } = req.query;
 
-    const mainSection = await OtherActivitiesPageMainSection.findById(
-      req.params.id
-    );
+    const section = await OtherActivitiesPageMainSection.findOne();
 
-    if (!mainSection)
-      return res.status(404).json({ message: "Section not found" });
+    if (imgId && image) {
+      const imgIndex = section.images.findIndex(
+        (img) => img._id.toString() === imgId
+      );
 
-    if (
-      imgIndex !== undefined &&
-      imgUrl &&
-      imgIndex >= 0 &&
-      imgIndex < mainSection.images.length
-    ) {
-      mainSection.images[Number(imgIndex)] = imgUrl;
+      if (imgIndex === -1)
+        return res.status(404).json({ message: "Image not found" });
+
+      const img = section.images[imgIndex];
+
+      if (img && img.public_id) {
+        await cloudinary.uploader.destroy(img.public_id);
+      }
+
+      if (image.public_id) section.images[imgIndex].public_id = image.public_id;
+
+      if (image.url) section.images[imgIndex].url = image.url;
     }
 
-    if (title) mainSection.title = title;
+    if (title) section.title = title;
 
-    if (subtitle) mainSection.subtitle = subtitle;
+    if (subtitle) section.subtitle = subtitle;
 
-    await mainSection.save();
+    await section.save();
 
     res.status(200).json({ message: "Section updated successfully" });
   } catch (err) {
@@ -123,7 +168,7 @@ exports.createOtherActivitiesPageTransfersForm = async (req, res) => {
 
 exports.updateOtherActivitiesPageTransfersForm = async (req, res) => {
   try {
-    const { title, subtitle, warning, description, imgUrl } = req.body;
+    const { title, subtitle, warning, description, image } = req.body;
     const { itemId } = req.query;
 
     const transfersForm = await OtherActivitiesPageTransfersForm.findOne();
@@ -137,7 +182,13 @@ exports.updateOtherActivitiesPageTransfersForm = async (req, res) => {
       if (item) {
         if (description) item.description = description;
 
-        if (imgUrl) item.imgUrl = imgUrl;
+        if (image) {
+          const imgId = item.image.public_id;
+          if (imgId) {
+            await cloudinary.uploader.destroy(item.image.public_id);
+          }
+          item.image = image;
+        }
       }
     }
 
@@ -168,7 +219,7 @@ exports.createOtherActivitiesPageSnowMobileForm = async (req, res) => {
 
 exports.updateOtherActivitiesPageSnowMobileForm = async (req, res) => {
   try {
-    const { title, subtitle, warning, description, imgUrl } = req.body;
+    const { title, subtitle, warning, description, image } = req.body;
     const { itemId } = req.query;
 
     const snowMobileForm = await OtherActivitiesPageSnowMobileForm.findOne();
@@ -181,7 +232,16 @@ exports.updateOtherActivitiesPageSnowMobileForm = async (req, res) => {
 
       if (item) {
         if (description) item.description = description;
-        if (imgUrl) item.imgUrl = imgUrl;
+
+        if (image) {
+          const imgId = item.image.public_id;
+
+          if (imgId) {
+            await cloudinary.uploader.destroy(item.image.public_id);
+          }
+
+          item.image = image;
+        }
       }
     }
 
@@ -211,7 +271,7 @@ exports.createOtherActivitiesPageHorseRidingForm = async (req, res) => {
 
 exports.updateOtherActivitiesPageHorseRidingForm = async (req, res) => {
   try {
-    const { title, subtitle, warning, description, imgUrl } = req.body;
+    const { title, subtitle, warning, description, image } = req.body;
     const { itemId } = req.query;
 
     const horseRidingForm = await OtherActivitiesPageHorseRidingForm.findOne();
@@ -221,9 +281,17 @@ exports.updateOtherActivitiesPageHorseRidingForm = async (req, res) => {
 
     if (itemId) {
       const item = horseRidingForm.items.id(itemId);
+
       if (item) {
         if (description) item.description = description;
-        if (imgUrl) item.imgUrl = imgUrl;
+
+        if (image) {
+          const imgId = item.image.public_id;
+
+          if (imgId) await cloudinary.uploader.destroy(imgId);
+
+          item.image = image;
+        }
       }
     }
 
@@ -252,7 +320,7 @@ exports.createOtherActivitiesPageQuadBikeForm = async (req, res) => {
 
 exports.updateOtherActivitiesPageQuadBikeForm = async (req, res) => {
   try {
-    const { title, subtitle, warning, description, imgUrl } = req.body;
+    const { title, subtitle, warning, description, image } = req.body;
     const { itemId } = req.query;
 
     const quadBikeForm = await OtherActivitiesPageQuadBikeForm.findOne();
@@ -262,9 +330,17 @@ exports.updateOtherActivitiesPageQuadBikeForm = async (req, res) => {
 
     if (itemId) {
       const item = quadBikeForm.items.id(itemId);
+
       if (item) {
         if (description) item.description = description;
-        if (imgUrl) item.imgUrl = imgUrl;
+
+        if (image) {
+          const imgId = item.image.public_id;
+
+          if (imgId) await cloudinary.uploader.destroy(imgId);
+
+          item.image = image;
+        }
       }
     }
 
@@ -309,22 +385,55 @@ exports.createOtherActivitiesCarouselImage = async (req, res) => {
 
 exports.updateOtherActivitiesCarouselImage = async (req, res) => {
   try {
-    const { index } = req.query;
-    const { imgUrl } = req.body;
+    const { id } = req.params;
+    const { image } = req.body;
 
-    const images = await OtherActivitiesPageCarouselImages.findOne();
-    if (!images) return res.status(404).json({ message: "Images not found" });
+    const carousel = await OtherActivitiesPageCarouselImages.findOne();
+    if (!carousel) return res.status(404).json({ message: "Images not found" });
 
-    if (index) {
-      if (index > images.images.length - 1 || index < 0) {
-        return res.status(400).json({ message: "Invalid index" });
-      }
+    const img = carousel.images.id(id);
+    if (!img) return res.status(404).json({ message: "Image not found" });
 
-      images.images[index] = imgUrl;
-      await images.save();
+    if (img.public_id) {
+      await cloudinary.uploader.destroy(img.public_id);
     }
 
+    img.public_id = image.public_id;
+    img.url = image.url;
+
+    await carousel.save();
+
     res.status(200).json({ message: "Image updated successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.deleteOtherActivitiesPageCarouselImage = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const carousel = await OtherActivitiesPageCarouselImages.findOne();
+    if (!carousel) {
+      return res.status(404).json({ message: "Images not found" });
+    }
+
+    const index = carousel.images.findIndex((img) => img._id.toString() === id);
+
+    if (index === -1) {
+      return res.status(404).json({ message: "Image not found" });
+    }
+
+    const img = carousel.images[index];
+
+    if (img.public_id) {
+      await cloudinary.uploader.destroy(img.public_id);
+    }
+
+    carousel.images.splice(index, 1);
+    await carousel.save();
+
+    res.status(200).json({ message: "Image deleted successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

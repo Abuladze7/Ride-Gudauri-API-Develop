@@ -1,6 +1,8 @@
 const ContactPageFaqTitles = require("../models/contact-page/contactPageFaqTitlesModel");
 const ContactPageFaqQuestion = require("../models/contact-page/contactPageFaqQuestionsModel");
 const ContactPageCarouselImage = require("../models/contact-page/contactPageCarouselImageModel");
+const cloudinary = require("../config/cloudinary");
+
 // ========== FAQ Title ========== //
 
 exports.createContactPageFaqTitle = async (req, res) => {
@@ -138,20 +140,23 @@ exports.createContactPageCarouselImage = async (req, res) => {
 
 exports.updateContactPageCarouselImage = async (req, res) => {
   try {
-    const { index } = req.query;
-    const { imgUrl } = req.body;
+    const { id } = req.params;
+    const { image } = req.body;
 
-    const images = await ContactPageCarouselImage.findOne();
+    const carousel = await ContactPageCarouselImage.findOne();
+    if (!carousel) return res.status(404).json({ message: "Images not found" });
 
-    if (!images) return res.status(404).json({ message: "Images not found" });
+    const img = carousel.images.id(id);
+    if (!img) return res.status(404).json({ message: "Image not found" });
 
-    if (index) {
-      if (index > images.images.length - 1 || index < 0) {
-        return res.status(400).json({ message: "Invalid index" });
-      }
-      images.images[index] = imgUrl;
-      await images.save();
+    if (img.public_id) {
+      await cloudinary.uploader.destroy(img.public_id);
     }
+
+    img.public_id = image.public_id;
+    img.url = image.url;
+
+    await carousel.save();
 
     res.status(200).json({ message: "Image updated successfully" });
   } catch (err) {
@@ -159,6 +164,35 @@ exports.updateContactPageCarouselImage = async (req, res) => {
   }
 };
 
+exports.deleteContactPageCarouselImage = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const carousel = await ContactPageCarouselImage.findOne();
+    if (!carousel) {
+      return res.status(404).json({ message: "Images not found" });
+    }
+
+    const index = carousel.images.findIndex((img) => img._id.toString() === id);
+
+    if (index === -1) {
+      return res.status(404).json({ message: "Image not found" });
+    }
+
+    const img = carousel.images[index];
+
+    if (img.public_id) {
+      await cloudinary.uploader.destroy(img.public_id);
+    }
+
+    carousel.images.splice(index, 1);
+    await carousel.save();
+
+    res.status(200).json({ message: "Image deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 // ========== All Data ========== //
 
 exports.getAllData = async (req, res) => {

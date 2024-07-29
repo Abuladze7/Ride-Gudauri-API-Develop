@@ -17,6 +17,7 @@ const {
   updateSkiSchoolTEamSection,
   addImageToBanner,
   getAllData,
+  deleteImageToSkiSchoolPageBanner,
 } = require("../controllers/skiSchoolPageController");
 const router = require("express").Router();
 
@@ -26,11 +27,10 @@ const router = require("express").Router();
  * /api/skiSchoolPage:
  *   get:
  *     summary: Retrieves all data for the Ski School page
- *     tags:
- *       - Ski School Page
+ *     tags: [Ski School Page]
  *     responses:
  *       200:
- *         description: Successfully retrieved all data for the Ski School page
+ *         description: Successfully retrieved all data
  *         content:
  *           application/json:
  *             schema:
@@ -41,16 +41,27 @@ const router = require("express").Router();
  *                   properties:
  *                     _id:
  *                       type: string
+ *                     title:
+ *                       type: string
  *                     subtitle:
  *                       type: string
  *                     images:
  *                       type: array
  *                       items:
- *                         type: string
+ *                         type: object
+ *                         properties:
+ *                           public_id:
+ *                             type: string
+ *                           url:
+ *                             type: string
+ *                           _id:
+ *                             type: string
  *                     createdAt:
  *                       type: string
+ *                       format: date-time
  *                     updatedAt:
  *                       type: string
+ *                       format: date-time
  *                 aboutSection:
  *                   type: object
  *                   properties:
@@ -60,12 +71,19 @@ const router = require("express").Router();
  *                       type: string
  *                     subtitle:
  *                       type: string
- *                     imgUrl:
- *                       type: string
+ *                     image:
+ *                       type: object
+ *                       properties:
+ *                         public_id:
+ *                           type: string
+ *                         url:
+ *                           type: string
  *                     createdAt:
  *                       type: string
+ *                       format: date-time
  *                     updatedAt:
  *                       type: string
+ *                       format: date-time
  *                 lessons:
  *                   type: object
  *                   properties:
@@ -83,14 +101,23 @@ const router = require("express").Router();
  *                           items:
  *                             type: object
  *                             properties:
- *                               imgUrl:
- *                                 type: string
+ *                               image:
+ *                                 type: object
+ *                                 properties:
+ *                                   public_id:
+ *                                     type: string
+ *                                   url:
+ *                                     type: string
  *                               description:
+ *                                 type: string
+ *                               _id:
  *                                 type: string
  *                         createdAt:
  *                           type: string
+ *                           format: date-time
  *                         updatedAt:
  *                           type: string
+ *                           format: date-time
  *                     groupLesson:
  *                       type: object
  *                       properties:
@@ -105,14 +132,23 @@ const router = require("express").Router();
  *                           items:
  *                             type: object
  *                             properties:
- *                               imgUrl:
- *                                 type: string
+ *                               image:
+ *                                 type: object
+ *                                 properties:
+ *                                   public_id:
+ *                                     type: string
+ *                                   url:
+ *                                     type: string
  *                               description:
+ *                                 type: string
+ *                               _id:
  *                                 type: string
  *                         createdAt:
  *                           type: string
+ *                           format: date-time
  *                         updatedAt:
  *                           type: string
+ *                           format: date-time
  *                 benefitsSection:
  *                   type: object
  *                   properties:
@@ -127,12 +163,21 @@ const router = require("express").Router();
  *                         properties:
  *                           subtitle:
  *                             type: string
- *                           imgUrl:
+ *                           image:
+ *                             type: object
+ *                             properties:
+ *                               public_id:
+ *                                 type: string
+ *                               url:
+ *                                 type: string
+ *                           _id:
  *                             type: string
  *                     createdAt:
  *                       type: string
+ *                       format: date-time
  *                     updatedAt:
  *                       type: string
+ *                       format: date-time
  *                 rentalShopSection:
  *                   type: object
  *                   properties:
@@ -142,12 +187,19 @@ const router = require("express").Router();
  *                       type: string
  *                     subtitle:
  *                       type: string
- *                     imgUrl:
- *                       type: string
+ *                     image:
+ *                       type: object
+ *                       properties:
+ *                         public_id:
+ *                           type: string
+ *                         url:
+ *                           type: string
  *                     createdAt:
  *                       type: string
+ *                       format: date-time
  *                     updatedAt:
  *                       type: string
+ *                       format: date-time
  *                 repairSection:
  *                   type: object
  *                   properties:
@@ -157,12 +209,19 @@ const router = require("express").Router();
  *                       type: string
  *                     subtitle:
  *                       type: string
- *                     imgUrl:
- *                       type: string
+ *                     image:
+ *                       type: object
+ *                       properties:
+ *                         public_id:
+ *                           type: string
+ *                         url:
+ *                           type: string
  *                     createdAt:
  *                       type: string
+ *                       format: date-time
  *                     updatedAt:
  *                       type: string
+ *                       format: date-time
  *                 teamSection:
  *                   type: object
  *                   properties:
@@ -179,15 +238,23 @@ const router = require("express").Router();
  *                             type: string
  *                           subtitle:
  *                             type: string
- *                           imgUrl:
+ *                           image:
+ *                             type: object
+ *                             properties:
+ *                               public_id:
+ *                                 type: string
+ *                               url:
+ *                                 type: string
+ *                           _id:
  *                             type: string
  *                     createdAt:
  *                       type: string
+ *                       format: date-time
  *                     updatedAt:
  *                       type: string
- *       500:
- *         description: Internal server error
+ *                       format: date-time
  */
+
 router.get("/", getAllData);
 
 // ========== Banner ========== //
@@ -195,9 +262,8 @@ router.get("/", getAllData);
  * @swagger
  * /api/skiSchoolPage/banner:
  *   post:
- *     summary: Creates a new Ski School Page Banner section
- *     tags:
- *       - Ski School Page
+ *     summary: Creates a new banner for the Ski School page
+ *     tags: [Ski School Page]
  *     requestBody:
  *       required: true
  *       content:
@@ -205,44 +271,65 @@ router.get("/", getAllData);
  *           schema:
  *             type: object
  *             properties:
+ *               title:
+ *                 type: string
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the banner
- *                 example: "string"
  *               images:
  *                 type: array
  *                 items:
- *                   type: string
- *                 description: The image URLs of the banner
- *                 example: ["string1", "string2"]
+ *                   type: object
+ *                   properties:
+ *                     public_id:
+ *                       type: string
+ *                     url:
+ *                       type: string
  *     responses:
  *       201:
- *         description: Successfully created the banner section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 subtitle:
- *                   type: string
- *                 images:
- *                   type: array
- *                   items:
- *                     type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *         description: Banner created successfully
  *       500:
  *         description: Internal server error
  *
- * /api/skiSchoolPage/banner/add-image:
+ *   put:
+ *     summary: Updates an existing banner for the Ski School page
+ *     tags: [Ski School Page]
+ *     parameters:
+ *       - in: query
+ *         name: imgId
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: The ID of the image to be updated
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               subtitle:
+ *                 type: string
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
+ *     responses:
+ *       200:
+ *         description: Banner updated successfully
+ *       404:
+ *         description: Banner or image not found
+ *       500:
+ *         description: Internal server error
+ *
+ * /api/skiSchoolPage/banner/images/add:
  *   post:
- *     summary: Adds an image to the existing Ski School Page Banner
- *     tags:
- *       - Ski School Page
+ *     summary: Adds a new image to the banner
+ *     tags: [Ski School Page]
  *     requestBody:
  *       required: true
  *       content:
@@ -251,103 +338,51 @@ router.get("/", getAllData);
  *             type: object
  *             properties:
  *               imgUrl:
- *                 type: string
- *                 description: The URL of the image to add
- *                 example: "string"
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       200:
- *         description: Successfully added the image to the banner
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 subtitle:
- *                   type: string
- *                 images:
- *                   type: array
- *                   items:
- *                     type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *         description: Image added successfully
  *       404:
  *         description: Banner not found
  *       500:
  *         description: Internal server error
  *
- * /api/skiSchoolPage/banner/{id}:
- *   put:
- *     summary: Updates an existing Ski School Page Banner
- *     tags:
- *       - Ski School Page
+ * /api/skiSchoolPage/banner/images/{id}:
+ *   delete:
+ *     summary: Deletes an image from the banner
+ *     tags: [Ski School Page]
  *     parameters:
  *       - in: path
  *         name: id
- *         required: true
  *         schema:
  *           type: string
- *         description: The ID of the banner to update
- *       - in: query
- *         name: imgIndex
- *         schema:
- *           type: integer
- *         description: The index of the image to update
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               subtitle:
- *                 type: string
- *                 description: The subtitle of the banner
- *                 example: "string"
- *               imgUrl:
- *                 type: string
- *                 description: The new image URL to update
- *                 example: "string"
+ *         required: true
+ *         description: The ID of the image to be deleted
  *     responses:
  *       200:
- *         description: Successfully updated the banner
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 subtitle:
- *                   type: string
- *                 images:
- *                   type: array
- *                   items:
- *                     type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *         description: Image deleted successfully
  *       404:
- *         description: Banner not found
+ *         description: Banner or image not found
  *       500:
  *         description: Internal server error
  */
 router.post("/banner", createSkiSchoolPageBanner);
-router.post("/banner/add-image", addImageToBanner);
-router.put("/banner/:id", updateSkiSchoolPageBanner);
+router.put("/banner", updateSkiSchoolPageBanner);
+router.post("/banner/images/add", addImageToBanner);
+router.delete("/banner/images/:id", deleteImageToSkiSchoolPageBanner);
 
 // ========== About ========== //
 /**
  * @swagger
  * /api/skiSchoolPage/aboutSection:
  *   post:
- *     summary: Creates a new Ski School Page About section
- *     tags:
- *       - Ski School Page
+ *     summary: Creates a new about section for the Ski School page
+ *     tags: [Ski School Page]
  *     requestBody:
  *       required: true
  *       content:
@@ -357,51 +392,32 @@ router.put("/banner/:id", updateSkiSchoolPageBanner);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the about section
- *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the about section
- *                 example: "string"
- *               imgUrl:
- *                 type: string
- *                 description: The image URL of the about section
- *                 example: "string"
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       201:
- *         description: Successfully created the about section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 title:
- *                   type: string
- *                 subtitle:
- *                   type: string
- *                 imgUrl:
- *                   type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *         description: About section created successfully
  *       500:
  *         description: Internal server error
  *
  * /api/skiSchoolPage/aboutSection/{id}:
  *   put:
- *     summary: Updates an existing Ski School Page About section
- *     tags:
- *       - Ski School Page
+ *     summary: Updates an existing about section for the Ski School page
+ *     tags: [Ski School Page]
  *     parameters:
  *       - in: path
  *         name: id
- *         required: true
  *         schema:
  *           type: string
- *         description: The ID of the about section to update
+ *         required: true
+ *         description: The ID of the about section to be updated
  *     requestBody:
  *       required: true
  *       content:
@@ -411,36 +427,18 @@ router.put("/banner/:id", updateSkiSchoolPageBanner);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the about section
- *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the about section
- *                 example: "string"
- *               imgUrl:
- *                 type: string
- *                 description: The image URL of the about section
- *                 example: "string"
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       200:
- *         description: Successfully updated the about section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 title:
- *                   type: string
- *                 subtitle:
- *                   type: string
- *                 imgUrl:
- *                   type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *         description: About section updated successfully
  *       404:
  *         description: About section not found
  *       500:
@@ -454,9 +452,8 @@ router.put("/aboutSection/:id", updateSkiSchoolPageAbout);
  * @swagger
  * /api/skiSchoolPage/individualLesson:
  *   post:
- *     summary: Creates a new Ski School Page Individual Lesson section
- *     tags:
- *       - Ski School Page
+ *     summary: Creates a new individual lesson for the Ski School page
+ *     tags: [Ski School Page]
  *     requestBody:
  *       required: true
  *       content:
@@ -466,65 +463,38 @@ router.put("/aboutSection/:id", updateSkiSchoolPageAbout);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the individual lesson section
- *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the individual lesson section
- *                 example: "string"
  *               items:
  *                 type: array
  *                 items:
  *                   type: object
  *                   properties:
- *                     imgUrl:
- *                       type: string
- *                       description: The image URL for the lesson item
- *                       example: "string"
+ *                     image:
+ *                       type: object
+ *                       properties:
+ *                         public_id:
+ *                           type: string
+ *                         url:
+ *                           type: string
  *                     description:
  *                       type: string
- *                       description: The description for the lesson item
- *                       example: "string"
  *     responses:
  *       201:
- *         description: Successfully created the individual lesson section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 title:
- *                   type: string
- *                 subtitle:
- *                   type: string
- *                 items:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       imgUrl:
- *                         type: string
- *                       description:
- *                         type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *         description: Individual lesson created successfully
  *       500:
  *         description: Internal server error
  *
  *   put:
- *     summary: Updates an existing Ski School Page Individual Lesson section
- *     tags:
- *       - Ski School Page
+ *     summary: Updates an existing individual lesson for the Ski School page
+ *     tags: [Ski School Page]
  *     parameters:
  *       - in: query
  *         name: itemId
  *         schema:
  *           type: string
- *         description: The ID of the lesson item to update
+ *         required: false
+ *         description: The ID of the item to be updated
  *     requestBody:
  *       required: true
  *       content:
@@ -534,47 +504,20 @@ router.put("/aboutSection/:id", updateSkiSchoolPageAbout);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the individual lesson section
- *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the individual lesson section
- *                 example: "string"
- *               imgUrl:
- *                 type: string
- *                 description: The new image URL for the lesson item
- *                 example: "string"
  *               description:
  *                 type: string
- *                 description: The new description for the lesson item
- *                 example: "string"
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       200:
- *         description: Successfully updated the individual lesson section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 title:
- *                   type: string
- *                 subtitle:
- *                   type: string
- *                 items:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       imgUrl:
- *                         type: string
- *                       description:
- *                         type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *         description: Individual lesson updated successfully
  *       404:
  *         description: Lesson or item not found
  *       500:
@@ -588,9 +531,8 @@ router.put("/individualLesson", updateSkiSchoolIndividualLesson);
  * @swagger
  * /api/skiSchoolPage/groupLesson:
  *   post:
- *     summary: Creates a new Ski School Page Private Group Lesson section
- *     tags:
- *       - Ski School Page
+ *     summary: Creates a new private group lesson for the Ski School page
+ *     tags: [Ski School Page]
  *     requestBody:
  *       required: true
  *       content:
@@ -600,65 +542,38 @@ router.put("/individualLesson", updateSkiSchoolIndividualLesson);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the group lesson section
- *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the group lesson section
- *                 example: "string"
  *               items:
  *                 type: array
  *                 items:
  *                   type: object
  *                   properties:
- *                     imgUrl:
- *                       type: string
- *                       description: The image URL for the lesson item
- *                       example: "string"
+ *                     image:
+ *                       type: object
+ *                       properties:
+ *                         public_id:
+ *                           type: string
+ *                         url:
+ *                           type: string
  *                     description:
  *                       type: string
- *                       description: The description for the lesson item
- *                       example: "string"
  *     responses:
  *       201:
- *         description: Successfully created the group lesson section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 title:
- *                   type: string
- *                 subtitle:
- *                   type: string
- *                 items:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       imgUrl:
- *                         type: string
- *                       description:
- *                         type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *         description: Private group lesson created successfully
  *       500:
  *         description: Internal server error
  *
  *   put:
- *     summary: Updates an existing Ski School Page Private Group Lesson section
- *     tags:
- *       - Ski School Page
+ *     summary: Updates an existing private group lesson for the Ski School page
+ *     tags: [Ski School Page]
  *     parameters:
  *       - in: query
  *         name: itemId
  *         schema:
  *           type: string
- *         description: The ID of the lesson item to update
+ *         required: false
+ *         description: The ID of the item to be updated
  *     requestBody:
  *       required: true
  *       content:
@@ -668,47 +583,20 @@ router.put("/individualLesson", updateSkiSchoolIndividualLesson);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the group lesson section
- *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the group lesson section
- *                 example: "string"
- *               imgUrl:
- *                 type: string
- *                 description: The new image URL for the lesson item
- *                 example: "string"
  *               description:
  *                 type: string
- *                 description: The new description for the lesson item
- *                 example: "string"
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       200:
- *         description: Successfully updated the group lesson section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 title:
- *                   type: string
- *                 subtitle:
- *                   type: string
- *                 items:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       imgUrl:
- *                         type: string
- *                       description:
- *                         type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *         description: Private group lesson updated successfully
  *       404:
  *         description: Lesson or item not found
  *       500:
@@ -722,9 +610,8 @@ router.put("/groupLesson", updateSkiSchoolPrivateGroupLesson);
  * @swagger
  * /api/skiSchoolPage/benefitsSection:
  *   post:
- *     summary: Creates a new Ski School Page Benefits section
- *     tags:
- *       - Ski School Page
+ *     summary: Creates a new benefits section for the Ski School page
+ *     tags: [Ski School Page]
  *     requestBody:
  *       required: true
  *       content:
@@ -734,8 +621,6 @@ router.put("/groupLesson", updateSkiSchoolPrivateGroupLesson);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the benefits section
- *                 example: "string"
  *               items:
  *                 type: array
  *                 items:
@@ -743,50 +628,29 @@ router.put("/groupLesson", updateSkiSchoolPrivateGroupLesson);
  *                   properties:
  *                     subtitle:
  *                       type: string
- *                       description: The subtitle of the benefit
- *                       example: "string"
- *                     imgUrl:
- *                       type: string
- *                       description: The image URL of the benefit
- *                       example: "string"
+ *                     image:
+ *                       type: object
+ *                       properties:
+ *                         public_id:
+ *                           type: string
+ *                         url:
+ *                           type: string
  *     responses:
  *       201:
- *         description: Successfully created the benefits section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 title:
- *                   type: string
- *                 items:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       subtitle:
- *                         type: string
- *                       imgUrl:
- *                         type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *         description: Benefits section created successfully
  *       500:
  *         description: Internal server error
  *
  *   put:
- *     summary: Updates an existing Ski School Page Benefits section
- *     tags:
- *       - Ski School Page
+ *     summary: Updates an existing benefits section for the Ski School page
+ *     tags: [Ski School Page]
  *     parameters:
  *       - in: query
  *         name: itemId
  *         schema:
  *           type: string
- *         description: The ID of the item to update
+ *         required: false
+ *         description: The ID of the item to be updated
  *     requestBody:
  *       required: true
  *       content:
@@ -796,43 +660,20 @@ router.put("/groupLesson", updateSkiSchoolPrivateGroupLesson);
  *             properties:
  *               sectionTitle:
  *                 type: string
- *                 description: The title of the benefits section
- *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the benefit item
- *                 example: "string"
- *               imgUrl:
- *                 type: string
- *                 description: The image URL of the benefit item
- *                 example: "string"
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       200:
- *         description: Successfully updated the benefits section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 title:
- *                   type: string
- *                 items:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       subtitle:
- *                         type: string
- *                       imgUrl:
- *                         type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *         description: Benefits section updated successfully
  *       404:
- *         description: Item not found
+ *         description: Section or item not found
  *       500:
  *         description: Internal server error
  */
@@ -844,9 +685,8 @@ router.put("/benefitsSection", updateSkiSchoolPageBenefits);
  * @swagger
  * /api/skiSchoolPage/rentalShopSection:
  *   post:
- *     summary: Creates a new Rental Shop section
- *     tags:
- *       - Ski School Page
+ *     summary: Creates a new rental shop section for the Ski School page
+ *     tags: [Ski School Page]
  *     requestBody:
  *       required: true
  *       content:
@@ -856,51 +696,32 @@ router.put("/benefitsSection", updateSkiSchoolPageBenefits);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the section
- *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the section
- *                 example: "string"
- *               imgUrl:
- *                 type: string
- *                 description: The image URL of the section
- *                 example: "string"
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       201:
- *         description: Successfully created the section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 title:
- *                   type: string
- *                 subtitle:
- *                   type: string
- *                 imgUrl:
- *                   type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *         description: Rental shop section created successfully
  *       500:
  *         description: Internal server error
  *
  * /api/skiSchoolPage/rentalShopSection/{id}:
  *   put:
- *     summary: Updates an existing Rental Shop section
- *     tags:
- *       - Ski School Page
+ *     summary: Updates an existing rental shop section for the Ski School page
+ *     tags: [Ski School Page]
  *     parameters:
  *       - in: path
  *         name: id
- *         required: true
  *         schema:
  *           type: string
- *         description: The ID of the section to update
+ *         required: true
+ *         description: The ID of the rental shop section to be updated
  *     requestBody:
  *       required: true
  *       content:
@@ -910,38 +731,20 @@ router.put("/benefitsSection", updateSkiSchoolPageBenefits);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the section
- *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the section
- *                 example: "string"
- *               imgUrl:
- *                 type: string
- *                 description: The image URL of the section
- *                 example: "string"
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       200:
- *         description: Successfully updated the section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 title:
- *                   type: string
- *                 subtitle:
- *                   type: string
- *                 imgUrl:
- *                   type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *         description: Rental shop section updated successfully
  *       404:
- *         description: Section not found
+ *         description: Rental shop section not found
  *       500:
  *         description: Internal server error
  */
@@ -953,9 +756,8 @@ router.put("/rentalShopSection/:id", updateSkiSchoolRentalShopSection);
  * @swagger
  * /api/skiSchoolPage/repairSection:
  *   post:
- *     summary: Creates a new Ski School Page Rental Shop section
- *     tags:
- *       - Ski School Page
+ *     summary: Creates a new repair section for the Ski School page
+ *     tags: [Ski School Page]
  *     requestBody:
  *       required: true
  *       content:
@@ -965,51 +767,32 @@ router.put("/rentalShopSection/:id", updateSkiSchoolRentalShopSection);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the rental shop section
- *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the rental shop section
- *                 example: "string"
- *               imgUrl:
- *                 type: string
- *                 description: The image URL of the rental shop section
- *                 example: "string"
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       201:
- *         description: Successfully created the rental shop section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 title:
- *                   type: string
- *                 subtitle:
- *                   type: string
- *                 imgUrl:
- *                   type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *         description: Repair section created successfully
  *       500:
  *         description: Internal server error
  *
  * /api/skiSchoolPage/repairSection/{id}:
  *   put:
- *     summary: Updates an existing Ski School Page Rental Shop section
- *     tags:
- *       - Ski School Page
+ *     summary: Updates an existing repair section for the Ski School page
+ *     tags: [Ski School Page]
  *     parameters:
  *       - in: path
  *         name: id
- *         required: true
  *         schema:
  *           type: string
- *         description: The ID of the rental shop section to update
+ *         required: true
+ *         description: The ID of the repair section to be updated
  *     requestBody:
  *       required: true
  *       content:
@@ -1019,38 +802,20 @@ router.put("/rentalShopSection/:id", updateSkiSchoolRentalShopSection);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the rental shop section
- *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the rental shop section
- *                 example: "string"
- *               imgUrl:
- *                 type: string
- *                 description: The image URL of the rental shop section
- *                 example: "string"
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       200:
- *         description: Successfully updated the rental shop section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 title:
- *                   type: string
- *                 subtitle:
- *                   type: string
- *                 imgUrl:
- *                   type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *         description: Repair section updated successfully
  *       404:
- *         description: Rental shop section not found
+ *         description: Repair section not found
  *       500:
  *         description: Internal server error
  */
@@ -1062,9 +827,8 @@ router.put("/repairSection/:id", updateSkiSchoolRepairSection);
  * @swagger
  * /api/skiSchoolPage/teamSection:
  *   post:
- *     summary: Creates a new Ski School Page Team section
- *     tags:
- *       - Ski School Page
+ *     summary: Creates a new team section for the Ski School page
+ *     tags: [Ski School Page]
  *     requestBody:
  *       required: true
  *       content:
@@ -1074,8 +838,6 @@ router.put("/repairSection/:id", updateSkiSchoolRepairSection);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the team section
- *                 example: "string"
  *               items:
  *                 type: array
  *                 items:
@@ -1083,57 +845,31 @@ router.put("/repairSection/:id", updateSkiSchoolRepairSection);
  *                   properties:
  *                     title:
  *                       type: string
- *                       description: The title of the team member
- *                       example: "string"
  *                     subtitle:
  *                       type: string
- *                       description: The subtitle of the team member
- *                       example: "string"
- *                     imgUrl:
- *                       type: string
- *                       description: The image URL of the team member
- *                       example: "string"
+ *                     image:
+ *                       type: object
+ *                       properties:
+ *                         public_id:
+ *                           type: string
+ *                         url:
+ *                           type: string
  *     responses:
  *       201:
- *         description: Successfully created the team section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 title:
- *                   type: string
- *                 items:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       title:
- *                         type: string
- *                       subtitle:
- *                         type: string
- *                       imgUrl:
- *                         type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *         description: Team section created successfully
  *       500:
  *         description: Internal server error
  *
  *   put:
- *     summary: Updates an existing Ski School Page Team section
- *     tags:
- *       - Ski School Page
+ *     summary: Updates an existing team section for the Ski School page
+ *     tags: [Ski School Page]
  *     parameters:
  *       - in: query
  *         name: itemId
- *         required: false
  *         schema:
  *           type: string
- *         description: The ID of the team member to update
+ *         required: false
+ *         description: The ID of the item to be updated
  *     requestBody:
  *       required: true
  *       content:
@@ -1143,49 +879,22 @@ router.put("/repairSection/:id", updateSkiSchoolRepairSection);
  *             properties:
  *               sectionTitle:
  *                 type: string
- *                 description: The title of the team section
- *                 example: "string"
  *               itemTitle:
  *                 type: string
- *                 description: The title of the team member
- *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the team member
- *                 example: "string"
- *               imgUrl:
- *                 type: string
- *                 description: The image URL of the team member
- *                 example: "string"
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       200:
- *         description: Successfully updated the team section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 title:
- *                   type: string
- *                 items:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       title:
- *                         type: string
- *                       subtitle:
- *                         type: string
- *                       imgUrl:
- *                         type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *         description: Team section updated successfully
  *       404:
- *         description: Item not found
+ *         description: Section or item not found
  *       500:
  *         description: Internal server error
  */

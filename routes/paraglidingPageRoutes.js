@@ -9,6 +9,8 @@ const {
   createParaglidingPageBanner,
   updateParaglidingPageBanner,
   addImageToBanner,
+  deleteImageToBanner,
+  deleteParaglidingPageCarouselImage,
 } = require("../controllers/paraglidingPageController");
 
 const router = require("express").Router();
@@ -18,9 +20,8 @@ const router = require("express").Router();
  * @swagger
  * /api/paraglidingPage:
  *   get:
- *     summary: Get all data for the Paragliding Page
- *     tags:
- *       - Paragliding Page
+ *     summary: Retrieves all data for the Paragliding page
+ *     tags: [Paragliding Page]
  *     responses:
  *       200:
  *         description: Successfully retrieved all data
@@ -34,54 +35,58 @@ const router = require("express").Router();
  *                   properties:
  *                     _id:
  *                       type: string
- *                       example: "string"
+ *                     title:
+ *                       type: string
  *                     subtitle:
  *                       type: string
- *                       example: "string"
  *                     images:
  *                       type: array
  *                       items:
- *                         type: string
- *                       example: ["string", "string", "string"]
+ *                         type: object
+ *                         properties:
+ *                           public_id:
+ *                             type: string
+ *                           url:
+ *                             type: string
+ *                           _id:
+ *                             type: string
  *                     createdAt:
  *                       type: string
- *                       example: "string"
+ *                       format: date-time
  *                     updatedAt:
  *                       type: string
- *                       example: "string"
+ *                       format: date-time
  *                 mainSection:
  *                   type: object
  *                   properties:
  *                     _id:
  *                       type: string
- *                       example: "string"
  *                     title:
  *                       type: string
- *                       example: "string"
  *                     subtitle:
  *                       type: string
- *                       example: "string"
- *                     imgUrl:
- *                       type: string
- *                       example: "string"
+ *                     image:
+ *                       type: object
+ *                       properties:
+ *                         public_id:
+ *                           type: string
+ *                         url:
+ *                           type: string
  *                     createdAt:
  *                       type: string
- *                       example: "string"
+ *                       format: date-time
  *                     updatedAt:
  *                       type: string
- *                       example: "string"
+ *                       format: date-time
  *                 formSection:
  *                   type: object
  *                   properties:
  *                     _id:
  *                       type: string
- *                       example: "string"
  *                     title:
  *                       type: string
- *                       example: "string"
  *                     subtitle:
  *                       type: string
- *                       example: "string"
  *                     items:
  *                       type: array
  *                       items:
@@ -89,46 +94,43 @@ const router = require("express").Router();
  *                         properties:
  *                           description:
  *                             type: string
- *                             example: "string"
- *                           imgUrl:
- *                             type: string
- *                             example: "string"
+ *                           image:
+ *                             type: object
+ *                             properties:
+ *                               public_id:
+ *                                 type: string
+ *                               url:
+ *                                 type: string
  *                           _id:
  *                             type: string
- *                             example: "string"
  *                     createdAt:
  *                       type: string
- *                       example: "string"
+ *                       format: date-time
  *                     updatedAt:
  *                       type: string
- *                       example: "string"
+ *                       format: date-time
  *                 carouselImages:
  *                   type: object
  *                   properties:
  *                     _id:
  *                       type: string
- *                       example: "string"
  *                     images:
  *                       type: array
  *                       items:
- *                         type: string
- *                       example: ["string", "string", "string", "string", "string", "string"]
+ *                         type: object
+ *                         properties:
+ *                           public_id:
+ *                             type: string
+ *                           url:
+ *                             type: string
+ *                           _id:
+ *                             type: string
  *                     createdAt:
  *                       type: string
- *                       example: "string"
+ *                       format: date-time
  *                     updatedAt:
  *                       type: string
- *                       example: "string"
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "string"
+ *                       format: date-time
  */
 router.get("/", getAllData);
 
@@ -137,9 +139,8 @@ router.get("/", getAllData);
  * @swagger
  * /api/paraglidingPage/banner:
  *   post:
- *     summary: Creates a new Paragliding Page banner
- *     tags:
- *       - Paragliding Page
+ *     summary: Creates a new banner for the Paragliding page
+ *     tags: [Paragliding Page]
  *     requestBody:
  *       required: true
  *       content:
@@ -147,44 +148,35 @@ router.get("/", getAllData);
  *           schema:
  *             type: object
  *             properties:
+ *               title:
+ *                 type: string
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the banner
- *                 example: "string"
  *               images:
  *                 type: array
  *                 items:
- *                   type: string
- *                 description: The image URLs of the banner
- *                 example: ["string1", "string2"]
+ *                   type: object
+ *                   properties:
+ *                     public_id:
+ *                       type: string
+ *                     url:
+ *                       type: string
  *     responses:
  *       201:
- *         description: Successfully created the banner
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 subtitle:
- *                   type: string
- *                 images:
- *                   type: array
- *                   items:
- *                     type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *         description: Banner created successfully
  *       500:
  *         description: Internal server error
  *
- * /api/paraglidingPage/banner/add-image:
- *   post:
- *     summary: Adds an image to the existing Paragliding Page banner
- *     tags:
- *       - Paragliding Page
+ *   put:
+ *     summary: Updates an existing banner for the Paragliding page
+ *     tags: [Paragliding Page]
+ *     parameters:
+ *       - in: query
+ *         name: imgId
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: The ID of the image to be updated
  *     requestBody:
  *       required: true
  *       content:
@@ -192,104 +184,82 @@ router.get("/", getAllData);
  *           schema:
  *             type: object
  *             properties:
- *               imgUrl:
+ *               title:
  *                 type: string
- *                 description: The URL of the image to add
- *                 example: "string"
+ *               subtitle:
+ *                 type: string
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       200:
- *         description: Successfully added the image to the banner
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 subtitle:
- *                   type: string
- *                 images:
- *                   type: array
- *                   items:
+ *         description: Banner updated successfully
+ *       404:
+ *         description: Banner or image not found
+ *       500:
+ *         description: Internal server error
+ *
+ * /api/paraglidingPage/banner/images/add:
+ *   post:
+ *     summary: Adds a new image to the banner
+ *     tags: [Paragliding Page]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
  *                     type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *                   url:
+ *                     type: string
+ *     responses:
+ *       200:
+ *         description: Image added successfully
  *       404:
  *         description: Banner not found
  *       500:
  *         description: Internal server error
  *
- * /api/paraglidingPage/banner/{id}:
- *   put:
- *     summary: Updates an existing Paragliding Page banner
- *     tags:
- *       - Paragliding Page
+ * /api/paraglidingPage/banner/images/{id}:
+ *   delete:
+ *     summary: Deletes an image from the banner
+ *     tags: [Paragliding Page]
  *     parameters:
  *       - in: path
  *         name: id
- *         required: true
  *         schema:
  *           type: string
- *         description: The ID of the banner to update
- *       - in: query
- *         name: imgIndex
- *         schema:
- *           type: integer
- *         description: The index of the image to update
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               subtitle:
- *                 type: string
- *                 description: The subtitle of the banner
- *                 example: "string"
- *               imgUrl:
- *                 type: string
- *                 description: The new image URL to update
- *                 example: "string"
+ *         required: true
+ *         description: The ID of the image to be deleted
  *     responses:
  *       200:
- *         description: Successfully updated the banner
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 subtitle:
- *                   type: string
- *                 images:
- *                   type: array
- *                   items:
- *                     type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *         description: Image deleted successfully
  *       404:
- *         description: Banner not found
+ *         description: Banner or image not found
  *       500:
  *         description: Internal server error
  */
 router.post("/banner", createParaglidingPageBanner);
-router.post("/banner/add-image", addImageToBanner);
-router.put("/banner/:id", updateParaglidingPageBanner);
+router.put("/banner", updateParaglidingPageBanner);
+router.post("/banner/images/add", addImageToBanner);
+router.delete("/banner/images/:id", deleteImageToBanner);
 
 // ========== Paragliding Main Section ============ //
 /**
  * @swagger
  * /api/paraglidingPage/mainSection:
  *   post:
- *     summary: Creates a new Paragliding Page main section
- *     tags:
- *       - Paragliding Page
+ *     summary: Creates a new main section for the Paragliding page
+ *     tags: [Paragliding Page]
  *     requestBody:
  *       required: true
  *       content:
@@ -299,51 +269,32 @@ router.put("/banner/:id", updateParaglidingPageBanner);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the main section
- *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the main section
- *                 example: "string"
- *               imgUrl:
- *                 type: string
- *                 description: The image URL of the main section
- *                 example: "string"
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       201:
- *         description: Successfully created the main section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 title:
- *                   type: string
- *                 subtitle:
- *                   type: string
- *                 imgUrl:
- *                   type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *         description: Main section created successfully
  *       500:
  *         description: Internal server error
  *
  * /api/paraglidingPage/mainSection/{id}:
  *   put:
- *     summary: Updates an existing Paragliding Page main section
- *     tags:
- *       - Paragliding Page
+ *     summary: Updates an existing main section for the Paragliding page
+ *     tags: [Paragliding Page]
  *     parameters:
  *       - in: path
  *         name: id
- *         required: true
  *         schema:
  *           type: string
- *         description: The ID of the main section to update
+ *         required: true
+ *         description: The ID of the main section to be updated
  *     requestBody:
  *       required: true
  *       content:
@@ -353,36 +304,18 @@ router.put("/banner/:id", updateParaglidingPageBanner);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the main section
- *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the main section
- *                 example: "string"
- *               imgUrl:
- *                 type: string
- *                 description: The image URL of the main section
- *                 example: "string"
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       200:
- *         description: Successfully updated the main section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 title:
- *                   type: string
- *                 subtitle:
- *                   type: string
- *                 imgUrl:
- *                   type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *         description: Main section updated successfully
  *       404:
  *         description: Main section not found
  *       500:
@@ -396,9 +329,8 @@ router.put("/mainSection/:id", updateParaglidingMainSectionSection);
  * @swagger
  * /api/paraglidingPage/formSection:
  *   post:
- *     summary: Creates a new Paragliding Page form section
- *     tags:
- *       - Paragliding Page
+ *     summary: Creates a new form section for the Paragliding page
+ *     tags: [Paragliding Page]
  *     requestBody:
  *       required: true
  *       content:
@@ -408,12 +340,8 @@ router.put("/mainSection/:id", updateParaglidingMainSectionSection);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the form section
- *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the form section
- *                 example: "string"
  *               items:
  *                 type: array
  *                 items:
@@ -421,52 +349,29 @@ router.put("/mainSection/:id", updateParaglidingMainSectionSection);
  *                   properties:
  *                     description:
  *                       type: string
- *                       description: The description of the item
- *                       example: "string"
- *                     imgUrl:
- *                       type: string
- *                       description: The image URL of the item
- *                       example: "string"
+ *                     image:
+ *                       type: object
+ *                       properties:
+ *                         public_id:
+ *                           type: string
+ *                         url:
+ *                           type: string
  *     responses:
  *       201:
- *         description: Successfully created the form section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 title:
- *                   type: string
- *                 subtitle:
- *                   type: string
- *                 items:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       description:
- *                         type: string
- *                       imgUrl:
- *                         type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *         description: Form section created successfully
  *       500:
  *         description: Internal server error
  *
  *   put:
- *     summary: Updates an existing Paragliding Page form section
- *     tags:
- *       - Paragliding Page
+ *     summary: Updates an existing form section for the Paragliding page
+ *     tags: [Paragliding Page]
  *     parameters:
  *       - in: query
  *         name: itemId
  *         schema:
  *           type: string
- *         description: The ID of the lesson item to update
+ *         required: false
+ *         description: The ID of the item to be updated
  *     requestBody:
  *       required: true
  *       content:
@@ -476,47 +381,20 @@ router.put("/mainSection/:id", updateParaglidingMainSectionSection);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the individual lesson section
- *                 example: "string"
  *               subtitle:
  *                 type: string
- *                 description: The subtitle of the individual lesson section
- *                 example: "string"
- *               imgUrl:
- *                 type: string
- *                 description: The new image URL for the lesson item
- *                 example: "string"
  *               description:
  *                 type: string
- *                 description: The new description for the lesson item
- *                 example: "string"
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       200:
- *         description: Successfully updated the individual lesson section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 title:
- *                   type: string
- *                 subtitle:
- *                   type: string
- *                 items:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       imgUrl:
- *                         type: string
- *                       description:
- *                         type: string
- *                 createdAt:
- *                   type: string
- *                 updatedAt:
- *                   type: string
+ *         description: Form section updated successfully
  *       404:
  *         description: Section or item not found
  *       500:
@@ -530,9 +408,8 @@ router.put("/formSection", updateParaglidingFormSection);
  * @swagger
  * /api/paraglidingPage/carouselImages:
  *   post:
- *     summary: Create new carousel images
- *     tags:
- *       - Paragliding Page
+ *     summary: Creates or adds images to the carousel for the Paragliding page
+ *     tags: [Paragliding Page]
  *     requestBody:
  *       required: true
  *       content:
@@ -543,53 +420,29 @@ router.put("/formSection", updateParaglidingFormSection);
  *               images:
  *                 type: array
  *                 items:
- *                   type: string
- *                 description: List of image URLs to be added to the carousel
- *                 example: ["string", "string"]
+ *                   type: object
+ *                   properties:
+ *                     public_id:
+ *                       type: string
+ *                     url:
+ *                       type: string
  *     responses:
  *       201:
- *         description: Successfully created carousel images
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   example: "string"
- *                 images:
- *                   type: array
- *                   items:
- *                     type: string
- *                   example: ["string", "string"]
- *                 createdAt:
- *                   type: string
- *                   example: "string"
- *                 updatedAt:
- *                   type: string
- *                   example: "string"
+ *         description: Carousel images created/added successfully
  *       500:
  *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "string"
  *
+ * /api/paraglidingPage/carouselImages/{id}:
  *   put:
- *     summary: Update carousel images
- *     tags:
- *       - Paragliding Page
+ *     summary: Updates an existing carousel image for the Paragliding page
+ *     tags: [Paragliding Page]
  *     parameters:
- *       - in: query
- *         name: index
+ *       - in: path
+ *         name: id
  *         schema:
- *           type: integer
+ *           type: string
  *         required: true
- *         description: Index of the image to update
+ *         description: The ID of the image to be updated
  *     requestBody:
  *       required: true
  *       content:
@@ -597,62 +450,43 @@ router.put("/formSection", updateParaglidingFormSection);
  *           schema:
  *             type: object
  *             properties:
- *               imgUrl:
- *                 type: string
- *                 description: The new image URL to update
- *                 example: "string"
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
  *     responses:
  *       200:
- *         description: Successfully updated carousel image
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   example: "string"
- *                 images:
- *                   type: array
- *                   items:
- *                     type: string
- *                   example: ["string", "string"]
- *                 createdAt:
- *                   type: string
- *                   example: "string"
- *                 updatedAt:
- *                   type: string
- *                   example: "string"
- *       400:
- *         description: Invalid index
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "string"
+ *         description: Image updated successfully
  *       404:
- *         description: Images not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
+ *         description: Image not found
  *       500:
  *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
+ *
+ *   delete:
+ *     summary: Deletes an existing carousel image from the Paragliding page
+ *     tags: [Paragliding Page]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the image to be deleted
+ *     responses:
+ *       200:
+ *         description: Image deleted successfully
+ *       404:
+ *         description: Image not found
+ *       500:
+ *         description: Internal server error
  */
 router.post("/carouselImages", createParaglidingCarouselImage);
-router.put("/carouselImages", updateParaglidingCarouselImage);
+router
+  .route("/carouselImages/:id")
+  .put(updateParaglidingCarouselImage)
+  .delete(deleteParaglidingPageCarouselImage);
 
 module.exports = router;

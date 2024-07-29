@@ -3,7 +3,12 @@ const { Schema } = mongoose;
 
 const homepageCarouselImages = new Schema(
   {
-    images: { type: [String], required: true },
+    images: [
+      {
+        public_id: { type: String, required: true },
+        url: { type: String, required: true },
+      },
+    ],
   },
   { versionKey: false, timestamps: true }
 );
