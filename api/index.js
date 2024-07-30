@@ -20,7 +20,7 @@ const contactPageRoutes = require("../routes/contactPageRoutes");
 const { swaggerUi, specs, CSS_URL, customCss } = require("../config/swagger");
 
 connectDB();
-// s
+
 const app = express();
 
 // Middleware
