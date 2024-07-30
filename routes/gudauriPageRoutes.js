@@ -241,33 +241,6 @@ router.get("/", getAllData);
 /**
  * @swagger
  * /api/gudauriPage/banner:
- *   post:
- *     summary: Creates a new banner
- *     tags: [Gudauri Page]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *               images:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     public_id:
- *                       type: string
- *                     url:
- *                       type: string
- *     responses:
- *       201:
- *         description: Banner created successfully
- *       500:
- *         description: Internal server error
- *
  *   put:
  *     summary: Updates an existing banner
  *     tags: [Gudauri Page]
@@ -347,7 +320,7 @@ router.get("/", getAllData);
  *       500:
  *         description: Internal server error
  */
-router.post("/banner", createGudauriBanner);
+// router.post("/banner", createGudauriBanner);
 router.put("/banner", updateGudauriBanner);
 router.post("/banner/images/add", addImageToBanner);
 router.delete("/banner/images/:id", deleteImageToBanner);
@@ -355,69 +328,6 @@ router.delete("/banner/images/:id", deleteImageToBanner);
 // ========== Gudauri Wonderland Section ========== //
 /**
  * @swagger
- * /api/gudauriPage/wonderland:
- *   post:
- *     summary: Creates a new Gudauri Wonderland section
- *     tags:
- *       - Gudauri Page
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *                 description: The title of the Wonderland section
- *                 example: "string"
- *               subtitle:
- *                 type: string
- *                 description: The subtitle of the Wonderland section
- *                 example: "string"
- *               image:
- *                 type: object
- *                 properties:
- *                   public_id:
- *                     type: string
- *                     example: "string"
- *                   url:
- *                     type: string
- *                     example: "string"
- *     responses:
- *       201:
- *         description: Successfully created the Wonderland section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 title:
- *                   type: string
- *                   example: "string"
- *                 subtitle:
- *                   type: string
- *                   example: "string"
- *                 image:
- *                   type: object
- *                   properties:
- *                     public_id:
- *                       type: string
- *                       example: "string"
- *                     url:
- *                       type: string
- *                       example: "string"
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "string"
- *
  * /api/gudauriPage/wonderland/{id}:
  *   put:
  *     summary: Updates an existing Gudauri Wonderland section
@@ -486,81 +396,12 @@ router.delete("/banner/images/:id", deleteImageToBanner);
  *                   type: string
  *                   example: "string"
  */
-router.post("/wonderland", createGudauriWonderlandSection);
+// router.post("/wonderland", createGudauriWonderlandSection);
 router.put("/wonderland/:id", updateGudauriWonderlandSection);
 
 // ========== Plan Trip Section ========== //
 /**
  * @swagger
- * /api/gudauriPage/planTrip:
- *   post:
- *     summary: Creates a new Plan Trip section
- *     tags:
- *       - Gudauri Page
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - title
- *               - subtitle
- *               - image
- *             properties:
- *               title:
- *                 type: string
- *                 description: The title of the Plan Trip section
- *                 example: "string"
- *               subtitle:
- *                 type: string
- *                 description: The subtitle of the Plan Trip section
- *                 example: "string"
- *               image:
- *                 type: object
- *                 properties:
- *                   public_id:
- *                     type: string
- *                     description: The public ID of the image
- *                     example: "string"
- *                   url:
- *                     type: string
- *                     description: The URL of the image
- *                     example: "string"
- *     responses:
- *       201:
- *         description: Successfully created the Plan Trip section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 title:
- *                   type: string
- *                   example: "string"
- *                 subtitle:
- *                   type: string
- *                   example: "string"
- *                 image:
- *                   type: object
- *                   properties:
- *                     public_id:
- *                       type: string
- *                       example: "string"
- *                     url:
- *                       type: string
- *                       example: "string"
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "string"
- *
  * /api/gudauriPage/plantrip/{id}:
  *   put:
  *     summary: Updates an existing Plan Trip section
@@ -629,77 +470,12 @@ router.put("/wonderland/:id", updateGudauriWonderlandSection);
  *                   type: string
  *                   example: "string"
  */
-router.post("/planTrip", createPlanTripSection);
+// router.post("/planTrip", createPlanTripSection);
 router.put("/plantrip/:id", updatePlanTripSection);
 
 // ========== Why Gudauri Section ========== //
 /**
  * @swagger
- * /api/gudauriPage/whygudaurisection:
- *   post:
- *     summary: Creates a new Why Gudauri section
- *     tags:
- *       - Gudauri Page
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *                 description: The title of the Why Gudauri section
- *                 example: "string OPTIONAL"
- *               subtitle:
- *                 type: string
- *                 description: The subtitle of the Why Gudauri section
- *                 example: "string"
- *               image:
- *                 type: object
- *                 properties:
- *                   public_id:
- *                     type: string
- *                     description: The public ID of the image
- *                     example: "string"
- *                   url:
- *                     type: string
- *                     description: The URL of the image
- *                     example: "string"
- *     responses:
- *       201:
- *         description: Successfully created the Why Gudauri section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 title:
- *                   type: string
- *                   example: "string"
- *                 subtitle:
- *                   type: string
- *                   example: "string"
- *                 image:
- *                   type: object
- *                   properties:
- *                     public_id:
- *                       type: string
- *                       example: "string"
- *                     url:
- *                       type: string
- *                       example: "string"
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "string"
- *
  * /api/gudauriPage/whygudaurisection/{id}:
  *   put:
  *     summary: Updates an existing Why Gudauri section
@@ -768,81 +544,12 @@ router.put("/plantrip/:id", updatePlanTripSection);
  *                   type: string
  *                   example: "string"
  */
-router.post("/whygudaurisection", createWhyGudauriSection);
+// router.post("/whygudaurisection", createWhyGudauriSection);
 router.put("/whygudaurisection/:id", updateWhyGudauriSection);
 
 // ========== Gudauri Spirit Section ========== //
 /**
  * @swagger
- * /api/gudauriPage/spiritSection:
- *   post:
- *     summary: Creates a new Gudauri Spirit section
- *     tags:
- *       - Gudauri Page
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - title
- *               - subtitle
- *               - image
- *             properties:
- *               title:
- *                 type: string
- *                 description: The title of the Gudauri Spirit section
- *                 example: "string"
- *               subtitle:
- *                 type: string
- *                 description: The subtitle of the Gudauri Spirit section
- *                 example: "string"
- *               image:
- *                 type: object
- *                 properties:
- *                   public_id:
- *                     type: string
- *                     description: The public ID of the image
- *                     example: "string"
- *                   url:
- *                     type: string
- *                     description: The URL of the image
- *                     example: "string"
- *     responses:
- *       201:
- *         description: Successfully created the Gudauri Spirit section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 title:
- *                   type: string
- *                   example: "string"
- *                 subtitle:
- *                   type: string
- *                   example: "string"
- *                 image:
- *                   type: object
- *                   properties:
- *                     public_id:
- *                       type: string
- *                       example: "string"
- *                     url:
- *                       type: string
- *                       example: "string"
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "string"
- *
  * /api/gudauriPage/spiritSection/{id}:
  *   put:
  *     summary: Updates an existing Gudauri Spirit section
@@ -911,68 +618,12 @@ router.put("/whygudaurisection/:id", updateWhyGudauriSection);
  *                   type: string
  *                   example: "string"
  */
-router.post("/spiritSection", createGudauriSpiritSection);
+// router.post("/spiritSection", createGudauriSpiritSection);
 router.put("/spiritSection/:id", updateGudauriSpiritSection);
 
 // =========== How To Get There Section ========== //
 /**
  * @swagger
- * /api/gudauriPage/howtoget:
- *   post:
- *     summary: Creates a new How to Get There section
- *     tags:
- *       - Gudauri Page
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - title
- *               - subtitle
- *               - description
- *             properties:
- *               title:
- *                 type: string
- *                 description: The title of the How to Get There section
- *                 example: "string"
- *               subtitle:
- *                 type: string
- *                 description: The subtitle of the How to Get There section
- *                 example: "string"
- *               description:
- *                 type: string
- *                 description: A detailed description of how to get there
- *                 example: "string"
- *     responses:
- *       201:
- *         description: Successfully created the How to Get There section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 title:
- *                   type: string
- *                   example: "string"
- *                 subtitle:
- *                   type: string
- *                   example: "string"
- *                 description:
- *                   type: string
- *                   example: "string"
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "string"
- *
  * /api/gudauriPage/howtoget/{id}:
  *   put:
  *     summary: Updates an existing How to Get There section
@@ -1036,7 +687,7 @@ router.put("/spiritSection/:id", updateGudauriSpiritSection);
  *                   type: string
  *                   example: "string"
  */
-router.post("/howtoget", createHowToGetThereSection);
+// router.post("/howtoget", createHowToGetThereSection);
 router.put("/howtoget/:id", updateHowToGetThereSection);
 
 // ========== Carousel Images ========== //

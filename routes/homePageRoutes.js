@@ -264,80 +264,6 @@ router.get("/", getAllData);
 // ========= Hero Section ========== //
 /**
  * @swagger
- * /api/homepage/banner:
- *   post:
- *     summary: Creates a new banner
- *     tags:
- *       - Home Page
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *                 description: The title of the banner
- *                 example: "string"
- *               subtitle:
- *                 type: string
- *                 description: The subtitle of the banner
- *                 example: "string"
- *               image:
- *                 type: object
- *                 properties:
- *                   public_id:
- *                     type: string
- *                     description: The public ID of the image
- *                     example: "string"
- *                   url:
- *                     type: string
- *                     description: The URL of the image
- *                     example: "string"
- *     responses:
- *       201:
- *         description: Successfully created the banner
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   example: "string"
- *                 title:
- *                   type: string
- *                   example: "string"
- *                 subtitle:
- *                   type: string
- *                   example: "string"
- *                 image:
- *                   type: object
- *                   properties:
- *                     public_id:
- *                       type: string
- *                       example: "string"
- *                     url:
- *                       type: string
- *                       example: "string"
- *                 createdAt:
- *                   type: string
- *                   example: "string"
- *                 updatedAt:
- *                   type: string
- *                   example: "string"
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "string"
- *
  * /api/homepage/banner/{id}:
  *   put:
  *     summary: Updates an existing banner
@@ -408,106 +334,13 @@ router.get("/", getAllData);
  *                   type: string
  *                   example: "string"
  */
-router.post("/banner", createBanner);
+// router.post("/banner", createBanner);
 router.put("/banner/:id", updateBanner);
 
 // ========== Our Activities ========== //
 /**
  * @swagger
  * /api/homepage/ourActivitiesSection:
- *   post:
- *     summary: Creates a new "Our Activities" section
- *     tags:
- *       - Home Page
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *                 description: The title of the section
- *                 example: "string"
- *               items:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     title:
- *                       type: string
- *                       description: The title of the item
- *                       example: "string"
- *                     subtitle:
- *                       type: string
- *                       description: The subtitle of the item
- *                       example: "string"
- *                     image:
- *                       type: object
- *                       properties:
- *                         public_id:
- *                           type: string
- *                           description: The public ID of the image
- *                           example: "string"
- *                         url:
- *                           type: string
- *                           description: The URL of the image
- *                           example: "string"
- *     responses:
- *       201:
- *         description: Successfully created the section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   example: "string"
- *                 title:
- *                   type: string
- *                   example: "string"
- *                 items:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       _id:
- *                         type: string
- *                         example: "string"
- *                       title:
- *                         type: string
- *                         example: "string"
- *                       subtitle:
- *                         type: string
- *                         example: "string"
- *                       image:
- *                         type: object
- *                         properties:
- *                           public_id:
- *                             type: string
- *                             example: "string"
- *                           url:
- *                             type: string
- *                             example: "string"
- *                 createdAt:
- *                   type: string
- *                   example: "string"
- *                 updatedAt:
- *                   type: string
- *                   example: "string"
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "string"
- *
  *   put:
  *     summary: Updates the "Our Activities" section
  *     tags:
@@ -612,93 +445,12 @@ router.put("/banner/:id", updateBanner);
  *                   type: string
  *                   example: "string"
  */
-router.post("/ourActivitiesSection", createActivitiesSection);
+// router.post("/ourActivitiesSection", createActivitiesSection);
 router.put("/ourActivitiesSection", updateActivitySection);
 
 // ========== Discount Coupon ========== //
 /**
  * @swagger
- * /api/homepage/discountCoupon:
- *   post:
- *     summary: Creates a new discount coupon
- *     tags:
- *       - Home Page
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *                 description: The title of the discount coupon
- *                 example: "string"
- *               subtitle:
- *                 type: string
- *                 description: The subtitle of the discount coupon
- *                 example: "string"
- *               image:
- *                 type: object
- *                 properties:
- *                   public_id:
- *                     type: string
- *                     description: The public ID of the image
- *                     example: "string"
- *                   url:
- *                     type: string
- *                     description: The URL of the image
- *                     example: "string"
- *               addressLink:
- *                 type: string
- *                 description: The address link for the discount coupon
- *                 example: "string"
- *     responses:
- *       201:
- *         description: Successfully created the discount coupon
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   example: "string"
- *                 title:
- *                   type: string
- *                   example: "string"
- *                 subtitle:
- *                   type: string
- *                   example: "string"
- *                 image:
- *                   type: object
- *                   properties:
- *                     public_id:
- *                       type: string
- *                       example: "string"
- *                     url:
- *                       type: string
- *                       example: "string"
- *                 addressLink:
- *                   type: string
- *                   example: "string"
- *                 createdAt:
- *                   type: string
- *                   example: "string"
- *                 updatedAt:
- *                   type: string
- *                   example: "string"
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "string"
- *
  * /api/homepage/discountCoupon/{id}:
  *   put:
  *     summary: Updates an existing discount coupon
@@ -773,86 +525,12 @@ router.put("/ourActivitiesSection", updateActivitySection);
  *                   type: string
  *                   example: "string"
  */
-router.post("/discountCoupon", createDiscountCoupon);
+// router.post("/discountCoupon", createDiscountCoupon);
 router.put("/discountCoupon/:id", updateDiscountCoupon);
 
 // ========== Welcome Section ========== //
 /**
  * @swagger
- * /api/homepage/welcomeSection:
- *   post:
- *     summary: Creates a new welcome section
- *     tags:
- *       - Home Page
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *                 description: The title of the welcome section
- *                 example: "string"
- *               subtitle:
- *                 type: string
- *                 description: The subtitle of the welcome section
- *                 example: "string"
- *               image:
- *                 type: object
- *                 properties:
- *                   public_id:
- *                     type: string
- *                     description: The public ID of the image
- *                     example: "string"
- *                   url:
- *                     type: string
- *                     description: The URL of the image
- *                     example: "string"
- *     responses:
- *       201:
- *         description: Successfully created the welcome section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   example: "string"
- *                 title:
- *                   type: string
- *                   example: "string"
- *                 subtitle:
- *                   type: string
- *                   example: "string"
- *                 image:
- *                   type: object
- *                   properties:
- *                     public_id:
- *                       type: string
- *                       example: "string"
- *                     url:
- *                       type: string
- *                       example: "string"
- *                 createdAt:
- *                   type: string
- *                   example: "string"
- *                 updatedAt:
- *                   type: string
- *                   example: "string"
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "string"
- *
  * /api/homepage/welcomeSection/{id}:
  *   put:
  *     summary: Updates an existing welcome section
@@ -923,106 +601,13 @@ router.put("/discountCoupon/:id", updateDiscountCoupon);
  *                   type: string
  *                   example: "string"
  */
-router.post("/welcomeSection", createWelcomeSection);
+// router.post("/welcomeSection", createWelcomeSection);
 router.put("/welcomeSection/:id", updateWelcomeSection);
 
 // ========== What Sets Apart Section ========== //
 /**
  * @swagger
  * /api/homepage/whatSetsApart:
- *   post:
- *     summary: Creates a new "What Sets Us Apart" section
- *     tags:
- *       - Home Page
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *                 description: The title of the section
- *                 example: "string"
- *               items:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     title:
- *                       type: string
- *                       description: The title of the item
- *                       example: "string"
- *                     subtitle:
- *                       type: string
- *                       description: The subtitle of the item
- *                       example: "string"
- *                     image:
- *                       type: object
- *                       properties:
- *                         public_id:
- *                           type: string
- *                           description: The public ID of the image
- *                           example: "string"
- *                         url:
- *                           type: string
- *                           description: The URL of the image
- *                           example: "string"
- *     responses:
- *       201:
- *         description: Successfully created the section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   example: "string"
- *                 title:
- *                   type: string
- *                   example: "string"
- *                 items:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       _id:
- *                         type: string
- *                         example: "string"
- *                       title:
- *                         type: string
- *                         example: "string"
- *                       subtitle:
- *                         type: string
- *                         example: "string"
- *                       image:
- *                         type: object
- *                         properties:
- *                           public_id:
- *                             type: string
- *                             example: "string"
- *                           url:
- *                             type: string
- *                             example: "string"
- *                 createdAt:
- *                   type: string
- *                   example: "string"
- *                 updatedAt:
- *                   type: string
- *                   example: "string"
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "string"
- *
  *   put:
  *     summary: Updates the "What Sets Us Apart" section
  *     tags:
@@ -1193,7 +778,7 @@ router.put("/welcomeSection/:id", updateWelcomeSection);
  *                   type: string
  *                   example: "string"
  */
-router.post("/whatSetsApart", createWhatSetsApartSection);
+// router.post("/whatSetsApart", createWhatSetsApartSection);
 router.post("/whatSetsApart/item", addApartItemToSection);
 router.put("/whatSetsApart", updateWhatSetsApartSection);
 router.delete("/whatSetsApart/item/:id", deleteItemFromSection);
@@ -1201,80 +786,6 @@ router.delete("/whatSetsApart/item/:id", deleteItemFromSection);
 // ========== Wonderland Section =========== //
 /**
  * @swagger
- * /api/homepage/wonderlandSection:
- *   post:
- *     summary: Creates a new wonderland section
- *     tags:
- *       - Home Page
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *                 description: The title of the wonderland section
- *                 example: "string"
- *               subtitle:
- *                 type: string
- *                 description: The subtitle of the wonderland section
- *                 example: "string"
- *               image:
- *                 type: object
- *                 properties:
- *                   public_id:
- *                     type: string
- *                     description: The public ID of the image
- *                     example: "string"
- *                   url:
- *                     type: string
- *                     description: The URL of the image
- *                     example: "string"
- *     responses:
- *       201:
- *         description: Successfully created the wonderland section
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   example: "string"
- *                 title:
- *                   type: string
- *                   example: "string"
- *                 subtitle:
- *                   type: string
- *                   example: "string"
- *                 image:
- *                   type: object
- *                   properties:
- *                     public_id:
- *                       type: string
- *                       example: "string"
- *                     url:
- *                       type: string
- *                       example: "string"
- *                 createdAt:
- *                   type: string
- *                   example: "string"
- *                 updatedAt:
- *                   type: string
- *                   example: "string"
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "string"
- *
  * /api/homepage/wonderlandSection/{id}:
  *   put:
  *     summary: Updates an existing wonderland section
@@ -1345,7 +856,7 @@ router.delete("/whatSetsApart/item/:id", deleteItemFromSection);
  *                   type: string
  *                   example: "string"
  */
-router.post("/wonderlandSection", createWonderlandSection);
+// router.post("/wonderlandSection", createWonderlandSection);
 router.put("/wonderlandSection/:id", updateWonderlandSection);
 
 // ========== Carousel Images ========== //

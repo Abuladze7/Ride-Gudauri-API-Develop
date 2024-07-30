@@ -261,35 +261,6 @@ router.get("/", getAllData);
 /**
  * @swagger
  * /api/skiSchoolPage/banner:
- *   post:
- *     summary: Creates a new banner for the Ski School page
- *     tags: [Ski School Page]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *               subtitle:
- *                 type: string
- *               images:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     public_id:
- *                       type: string
- *                     url:
- *                       type: string
- *     responses:
- *       201:
- *         description: Banner created successfully
- *       500:
- *         description: Internal server error
- *
  *   put:
  *     summary: Updates an existing banner for the Ski School page
  *     tags: [Ski School Page]
@@ -371,7 +342,7 @@ router.get("/", getAllData);
  *       500:
  *         description: Internal server error
  */
-router.post("/banner", createSkiSchoolPageBanner);
+// router.post("/banner", createSkiSchoolPageBanner);
 router.put("/banner", updateSkiSchoolPageBanner);
 router.post("/banner/images/add", addImageToBanner);
 router.delete("/banner/images/:id", deleteImageToSkiSchoolPageBanner);
@@ -379,34 +350,6 @@ router.delete("/banner/images/:id", deleteImageToSkiSchoolPageBanner);
 // ========== About ========== //
 /**
  * @swagger
- * /api/skiSchoolPage/aboutSection:
- *   post:
- *     summary: Creates a new about section for the Ski School page
- *     tags: [Ski School Page]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *               subtitle:
- *                 type: string
- *               image:
- *                 type: object
- *                 properties:
- *                   public_id:
- *                     type: string
- *                   url:
- *                     type: string
- *     responses:
- *       201:
- *         description: About section created successfully
- *       500:
- *         description: Internal server error
- *
  * /api/skiSchoolPage/aboutSection/{id}:
  *   put:
  *     summary: Updates an existing about section for the Ski School page
@@ -444,47 +387,13 @@ router.delete("/banner/images/:id", deleteImageToSkiSchoolPageBanner);
  *       500:
  *         description: Internal server error
  */
-router.post("/aboutSection", createSkiSchoolPageAbout);
+// router.post("/aboutSection", createSkiSchoolPageAbout);
 router.put("/aboutSection/:id", updateSkiSchoolPageAbout);
 
 // ========== Individual Lessons ========== //
 /**
  * @swagger
  * /api/skiSchoolPage/individualLesson:
- *   post:
- *     summary: Creates a new individual lesson for the Ski School page
- *     tags: [Ski School Page]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *               subtitle:
- *                 type: string
- *               items:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     image:
- *                       type: object
- *                       properties:
- *                         public_id:
- *                           type: string
- *                         url:
- *                           type: string
- *                     description:
- *                       type: string
- *     responses:
- *       201:
- *         description: Individual lesson created successfully
- *       500:
- *         description: Internal server error
- *
  *   put:
  *     summary: Updates an existing individual lesson for the Ski School page
  *     tags: [Ski School Page]
@@ -523,47 +432,13 @@ router.put("/aboutSection/:id", updateSkiSchoolPageAbout);
  *       500:
  *         description: Internal server error
  */
-router.post("/individualLesson", createSkiSchoolIndividualLesson);
+// router.post("/individualLesson", createSkiSchoolIndividualLesson);
 router.put("/individualLesson", updateSkiSchoolIndividualLesson);
 
 // ========== Group Lessons ========== //
 /**
  * @swagger
  * /api/skiSchoolPage/groupLesson:
- *   post:
- *     summary: Creates a new private group lesson for the Ski School page
- *     tags: [Ski School Page]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *               subtitle:
- *                 type: string
- *               items:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     image:
- *                       type: object
- *                       properties:
- *                         public_id:
- *                           type: string
- *                         url:
- *                           type: string
- *                     description:
- *                       type: string
- *     responses:
- *       201:
- *         description: Private group lesson created successfully
- *       500:
- *         description: Internal server error
- *
  *   put:
  *     summary: Updates an existing private group lesson for the Ski School page
  *     tags: [Ski School Page]
@@ -602,45 +477,13 @@ router.put("/individualLesson", updateSkiSchoolIndividualLesson);
  *       500:
  *         description: Internal server error
  */
-router.post("/groupLesson", createSkiSchoolPrivateGroupLesson);
+// router.post("/groupLesson", createSkiSchoolPrivateGroupLesson);
 router.put("/groupLesson", updateSkiSchoolPrivateGroupLesson);
 
 // ========== Ski School Benefits ========== //
 /**
  * @swagger
  * /api/skiSchoolPage/benefitsSection:
- *   post:
- *     summary: Creates a new benefits section for the Ski School page
- *     tags: [Ski School Page]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *               items:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     subtitle:
- *                       type: string
- *                     image:
- *                       type: object
- *                       properties:
- *                         public_id:
- *                           type: string
- *                         url:
- *                           type: string
- *     responses:
- *       201:
- *         description: Benefits section created successfully
- *       500:
- *         description: Internal server error
- *
  *   put:
  *     summary: Updates an existing benefits section for the Ski School page
  *     tags: [Ski School Page]
@@ -677,40 +520,12 @@ router.put("/groupLesson", updateSkiSchoolPrivateGroupLesson);
  *       500:
  *         description: Internal server error
  */
-router.post("/benefitsSection", createSkiSchoolPageBenefits);
+// router.post("/benefitsSection", createSkiSchoolPageBenefits);
 router.put("/benefitsSection", updateSkiSchoolPageBenefits);
 
 // ========== Ski School Rental Section ========== //
 /**
  * @swagger
- * /api/skiSchoolPage/rentalShopSection:
- *   post:
- *     summary: Creates a new rental shop section for the Ski School page
- *     tags: [Ski School Page]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *               subtitle:
- *                 type: string
- *               image:
- *                 type: object
- *                 properties:
- *                   public_id:
- *                     type: string
- *                   url:
- *                     type: string
- *     responses:
- *       201:
- *         description: Rental shop section created successfully
- *       500:
- *         description: Internal server error
- *
  * /api/skiSchoolPage/rentalShopSection/{id}:
  *   put:
  *     summary: Updates an existing rental shop section for the Ski School page
@@ -748,40 +563,12 @@ router.put("/benefitsSection", updateSkiSchoolPageBenefits);
  *       500:
  *         description: Internal server error
  */
-router.post("/rentalShopSection", createSkiSchoolRentalShopSection);
+// router.post("/rentalShopSection", createSkiSchoolRentalShopSection);
 router.put("/rentalShopSection/:id", updateSkiSchoolRentalShopSection);
 
 // ========== Ski School Repair Section ========== //
 /**
  * @swagger
- * /api/skiSchoolPage/repairSection:
- *   post:
- *     summary: Creates a new repair section for the Ski School page
- *     tags: [Ski School Page]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *               subtitle:
- *                 type: string
- *               image:
- *                 type: object
- *                 properties:
- *                   public_id:
- *                     type: string
- *                   url:
- *                     type: string
- *     responses:
- *       201:
- *         description: Repair section created successfully
- *       500:
- *         description: Internal server error
- *
  * /api/skiSchoolPage/repairSection/{id}:
  *   put:
  *     summary: Updates an existing repair section for the Ski School page
@@ -819,47 +606,13 @@ router.put("/rentalShopSection/:id", updateSkiSchoolRentalShopSection);
  *       500:
  *         description: Internal server error
  */
-router.post("/repairSection", createSkiSchoolRepairSection);
+// router.post("/repairSection", createSkiSchoolRepairSection);
 router.put("/repairSection/:id", updateSkiSchoolRepairSection);
 
 // ========== Ski School Team Section ========== //
 /**
  * @swagger
  * /api/skiSchoolPage/teamSection:
- *   post:
- *     summary: Creates a new team section for the Ski School page
- *     tags: [Ski School Page]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *               items:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     title:
- *                       type: string
- *                     subtitle:
- *                       type: string
- *                     image:
- *                       type: object
- *                       properties:
- *                         public_id:
- *                           type: string
- *                         url:
- *                           type: string
- *     responses:
- *       201:
- *         description: Team section created successfully
- *       500:
- *         description: Internal server error
- *
  *   put:
  *     summary: Updates an existing team section for the Ski School page
  *     tags: [Ski School Page]
@@ -898,7 +651,7 @@ router.put("/repairSection/:id", updateSkiSchoolRepairSection);
  *       500:
  *         description: Internal server error
  */
-router.post("/teamSection", createSkiSchoolTeamSection);
+// router.post("/teamSection", createSkiSchoolTeamSection);
 router.put("/teamSection", updateSkiSchoolTEamSection);
 
 module.exports = router;

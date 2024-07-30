@@ -138,35 +138,6 @@ router.get("/", getAllData);
 /**
  * @swagger
  * /api/paraglidingPage/banner:
- *   post:
- *     summary: Creates a new banner for the Paragliding page
- *     tags: [Paragliding Page]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *               subtitle:
- *                 type: string
- *               images:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     public_id:
- *                       type: string
- *                     url:
- *                       type: string
- *     responses:
- *       201:
- *         description: Banner created successfully
- *       500:
- *         description: Internal server error
- *
  *   put:
  *     summary: Updates an existing banner for the Paragliding page
  *     tags: [Paragliding Page]
@@ -248,7 +219,7 @@ router.get("/", getAllData);
  *       500:
  *         description: Internal server error
  */
-router.post("/banner", createParaglidingPageBanner);
+// router.post("/banner", createParaglidingPageBanner);
 router.put("/banner", updateParaglidingPageBanner);
 router.post("/banner/images/add", addImageToBanner);
 router.delete("/banner/images/:id", deleteImageToBanner);
@@ -256,34 +227,6 @@ router.delete("/banner/images/:id", deleteImageToBanner);
 // ========== Paragliding Main Section ============ //
 /**
  * @swagger
- * /api/paraglidingPage/mainSection:
- *   post:
- *     summary: Creates a new main section for the Paragliding page
- *     tags: [Paragliding Page]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *               subtitle:
- *                 type: string
- *               image:
- *                 type: object
- *                 properties:
- *                   public_id:
- *                     type: string
- *                   url:
- *                     type: string
- *     responses:
- *       201:
- *         description: Main section created successfully
- *       500:
- *         description: Internal server error
- *
  * /api/paraglidingPage/mainSection/{id}:
  *   put:
  *     summary: Updates an existing main section for the Paragliding page
@@ -321,47 +264,13 @@ router.delete("/banner/images/:id", deleteImageToBanner);
  *       500:
  *         description: Internal server error
  */
-router.post("/mainSection", createParaglidingPageMainSection);
+// router.post("/mainSection", createParaglidingPageMainSection);
 router.put("/mainSection/:id", updateParaglidingMainSectionSection);
 
 // =========== Paragliding Form Section ============ //
 /**
  * @swagger
  * /api/paraglidingPage/formSection:
- *   post:
- *     summary: Creates a new form section for the Paragliding page
- *     tags: [Paragliding Page]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *               subtitle:
- *                 type: string
- *               items:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     description:
- *                       type: string
- *                     image:
- *                       type: object
- *                       properties:
- *                         public_id:
- *                           type: string
- *                         url:
- *                           type: string
- *     responses:
- *       201:
- *         description: Form section created successfully
- *       500:
- *         description: Internal server error
- *
  *   put:
  *     summary: Updates an existing form section for the Paragliding page
  *     tags: [Paragliding Page]

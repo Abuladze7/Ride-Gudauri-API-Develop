@@ -150,33 +150,6 @@ router.get("/", getAllData);
 /**
  * @swagger
  * /api/ourStory/banner:
- *   post:
- *     summary: Creates a new banner
- *     tags: [Our Story]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *               images:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     public_id:
- *                       type: string
- *                     url:
- *                       type: string
- *     responses:
- *       201:
- *         description: Banner created successfully
- *       500:
- *         description: Internal server error
- *
  *   put:
  *     summary: Updates an existing banner
  *     tags: [Our Story]
@@ -256,7 +229,7 @@ router.get("/", getAllData);
  *       500:
  *         description: Internal server error
  */
-router.post("/banner", createBanner);
+// router.post("/banner", createBanner);
 router.put("/banner", updateBanner);
 router.post("/banner/images/add", addImageToBanner);
 router.delete("/banner/images/:id", deleteImageToBanner);
@@ -264,34 +237,6 @@ router.delete("/banner/images/:id", deleteImageToBanner);
 // ========== How It Started Section ========== //
 /**
  * @swagger
- * /api/ourStory/howItStartedSection:
- *   post:
- *     summary: Creates a new "How It Started" section
- *     tags: [Our Story]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *               subtitle:
- *                 type: string
- *               image:
- *                 type: object
- *                 properties:
- *                   public_id:
- *                     type: string
- *                   url:
- *                     type: string
- *     responses:
- *       201:
- *         description: Section created successfully
- *       500:
- *         description: Internal server error
- *
  * /api/ourStory/howItStartedSection/{id}:
  *   put:
  *     summary: Updates an existing "How It Started" section
@@ -335,32 +280,6 @@ router.put("/howItStartedSection/:id", updateHowStartedSection);
 // ========== How It Started Middle Sections ========== //
 /**
  * @swagger
- * /api/ourStory/howItStartedMiddleSection:
- *   post:
- *     summary: Creates a new "How It Started" middle section
- *     tags: [Our Story]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               subtitle:
- *                 type: string
- *               image:
- *                 type: object
- *                 properties:
- *                   public_id:
- *                     type: string
- *                   url:
- *                     type: string
- *     responses:
- *       201:
- *         description: Middle section created successfully
- *       500:
- *         description: Internal server error
- *
  * /api/ourStory/howItStartedMiddleSection/{id}:
  *   put:
  *     summary: Updates an existing "How It Started" middle section
@@ -396,40 +315,12 @@ router.put("/howItStartedSection/:id", updateHowStartedSection);
  *       500:
  *         description: Internal server error
  */
-router.post("/howItStartedMiddleSection", createHowStartedMiddleSections);
+// router.post("/howItStartedMiddleSection", createHowStartedMiddleSections);
 router.put("/howItStartedMiddleSection/:id", updateHowStartedMiddleSection);
 
 // ========== The Beginning of Paragliding ========== //
 /**
  * @swagger
- * /api/ourStory/beginningOfParagliding:
- *   post:
- *     summary: Creates a new "Beginning Of Paragliding" section
- *     tags: [Our Story]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *               subtitle:
- *                 type: string
- *               image:
- *                 type: object
- *                 properties:
- *                   public_id:
- *                     type: string
- *                   url:
- *                     type: string
- *     responses:
- *       201:
- *         description: Paragliding section created successfully
- *       500:
- *         description: Internal server error
- *
  * /api/ourStory/beginningOfParagliding/{id}:
  *   put:
  *     summary: Updates an existing "Beginning Of Paragliding" section
@@ -467,7 +358,7 @@ router.put("/howItStartedMiddleSection/:id", updateHowStartedMiddleSection);
  *       500:
  *         description: Internal server error
  */
-router.post("/beginningOfParagliding", createParaglidingSection);
+// router.post("/beginningOfParagliding", createParaglidingSection);
 router.put("/beginningOfParagliding/:id", updateParaglidingSection);
 
 // ========== Carousel Images ========== //

@@ -250,35 +250,6 @@ router.get("/", getAllData);
 /**
  * @swagger
  * /api/otherActivitiesPage/banner:
- *   post:
- *     summary: Creates a new banner for the Other Activities page
- *     tags: [Other Activities Page]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *               subtitle:
- *                 type: string
- *               images:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     public_id:
- *                       type: string
- *                     url:
- *                       type: string
- *     responses:
- *       201:
- *         description: Banner created successfully
- *       500:
- *         description: Internal server error
- *
  *   put:
  *     summary: Updates an existing banner for the Other Activities page
  *     tags: [Other Activities Page]
@@ -360,7 +331,7 @@ router.get("/", getAllData);
  *       500:
  *         description: Internal server error
  */
-router.post("/banner", createOtherActivitiesPageBanner);
+// router.post("/banner", createOtherActivitiesPageBanner);
 router.put("/banner", updateOtherActivitiesPageBanner);
 router.post("/banner/images/add", addImageToBanner);
 router.delete("/banner/images/:id", deleteImageToBanner);
@@ -369,35 +340,6 @@ router.delete("/banner/images/:id", deleteImageToBanner);
 /**
  * @swagger
  * /api/otherActivitiesPage/mainSection:
- *   post:
- *     summary: Creates a new main section for the Other Activities page
- *     tags: [Other Activities Page]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *               subtitle:
- *                 type: string
- *               images:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     public_id:
- *                       type: string
- *                     url:
- *                       type: string
- *     responses:
- *       201:
- *         description: Main section created successfully
- *       500:
- *         description: Internal server error
- *
  *   put:
  *     summary: Updates an existing main section for the Other Activities page
  *     tags: [Other Activities Page]
@@ -434,50 +376,13 @@ router.delete("/banner/images/:id", deleteImageToBanner);
  *       500:
  *         description: Internal server error
  */
-router.post("/mainSection", createOtherActivitiesPageMainSection);
+// router.post("/mainSection", createOtherActivitiesPageMainSection);
 router.put("/mainSection", updateOtherActivitiesPageMainSection);
 
 // ========== Transfers Form =========== //
 /**
  * @swagger
  * /api/otherActivitiesPage/transfersForm:
- *   post:
- *     summary: Creates a new transfers form section for the Other Activities page
- *     tags: [Other Activities Page]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *               subtitle:
- *                 type: string
- *               warning:
- *                 type: string
- *                 example: "string OPTIONAL"
- *               items:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     description:
- *                       type: string
- *                     image:
- *                       type: object
- *                       properties:
- *                         public_id:
- *                           type: string
- *                         url:
- *                           type: string
- *     responses:
- *       201:
- *         description: Transfers form section created successfully
- *       500:
- *         description: Internal server error
- *
  *   put:
  *     summary: Updates an existing transfers form section for the Other Activities page
  *     tags: [Other Activities Page]
@@ -518,49 +423,13 @@ router.put("/mainSection", updateOtherActivitiesPageMainSection);
  *       500:
  *         description: Internal server error
  */
-router.post("/transfersForm", createOtherActivitiesPageTransfersForm);
+// router.post("/transfersForm", createOtherActivitiesPageTransfersForm);
 router.put("/transfersForm", updateOtherActivitiesPageTransfersForm);
 
 // ========== Snowmobile Form =========== //
 /**
  * @swagger
  * /api/otherActivitiesPage/snowmobileForm:
- *   post:
- *     summary: Creates a new snowmobile form section for the Other Activities page
- *     tags: [Other Activities Page]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *               subtitle:
- *                 type: string
- *               warning:
- *                 type: string
- *               items:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     description:
- *                       type: string
- *                     image:
- *                       type: object
- *                       properties:
- *                         public_id:
- *                           type: string
- *                         url:
- *                           type: string
- *     responses:
- *       201:
- *         description: Snowmobile form section created successfully
- *       500:
- *         description: Internal server error
- *
  *   put:
  *     summary: Updates an existing snowmobile form section for the Other Activities page
  *     tags: [Other Activities Page]
@@ -601,49 +470,13 @@ router.put("/transfersForm", updateOtherActivitiesPageTransfersForm);
  *       500:
  *         description: Internal server error
  */
-router.post("/snowmobileForm", createOtherActivitiesPageSnowMobileForm);
+// router.post("/snowmobileForm", createOtherActivitiesPageSnowMobileForm);
 router.put("/snowmobileForm", updateOtherActivitiesPageSnowMobileForm);
 
 // ========== Horse riding form =========== //
 /**
  * @swagger
  * /api/otherActivitiesPage/horseRidingForm:
- *   post:
- *     summary: Creates a new horse riding form section for the Other Activities page
- *     tags: [Other Activities Page]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *               subtitle:
- *                 type: string
- *               warning:
- *                 type: string
- *               items:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     description:
- *                       type: string
- *                     image:
- *                       type: object
- *                       properties:
- *                         public_id:
- *                           type: string
- *                         url:
- *                           type: string
- *     responses:
- *       201:
- *         description: Horse riding form section created successfully
- *       500:
- *         description: Internal server error
- *
  *   put:
  *     summary: Updates an existing horse riding form section for the Other Activities page
  *     tags: [Other Activities Page]
@@ -684,49 +517,13 @@ router.put("/snowmobileForm", updateOtherActivitiesPageSnowMobileForm);
  *       500:
  *         description: Internal server error
  */
-router.post("/horseRidingForm", createOtherActivitiesPageHorseRidingForm);
+// router.post("/horseRidingForm", createOtherActivitiesPageHorseRidingForm);
 router.put("/horseRidingForm", updateOtherActivitiesPageHorseRidingForm);
 
 // ========== Quad Bike Form =========== //
 /**
  * @swagger
  * /api/otherActivitiesPage/quadBikeForm:
- *   post:
- *     summary: Creates a new quad bike form section for the Other Activities page
- *     tags: [Other Activities Page]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *               subtitle:
- *                 type: string
- *               warning:
- *                 type: string
- *               items:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     description:
- *                       type: string
- *                     image:
- *                       type: object
- *                       properties:
- *                         public_id:
- *                           type: string
- *                         url:
- *                           type: string
- *     responses:
- *       201:
- *         description: Quad bike form section created successfully
- *       500:
- *         description: Internal server error
- *
  *   put:
  *     summary: Updates an existing quad bike form section for the Other Activities page
  *     tags: [Other Activities Page]
@@ -767,7 +564,7 @@ router.put("/horseRidingForm", updateOtherActivitiesPageHorseRidingForm);
  *       500:
  *         description: Internal server error
  */
-router.post("/quadBikeForm", createOtherActivitiesPageQuadBikeForm);
+// router.post("/quadBikeForm", createOtherActivitiesPageQuadBikeForm);
 router.put("/quadBikeForm", updateOtherActivitiesPageQuadBikeForm);
 
 // ========== Carousel Image =========== //
