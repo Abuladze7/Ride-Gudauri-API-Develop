@@ -309,7 +309,7 @@ router.put("/mainSection/:id", updateParaglidingMainSectionSection);
  *       500:
  *         description: Internal server error
  */
-router.post("/formSection", createParaglidingFormSection);
+// router.post("/formSection", createParaglidingFormSection);
 router.put("/formSection", updateParaglidingFormSection);
 
 // ========== Carousel Images ========== //
