@@ -120,7 +120,7 @@ exports.updateHowStartedSection = async (req, res) => {
 
     if (!section) return res.status(404).json({ message: "Section not found" });
 
-    if (image) {
+    if (image && section.image.public_id) {
       const imgId = section.image.public_id;
       if (imgId) {
         await cloudinary.uploader.destroy(imgId);
