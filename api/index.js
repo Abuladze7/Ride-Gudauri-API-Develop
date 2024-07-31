@@ -39,7 +39,8 @@ const corsOptions = {
     "https://admin.ridegudauri.ge/",
     "https://admin.ridegudauri.com/",
   ],
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  allowedHeaders: ["Content-Type", "Authorization"],
+  methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
   credentials: true,
   optionsSuccessStatus: 204,
 };
