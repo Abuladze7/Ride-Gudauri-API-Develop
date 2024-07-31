@@ -308,7 +308,7 @@ router.get("/", getAllData);
  *           schema:
  *             type: object
  *             properties:
- *               imgUrl:
+ *               image:
  *                 type: object
  *                 properties:
  *                   public_id:

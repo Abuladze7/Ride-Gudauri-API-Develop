@@ -21,11 +21,11 @@ exports.createSkiSchoolPageBanner = async (req, res) => {
 
 exports.addImageToBanner = async (req, res) => {
   try {
-    const { imgUrl } = req.body;
+    const { image } = req.body;
     const banner = await SkiSchoolPageBanner.findOne();
     if (!banner) return res.status(404).json({ message: "Banner not found" });
 
-    banner.images.push(imgUrl);
+    banner.images.push(image);
 
     await banner.save();
 
@@ -44,9 +44,9 @@ exports.updateSkiSchoolPageBanner = async (req, res) => {
 
     if (!banner) return res.status(404).json({ message: "Banner not found" });
 
-    if (imgId && image) {
+    if (imgId && image && banner.images) {
       const imgIndex = banner.images.findIndex(
-        (img) => img._id.toString() === imgId
+        (img) => img && img._id && img._id.toString() === imgId
       );
 
       if (imgIndex === -1)
