@@ -339,7 +339,7 @@ exports.createGudauriCarouselImage = async (req, res) => {
       return res.status(201).json({ message: "Images added successfully" });
     }
 
-    if (!Array.isArray(images) && typeof images === "string") {
+    if (!Array.isArray(images) && typeof images === "object") {
       carouselImages.images.push(images);
       await carouselImages.save();
 
