@@ -245,7 +245,7 @@ exports.createOurStoryCarouselImage = async (req, res) => {
         .json({ message: "Carousel images created successfully" });
     }
 
-    if (!Array.isArray(images) && typeof images === "string") {
+    if (!Array.isArray(images) && typeof images === "object") {
       carouselImages.images.push(images);
 
       await carouselImages.save();
