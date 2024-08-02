@@ -206,7 +206,7 @@ exports.createParaglidingCarouselImage = async (req, res) => {
         .json({ message: "Carousel Images Created Successfully" });
     }
 
-    if (!Array.isArray(images) && typeof images === "string") {
+    if (!Array.isArray(images) && typeof images === "object") {
       carouselImages.images.push(images);
 
       await carouselImages.save();
