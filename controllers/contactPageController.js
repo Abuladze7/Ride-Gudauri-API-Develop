@@ -1,7 +1,92 @@
 const ContactPageFaqTitles = require("../models/contact-page/contactPageFaqTitlesModel");
 const ContactPageFaqQuestion = require("../models/contact-page/contactPageFaqQuestionsModel");
 const ContactPageCarouselImage = require("../models/contact-page/contactPageCarouselImageModel");
+const GudauriPageBanner = require("../models/contact-page/contactPageBannerModel");
 const cloudinary = require("../config/cloudinary");
+const carouselImages = require("../models/homePage/carouselImages");
+
+// ========== Banner ========== //
+exports.createContactPageBanner = async (req, res) => {
+  try {
+    const { images } = req.body;
+    let banner = await GudauriPageBanner.findOne();
+    if (!banner) {
+      banner = await GudauriPageBanner.create({
+        images: [...images],
+      });
+
+      return res.status(201).json({ message: "Images Created successfully" });
+    }
+
+    if (!Array.isArray(images) && typeof images === "object") {
+      banner.images.push(images);
+      await banner.save();
+
+      return res.status(201).json({ message: "Image added successfully" });
+    }
+
+    banner.images = [...banner.images, ...images];
+    await banner.save();
+    res.status(201).json({ message: "Images added successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.updateContactPageBanner = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { image } = req.body;
+
+    const banner = await GudauriPageBanner.findOne();
+    if (!banner) return res.status(404).json({ message: "Images not found" });
+
+    const img = banner.images.id(id);
+    if (!img) return res.status(404).json({ message: "Image not found" });
+
+    if (img.public_id) {
+      await cloudinary.uploader.destroy(img.public_id);
+    }
+
+    img.public_id = image.public_id;
+    img.url = image.url;
+
+    await banner.save();
+
+    res.status(200).json({ message: "Image updated successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.deleteContactPageBanner = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const banner = await GudauriPageBanner.findOne();
+    if (!banner) return res.status(404).json({ message: "Images not found" });
+
+    const index = banner.images.findIndex((img) => img._id.toString() === id);
+
+    if (index === -1)
+      return res.status(404).json({ message: "Images not found" });
+
+    const img = banner.images[index];
+
+    if (!img) return res.status(404).json({ message: "Image not found" });
+
+    if (img.public_id) {
+      await cloudinary.uploader.destroy(img.public_id);
+    }
+
+    banner.images.splice(index, 1);
+    await banner.save();
+
+    res.status(200).json({ message: "Image deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 
 // ========== FAQ Title ========== //
 
@@ -197,11 +282,14 @@ exports.deleteContactPageCarouselImage = async (req, res) => {
 
 exports.getAllData = async (req, res) => {
   try {
-    const [faqTitles, faqQuestions, carouselImages] = await Promise.all([
-      ContactPageFaqTitles.find().lean(),
-      ContactPageFaqQuestion.find().lean(),
-      ContactPageCarouselImage.findOne().lean(),
-    ]);
+    const [banner, faqTitles, faqQuestions, carouselImages] = await Promise.all(
+      [
+        GudauriPageBanner.findOne().lean(),
+        ContactPageFaqTitles.find().lean(),
+        ContactPageFaqQuestion.find().lean(),
+        ContactPageCarouselImage.findOne().lean(),
+      ]
+    );
 
     const faq = faqTitles.map((e) => ({
       _id: e._id,
@@ -212,6 +300,7 @@ exports.getAllData = async (req, res) => {
     }));
 
     const contactPage = {
+      banner,
       faq,
       carouselImages,
     };

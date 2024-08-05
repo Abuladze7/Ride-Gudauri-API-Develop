@@ -9,6 +9,9 @@ const {
   createContactPageCarouselImage,
   updateContactPageCarouselImage,
   deleteContactPageCarouselImage,
+  createContactPageBanner,
+  updateContactPageBanner,
+  deleteContactPageBanner,
 } = require("../controllers/contactPageController");
 
 const router = require("express").Router();
@@ -17,51 +20,21 @@ const router = require("express").Router();
  * @swagger
  * /api/contactPage:
  *   get:
- *     summary: Retrieves all FAQ titles, FAQ questions, and carousel images
- *     tags:
- *       - Contact Page
+ *     summary: Retrieve all data for the Contact page
+ *     tags: [Contact Page]
  *     responses:
  *       200:
- *         description: Successfully retrieved all FAQ titles, FAQ questions, and carousel images
+ *         description: Successfully retrieved data
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 faq:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       _id:
- *                         type: string
- *                         example: "string"
- *                       title:
- *                         type: string
- *                         example: "string"
- *                       items:
- *                         type: array
- *                         items:
- *                           type: object
- *                           properties:
- *                             _id:
- *                               type: string
- *                               example: "string"
- *                             question:
- *                               type: string
- *                               example: "string"
- *                             answer:
- *                               type: string
- *                               example: "string"
- *                             titleId:
- *                               type: string
- *                               example: "string"
- *                 carouselImages:
+ *                 banner:
  *                   type: object
  *                   properties:
  *                     _id:
  *                       type: string
- *                       example: "string"
  *                     images:
  *                       type: array
  *                       items:
@@ -69,33 +42,150 @@ const router = require("express").Router();
  *                         properties:
  *                           public_id:
  *                             type: string
- *                             example: "string"
  *                           url:
  *                             type: string
- *                             example: "string"
  *                           _id:
  *                             type: string
- *                             example: "string"
  *                     createdAt:
  *                       type: string
- *                       format: date-time
- *                       example: "string"
  *                     updatedAt:
  *                       type: string
- *                       format: date-time
- *                       example: "string"
+ *                 faq:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       _id:
+ *                         type: string
+ *                       title:
+ *                         type: string
+ *                       items:
+ *                         type: array
+ *                         items:
+ *                           type: object
+ *                           properties:
+ *                             _id:
+ *                               type: string
+ *                             question:
+ *                               type: string
+ *                             answer:
+ *                               type: string
+ *                             titleId:
+ *                               type: string
+ *                             createdAt:
+ *                               type: string
+ *                             updatedAt:
+ *                               type: string
+ *                 carouselImages:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     images:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           public_id:
+ *                             type: string
+ *                           url:
+ *                             type: string
+ *                           _id:
+ *                             type: string
+ *                     createdAt:
+ *                       type: string
+ *                     updatedAt:
+ *                       type: string
  *       500:
  *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "string"
  */
 router.get("/", getAllData);
+
+// ========== Banner ============ //
+/**
+ * @swagger
+ * /api/contactPage/banner:
+ *   post:
+ *     summary: Creates a new banner for the Contact page
+ *     tags: [Contact Page]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               images:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     public_id:
+ *                       type: string
+ *                     url:
+ *                       type: string
+ *     responses:
+ *       201:
+ *         description: Images created successfully
+ *       500:
+ *         description: Internal server error
+ *
+ * /api/contactPage/banner/{id}:
+ *   put:
+ *     summary: Updates an existing image in the banner for the Contact page
+ *     tags: [Contact Page]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the image to be updated
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
+ *     responses:
+ *       200:
+ *         description: Image updated successfully
+ *       404:
+ *         description: Images or image not found
+ *       500:
+ *         description: Internal server error
+ *
+ *   delete:
+ *     summary: Deletes an image from the banner for the Contact page
+ *     tags: [Contact Page]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the image to be deleted
+ *     responses:
+ *       200:
+ *         description: Image deleted successfully
+ *       404:
+ *         description: Images or image not found
+ *       500:
+ *         description: Internal server error
+ */
+router.post("/banner", createContactPageBanner);
+router
+  .route("/banner/:id")
+  .put(updateContactPageBanner)
+  .delete(deleteContactPageBanner);
 
 // ========== FAQ Title ========== //
 /**
