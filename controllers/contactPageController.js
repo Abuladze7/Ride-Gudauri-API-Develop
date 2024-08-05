@@ -90,6 +90,16 @@ exports.deleteContactPageBanner = async (req, res) => {
 
 // ========== FAQ Title ========== //
 
+exports.getContactPageFaqTitles = async (req, res) => {
+  try {
+    const faq = await ContactPageFaqTitles.find();
+
+    res.status(200).json(faq);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 exports.createContactPageFaqTitle = async (req, res) => {
   try {
     const faq = await ContactPageFaqTitles.create(req.body);

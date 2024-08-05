@@ -12,6 +12,7 @@ const {
   createContactPageBanner,
   updateContactPageBanner,
   deleteContactPageBanner,
+  getContactPageFaqTitles,
 } = require("../controllers/contactPageController");
 
 const router = require("express").Router();
@@ -191,10 +192,32 @@ router
 /**
  * @swagger
  * /api/contactPage/faqTitle:
+ *   get:
+ *     summary: Retrieve all FAQ titles
+ *     tags: [Contact Page]
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved FAQ titles
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                   title:
+ *                     type: string
+ *                   createdAt:
+ *                     type: string
+ *                   updatedAt:
+ *                     type: string
+ *       500:
+ *         description: Internal server error
  *   post:
- *     summary: Creates a new FAQ title
- *     tags:
- *       - Contact Page
+ *     summary: Create a new FAQ title
+ *     tags: [Contact Page]
  *     requestBody:
  *       required: true
  *       content:
@@ -204,11 +227,9 @@ router
  *             properties:
  *               title:
  *                 type: string
- *                 description: The title of the FAQ
- *                 example: "string"
  *     responses:
  *       201:
- *         description: Successfully created the FAQ title
+ *         description: FAQ title created successfully
  *         content:
  *           application/json:
  *             schema:
@@ -216,41 +237,25 @@ router
  *               properties:
  *                 _id:
  *                   type: string
- *                   example: "string"
  *                 title:
  *                   type: string
- *                   example: "string"
  *                 createdAt:
  *                   type: string
- *                   format: date-time
- *                   example: "2024-07-29T07:20:36.734Z"
  *                 updatedAt:
  *                   type: string
- *                   format: date-time
- *                   example: "2024-07-29T08:17:29.958Z"
  *       500:
  *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   example: "string"
- *
  * /api/contactPage/faqTitle/{id}:
  *   put:
- *     summary: Updates an existing FAQ title
- *     tags:
- *       - Contact Page
+ *     summary: Update an existing FAQ title
+ *     tags: [Contact Page]
  *     parameters:
  *       - in: path
  *         name: id
- *         required: true
  *         schema:
  *           type: string
- *         description: The ID of the FAQ title to update
+ *         required: true
+ *         description: The FAQ title ID
  *     requestBody:
  *       required: true
  *       content:
@@ -260,11 +265,9 @@ router
  *             properties:
  *               title:
  *                 type: string
- *                 description: The updated title of the FAQ
- *                 example: "string"
  *     responses:
  *       200:
- *         description: Successfully updated the FAQ title
+ *         description: FAQ title updated successfully
  *         content:
  *           application/json:
  *             schema:
@@ -272,42 +275,23 @@ router
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "string"
  *       404:
  *         description: FAQ title not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "string"
  *       500:
  *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "string"
- *
  *   delete:
- *     summary: Deletes an FAQ title
- *     tags:
- *       - Contact Page
+ *     summary: Delete an existing FAQ title and its related questions
+ *     tags: [Contact Page]
  *     parameters:
  *       - in: path
  *         name: id
- *         required: true
  *         schema:
  *           type: string
- *         description: The ID of the FAQ title to delete
+ *         required: true
+ *         description: The FAQ title ID
  *     responses:
  *       200:
- *         description: Successfully deleted the FAQ title and its associated questions
+ *         description: FAQ title and its questions deleted successfully
  *         content:
  *           application/json:
  *             schema:
@@ -315,29 +299,15 @@ router
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "string"
  *       404:
  *         description: FAQ title not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "string"
  *       500:
  *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "string"
  */
-router.post("/faqTitle", createContactPageFaqTitle);
+router
+  .route("/faqTitle")
+  .get(getContactPageFaqTitles)
+  .post(createContactPageFaqTitle);
 router
   .route("/faqTitle/:id")
   .put(updateContactPageFaqTitle)
