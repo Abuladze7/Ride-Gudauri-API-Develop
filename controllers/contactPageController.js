@@ -302,6 +302,7 @@ exports.getAllData = async (req, res) => {
     const contactPage = {
       banner,
       faqTitles,
+      faqQuestions,
       faq,
       carouselImages,
     };

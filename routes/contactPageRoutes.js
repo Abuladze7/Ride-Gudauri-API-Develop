@@ -63,6 +63,23 @@ const router = require("express").Router();
  *                         type: string
  *                       updatedAt:
  *                         type: string
+ *                 faqQuestions:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       _id:
+ *                         type: string
+ *                       question:
+ *                         type: string
+ *                       answer:
+ *                         type: string
+ *                       titleId:
+ *                         type: string
+ *                       createdAt:
+ *                         type: string
+ *                       updatedAt:
+ *                         type: string
  *                 faq:
  *                   type: array
  *                   items:
