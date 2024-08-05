@@ -94,7 +94,7 @@ exports.createContactPageFaqTitle = async (req, res) => {
   try {
     const faq = await ContactPageFaqTitles.create(req.body);
 
-    res.status(201).json(faq);
+    res.status(201).json({message: "Title created successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
