@@ -12,6 +12,8 @@ const {
   deleteImageToBanner,
   deleteParaglidingPageCarouselImage,
 } = require("../controllers/paraglidingPageController");
+const admin = require("../middleware/adminMiddleware");
+const auth = require("../middleware/authMiddleware");
 
 const router = require("express").Router();
 
@@ -220,9 +222,9 @@ router.get("/", getAllData);
  *         description: Internal server error
  */
 // router.post("/banner", createParaglidingPageBanner);
-router.put("/banner", updateParaglidingPageBanner);
-router.post("/banner/images/add", addImageToBanner);
-router.delete("/banner/images/:id", deleteImageToBanner);
+router.put("/banner", auth, admin, updateParaglidingPageBanner);
+router.post("/banner/images/add", auth, admin, addImageToBanner);
+router.delete("/banner/images/:id", auth, admin, deleteImageToBanner);
 
 // ========== Paragliding Main Section ============ //
 /**
@@ -265,7 +267,12 @@ router.delete("/banner/images/:id", deleteImageToBanner);
  *         description: Internal server error
  */
 // router.post("/mainSection", createParaglidingPageMainSection);
-router.put("/mainSection/:id", updateParaglidingMainSectionSection);
+router.put(
+  "/mainSection/:id",
+  auth,
+  admin,
+  updateParaglidingMainSectionSection
+);
 
 // =========== Paragliding Form Section ============ //
 /**
@@ -310,7 +317,7 @@ router.put("/mainSection/:id", updateParaglidingMainSectionSection);
  *         description: Internal server error
  */
 // router.post("/formSection", createParaglidingFormSection);
-router.put("/formSection", updateParaglidingFormSection);
+router.put("/formSection", auth, admin, updateParaglidingFormSection);
 
 // ========== Carousel Images ========== //
 /**
@@ -392,10 +399,10 @@ router.put("/formSection", updateParaglidingFormSection);
  *       500:
  *         description: Internal server error
  */
-router.post("/carouselImages", createParaglidingCarouselImage);
+router.post("/carouselImages", auth, admin, createParaglidingCarouselImage);
 router
   .route("/carouselImages/:id")
-  .put(updateParaglidingCarouselImage)
-  .delete(deleteParaglidingPageCarouselImage);
+  .put(auth, admin, updateParaglidingCarouselImage)
+  .delete(auth, admin, deleteParaglidingPageCarouselImage);
 
 module.exports = router;

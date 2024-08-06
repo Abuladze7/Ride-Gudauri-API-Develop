@@ -14,6 +14,8 @@ const {
   deleteImageToBanner,
   deleteOurStoryCarouselImage,
 } = require("../controllers/ourStoryControllers");
+const admin = require("../middleware/adminMiddleware");
+const auth = require("../middleware/authMiddleware");
 
 const router = require("express").Router();
 
@@ -230,9 +232,9 @@ router.get("/", getAllData);
  *         description: Internal server error
  */
 // router.post("/banner", createBanner);
-router.put("/banner", updateBanner);
-router.post("/banner/images/add", addImageToBanner);
-router.delete("/banner/images/:id", deleteImageToBanner);
+router.put("/banner", auth, admin, updateBanner);
+router.post("/banner/images/add", auth, admin, addImageToBanner);
+router.delete("/banner/images/:id", auth, admin, deleteImageToBanner);
 
 // ========== How It Started Section ========== //
 /**
@@ -274,8 +276,8 @@ router.delete("/banner/images/:id", deleteImageToBanner);
  *       500:
  *         description: Internal server error
  */
-router.post("/howItStartedSection", createHowStartedSection);
-router.put("/howItStartedSection/:id", updateHowStartedSection);
+// router.post("/howItStartedSection", auth, admin, createHowStartedSection
+router.put("/howItStartedSection/:id", auth, admin, updateHowStartedSection);
 
 // ========== How It Started Middle Sections ========== //
 /**
@@ -316,7 +318,12 @@ router.put("/howItStartedSection/:id", updateHowStartedSection);
  *         description: Internal server error
  */
 // router.post("/howItStartedMiddleSection", createHowStartedMiddleSections);
-router.put("/howItStartedMiddleSection/:id", updateHowStartedMiddleSection);
+router.put(
+  "/howItStartedMiddleSection/:id",
+  auth,
+  admin,
+  updateHowStartedMiddleSection
+);
 
 // ========== The Beginning of Paragliding ========== //
 /**
@@ -359,7 +366,12 @@ router.put("/howItStartedMiddleSection/:id", updateHowStartedMiddleSection);
  *         description: Internal server error
  */
 // router.post("/beginningOfParagliding", createParaglidingSection);
-router.put("/beginningOfParagliding/:id", updateParaglidingSection);
+router.put(
+  "/beginningOfParagliding/:id",
+  auth,
+  admin,
+  updateParaglidingSection
+);
 
 // ========== Carousel Images ========== //
 /**
@@ -441,10 +453,10 @@ router.put("/beginningOfParagliding/:id", updateParaglidingSection);
  *       500:
  *         description: Internal server error
  */
-router.post("/carouselImage", createOurStoryCarouselImage);
+router.post("/carouselImage", auth, admin, createOurStoryCarouselImage);
 router
   .route("/carouselImage/:id")
-  .put(updateOurStoryCarouselImage)
-  .delete(deleteOurStoryCarouselImage);
+  .put(auth, admin, updateOurStoryCarouselImage)
+  .delete(auth, admin, deleteOurStoryCarouselImage);
 
 module.exports = router;

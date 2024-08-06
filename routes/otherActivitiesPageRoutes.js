@@ -18,6 +18,8 @@ const {
   deleteImageToBanner,
   deleteOtherActivitiesPageCarouselImage,
 } = require("../controllers/otherActivitiesPageController");
+const admin = require("../middleware/adminMiddleware");
+const auth = require("../middleware/authMiddleware");
 
 const router = require("express").Router();
 
@@ -332,9 +334,9 @@ router.get("/", getAllData);
  *         description: Internal server error
  */
 // router.post("/banner", createOtherActivitiesPageBanner);
-router.put("/banner", updateOtherActivitiesPageBanner);
-router.post("/banner/images/add", addImageToBanner);
-router.delete("/banner/images/:id", deleteImageToBanner);
+router.put("/banner", auth, admin, updateOtherActivitiesPageBanner);
+router.post("/banner/images/add", auth, admin, addImageToBanner);
+router.delete("/banner/images/:id", auth, admin, deleteImageToBanner);
 
 // ========== Main Section =========== //
 /**
@@ -377,7 +379,7 @@ router.delete("/banner/images/:id", deleteImageToBanner);
  *         description: Internal server error
  */
 // router.post("/mainSection", createOtherActivitiesPageMainSection);
-router.put("/mainSection", updateOtherActivitiesPageMainSection);
+router.put("/mainSection", auth, admin, updateOtherActivitiesPageMainSection);
 
 // ========== Transfers Form =========== //
 /**
@@ -424,7 +426,12 @@ router.put("/mainSection", updateOtherActivitiesPageMainSection);
  *         description: Internal server error
  */
 // router.post("/transfersForm", createOtherActivitiesPageTransfersForm);
-router.put("/transfersForm", updateOtherActivitiesPageTransfersForm);
+router.put(
+  "/transfersForm",
+  auth,
+  admin,
+  updateOtherActivitiesPageTransfersForm
+);
 
 // ========== Snowmobile Form =========== //
 /**
@@ -471,7 +478,12 @@ router.put("/transfersForm", updateOtherActivitiesPageTransfersForm);
  *         description: Internal server error
  */
 // router.post("/snowmobileForm", createOtherActivitiesPageSnowMobileForm);
-router.put("/snowmobileForm", updateOtherActivitiesPageSnowMobileForm);
+router.put(
+  "/snowmobileForm",
+  auth,
+  admin,
+  updateOtherActivitiesPageSnowMobileForm
+);
 
 // ========== Horse riding form =========== //
 /**
@@ -518,7 +530,12 @@ router.put("/snowmobileForm", updateOtherActivitiesPageSnowMobileForm);
  *         description: Internal server error
  */
 // router.post("/horseRidingForm", createOtherActivitiesPageHorseRidingForm);
-router.put("/horseRidingForm", updateOtherActivitiesPageHorseRidingForm);
+router.put(
+  "/horseRidingForm",
+  auth,
+  admin,
+  updateOtherActivitiesPageHorseRidingForm
+);
 
 // ========== Quad Bike Form =========== //
 /**
@@ -565,7 +582,7 @@ router.put("/horseRidingForm", updateOtherActivitiesPageHorseRidingForm);
  *         description: Internal server error
  */
 // router.post("/quadBikeForm", createOtherActivitiesPageQuadBikeForm);
-router.put("/quadBikeForm", updateOtherActivitiesPageQuadBikeForm);
+router.put("/quadBikeForm", auth, admin, updateOtherActivitiesPageQuadBikeForm);
 
 // ========== Carousel Image =========== //
 /**
@@ -647,10 +664,10 @@ router.put("/quadBikeForm", updateOtherActivitiesPageQuadBikeForm);
  *       500:
  *         description: Internal server error
  */
-router.post("/carouselImage", createOtherActivitiesCarouselImage);
+router.post("/carouselImage", auth, admin, createOtherActivitiesCarouselImage);
 router
   .route("/carouselImage/:id")
-  .put(updateOtherActivitiesCarouselImage)
-  .delete(deleteOtherActivitiesPageCarouselImage);
+  .put(auth, admin, updateOtherActivitiesCarouselImage)
+  .delete(auth, admin, deleteOtherActivitiesPageCarouselImage);
 
 module.exports = router;
