@@ -276,7 +276,7 @@ router.delete("/banner/images/:id", auth, admin, deleteImageToBanner);
  *       500:
  *         description: Internal server error
  */
-router.post("/howItStartedSection", auth, admin, createHowStartedSection);
+// router.post("/howItStartedSection", auth, admin, createHowStartedSection
 router.put("/howItStartedSection/:id", auth, admin, updateHowStartedSection);
 
 // ========== How It Started Middle Sections ========== //
