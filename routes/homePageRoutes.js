@@ -19,6 +19,8 @@ const {
   deleteItemFromSection,
   deleteCarouselImage,
 } = require("../controllers/homePageControllers");
+const admin = require("../middleware/adminMiddleware");
+const auth = require("../middleware/authMiddleware");
 
 // ========= All Data ========== //
 /**
@@ -335,7 +337,7 @@ router.get("/", getAllData);
  *                   example: "string"
  */
 // router.post("/banner", createBanner);
-router.put("/banner/:id", updateBanner);
+router.put("/banner/:id", auth, admin, updateBanner);
 
 // ========== Our Activities ========== //
 /**
@@ -446,7 +448,7 @@ router.put("/banner/:id", updateBanner);
  *                   example: "string"
  */
 // router.post("/ourActivitiesSection", createActivitiesSection);
-router.put("/ourActivitiesSection", updateActivitySection);
+router.put("/ourActivitiesSection", auth, admin, updateActivitySection);
 
 // ========== Discount Coupon ========== //
 /**
@@ -526,7 +528,7 @@ router.put("/ourActivitiesSection", updateActivitySection);
  *                   example: "string"
  */
 // router.post("/discountCoupon", createDiscountCoupon);
-router.put("/discountCoupon/:id", updateDiscountCoupon);
+router.put("/discountCoupon/:id", auth, admin, updateDiscountCoupon);
 
 // ========== Welcome Section ========== //
 /**
@@ -602,7 +604,7 @@ router.put("/discountCoupon/:id", updateDiscountCoupon);
  *                   example: "string"
  */
 // router.post("/welcomeSection", createWelcomeSection);
-router.put("/welcomeSection/:id", updateWelcomeSection);
+router.put("/welcomeSection/:id", auth, admin, updateWelcomeSection);
 
 // ========== What Sets Apart Section ========== //
 /**
@@ -779,9 +781,9 @@ router.put("/welcomeSection/:id", updateWelcomeSection);
  *                   example: "string"
  */
 // router.post("/whatSetsApart", createWhatSetsApartSection);
-router.post("/whatSetsApart/item", addApartItemToSection);
-router.put("/whatSetsApart", updateWhatSetsApartSection);
-router.delete("/whatSetsApart/item/:id", deleteItemFromSection);
+router.post("/whatSetsApart/item", auth, admin, addApartItemToSection);
+router.put("/whatSetsApart", auth, admin, updateWhatSetsApartSection);
+router.delete("/whatSetsApart/item/:id", auth, admin, deleteItemFromSection);
 
 // ========== Wonderland Section =========== //
 /**
@@ -857,7 +859,7 @@ router.delete("/whatSetsApart/item/:id", deleteItemFromSection);
  *                   example: "string"
  */
 // router.post("/wonderlandSection", createWonderlandSection);
-router.put("/wonderlandSection/:id", updateWonderlandSection);
+router.put("/wonderlandSection/:id", auth, admin, updateWonderlandSection);
 
 // ========== Carousel Images ========== //
 /**
@@ -1018,10 +1020,10 @@ router.put("/wonderlandSection/:id", updateWonderlandSection);
  *                   type: string
  *                   example: "An error occurred while processing the request"
  */
-router.post("/carouselImage", createCarouselImage);
+router.post("/carouselImage", auth, admin, createCarouselImage);
 router
   .route("/carouselImage/:id")
-  .put(updateCarouselImage)
-  .delete(deleteCarouselImage);
+  .put(auth, admin, updateCarouselImage)
+  .delete(auth, admin, deleteCarouselImage);
 
 module.exports = router;

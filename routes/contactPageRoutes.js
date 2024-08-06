@@ -13,6 +13,8 @@ const {
   updateContactPageBanner,
   deleteContactPageBanner,
 } = require("../controllers/contactPageController");
+const admin = require("../middleware/adminMiddleware");
+const auth = require("../middleware/authMiddleware");
 
 const router = require("express").Router();
 
@@ -211,11 +213,11 @@ router.get("/", getAllData);
  *       500:
  *         description: Internal server error
  */
-router.post("/banner", createContactPageBanner);
+router.post("/banner", auth, admin, createContactPageBanner);
 router
   .route("/banner/:id")
-  .put(updateContactPageBanner)
-  .delete(deleteContactPageBanner);
+  .put(auth, admin, updateContactPageBanner)
+  .delete(auth, admin, deleteContactPageBanner);
 
 // ========== FAQ Title ========== //
 /**
@@ -310,11 +312,11 @@ router
  *       500:
  *         description: Internal server error
  */
-router.route("/faqTitle").post(createContactPageFaqTitle);
+router.route("/faqTitle").post(auth, admin, createContactPageFaqTitle);
 router
   .route("/faqTitle/:id")
-  .put(updateContactPageFaqTitle)
-  .delete(deleteContactPageFaqTitle);
+  .put(auth, admin, updateContactPageFaqTitle)
+  .delete(auth, admin, deleteContactPageFaqTitle);
 
 // ========== FAQ Questions ========== //
 /**
@@ -481,11 +483,11 @@ router
  *                   type: string
  *                   example: "string"
  */
-router.post("/faqQuestion", createContactPageFaqQuestion);
+router.post("/faqQuestion", auth, admin, createContactPageFaqQuestion);
 router
   .route("/faqQuestion/:id")
-  .put(updateContactPageFaqQuestion)
-  .delete(deleteContactPageFaqQuestion);
+  .put(auth, admin, updateContactPageFaqQuestion)
+  .delete(auth, admin, deleteContactPageFaqQuestion);
 
 // ========== Carousel Image ========== //
 /**
@@ -646,10 +648,10 @@ router
  *                   type: string
  *                   example: "string"
  */
-router.post("/carouselImage", createContactPageCarouselImage);
+router.post("/carouselImage", auth, admin, createContactPageCarouselImage);
 router
   .route("/carouselImage/:id")
-  .put(updateContactPageCarouselImage)
-  .delete(deleteContactPageCarouselImage);
+  .put(auth, admin, updateContactPageCarouselImage)
+  .delete(auth, admin, deleteContactPageCarouselImage);
 
 module.exports = router;

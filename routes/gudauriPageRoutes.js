@@ -18,6 +18,8 @@ const {
   deleteGudauriCarouselImage,
   deleteImageToBanner,
 } = require("../controllers/gudauriPageController");
+const admin = require("../middleware/adminMiddleware");
+const auth = require("../middleware/authMiddleware");
 
 const router = require("express").Router();
 
@@ -321,9 +323,9 @@ router.get("/", getAllData);
  *         description: Internal server error
  */
 // router.post("/banner", createGudauriBanner);
-router.put("/banner", updateGudauriBanner);
-router.post("/banner/images/add", addImageToBanner);
-router.delete("/banner/images/:id", deleteImageToBanner);
+router.put("/banner", auth, admin, updateGudauriBanner);
+router.post("/banner/images/add", auth, admin, addImageToBanner);
+router.delete("/banner/images/:id", auth, admin, deleteImageToBanner);
 
 // ========== Gudauri Wonderland Section ========== //
 /**
@@ -397,7 +399,7 @@ router.delete("/banner/images/:id", deleteImageToBanner);
  *                   example: "string"
  */
 // router.post("/wonderland", createGudauriWonderlandSection);
-router.put("/wonderland/:id", updateGudauriWonderlandSection);
+router.put("/wonderland/:id", auth, admin, updateGudauriWonderlandSection);
 
 // ========== Plan Trip Section ========== //
 /**
@@ -471,7 +473,7 @@ router.put("/wonderland/:id", updateGudauriWonderlandSection);
  *                   example: "string"
  */
 // router.post("/planTrip", createPlanTripSection);
-router.put("/plantrip/:id", updatePlanTripSection);
+router.put("/plantrip/:id", auth, admin, updatePlanTripSection);
 
 // ========== Why Gudauri Section ========== //
 /**
@@ -545,7 +547,7 @@ router.put("/plantrip/:id", updatePlanTripSection);
  *                   example: "string"
  */
 // router.post("/whygudaurisection", createWhyGudauriSection);
-router.put("/whygudaurisection/:id", updateWhyGudauriSection);
+router.put("/whygudaurisection/:id", auth, admin, updateWhyGudauriSection);
 
 // ========== Gudauri Spirit Section ========== //
 /**
@@ -619,7 +621,7 @@ router.put("/whygudaurisection/:id", updateWhyGudauriSection);
  *                   example: "string"
  */
 // router.post("/spiritSection", createGudauriSpiritSection);
-router.put("/spiritSection/:id", updateGudauriSpiritSection);
+router.put("/spiritSection/:id", auth, admin, updateGudauriSpiritSection);
 
 // =========== How To Get There Section ========== //
 /**
@@ -688,7 +690,7 @@ router.put("/spiritSection/:id", updateGudauriSpiritSection);
  *                   example: "string"
  */
 // router.post("/howtoget", createHowToGetThereSection);
-router.put("/howtoget/:id", updateHowToGetThereSection);
+router.put("/howtoget/:id", auth, admin, updateHowToGetThereSection);
 
 // ========== Carousel Images ========== //
 /**
@@ -854,8 +856,8 @@ router.put("/howtoget/:id", updateHowToGetThereSection);
  *                   type: string
  *                   example: "string"
  */
-router.post("/carouselImage", createGudauriCarouselImage);
-router.put("/carouselImage/:id", updateGudauriCarouselImage);
-router.delete("/carouselImage/:id", deleteGudauriCarouselImage);
+router.post("/carouselImage", auth, admin, createGudauriCarouselImage);
+router.put("/carouselImage/:id", auth, admin, updateGudauriCarouselImage);
+router.delete("/carouselImage/:id", auth, admin, deleteGudauriCarouselImage);
 
 module.exports = router;

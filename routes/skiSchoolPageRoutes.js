@@ -19,6 +19,8 @@ const {
   getAllData,
   deleteImageToSkiSchoolPageBanner,
 } = require("../controllers/skiSchoolPageController");
+const admin = require("../middleware/adminMiddleware");
+const auth = require("../middleware/authMiddleware");
 const router = require("express").Router();
 
 // ========== All Data =========== //
@@ -343,9 +345,14 @@ router.get("/", getAllData);
  *         description: Internal server error
  */
 // router.post("/banner", createSkiSchoolPageBanner);
-router.put("/banner", updateSkiSchoolPageBanner);
-router.post("/banner/images/add", addImageToBanner);
-router.delete("/banner/images/:id", deleteImageToSkiSchoolPageBanner);
+router.put("/banner", auth, admin, updateSkiSchoolPageBanner);
+router.post("/banner/images/add", auth, admin, addImageToBanner);
+router.delete(
+  "/banner/images/:id",
+  auth,
+  admin,
+  deleteImageToSkiSchoolPageBanner
+);
 
 // ========== About ========== //
 /**
@@ -388,7 +395,7 @@ router.delete("/banner/images/:id", deleteImageToSkiSchoolPageBanner);
  *         description: Internal server error
  */
 // router.post("/aboutSection", createSkiSchoolPageAbout);
-router.put("/aboutSection/:id", updateSkiSchoolPageAbout);
+router.put("/aboutSection/:id", auth, admin, updateSkiSchoolPageAbout);
 
 // ========== Individual Lessons ========== //
 /**
@@ -433,7 +440,7 @@ router.put("/aboutSection/:id", updateSkiSchoolPageAbout);
  *         description: Internal server error
  */
 // router.post("/individualLesson", createSkiSchoolIndividualLesson);
-router.put("/individualLesson", updateSkiSchoolIndividualLesson);
+router.put("/individualLesson", auth, admin, updateSkiSchoolIndividualLesson);
 
 // ========== Group Lessons ========== //
 /**
@@ -478,7 +485,7 @@ router.put("/individualLesson", updateSkiSchoolIndividualLesson);
  *         description: Internal server error
  */
 // router.post("/groupLesson", createSkiSchoolPrivateGroupLesson);
-router.put("/groupLesson", updateSkiSchoolPrivateGroupLesson);
+router.put("/groupLesson", auth, admin, updateSkiSchoolPrivateGroupLesson);
 
 // ========== Ski School Benefits ========== //
 /**
@@ -521,7 +528,7 @@ router.put("/groupLesson", updateSkiSchoolPrivateGroupLesson);
  *         description: Internal server error
  */
 // router.post("/benefitsSection", createSkiSchoolPageBenefits);
-router.put("/benefitsSection", updateSkiSchoolPageBenefits);
+router.put("/benefitsSection", auth, admin, updateSkiSchoolPageBenefits);
 
 // ========== Ski School Rental Section ========== //
 /**
@@ -564,7 +571,12 @@ router.put("/benefitsSection", updateSkiSchoolPageBenefits);
  *         description: Internal server error
  */
 // router.post("/rentalShopSection", createSkiSchoolRentalShopSection);
-router.put("/rentalShopSection/:id", updateSkiSchoolRentalShopSection);
+router.put(
+  "/rentalShopSection/:id",
+  auth,
+  admin,
+  updateSkiSchoolRentalShopSection
+);
 
 // ========== Ski School Repair Section ========== //
 /**
@@ -607,7 +619,7 @@ router.put("/rentalShopSection/:id", updateSkiSchoolRentalShopSection);
  *         description: Internal server error
  */
 // router.post("/repairSection", createSkiSchoolRepairSection);
-router.put("/repairSection/:id", updateSkiSchoolRepairSection);
+router.put("/repairSection/:id", auth, admin, updateSkiSchoolRepairSection);
 
 // ========== Ski School Team Section ========== //
 /**
@@ -652,6 +664,6 @@ router.put("/repairSection/:id", updateSkiSchoolRepairSection);
  *         description: Internal server error
  */
 // router.post("/teamSection", createSkiSchoolTeamSection);
-router.put("/teamSection", updateSkiSchoolTEamSection);
+router.put("/teamSection", auth, admin, updateSkiSchoolTEamSection);
 
 module.exports = router;
