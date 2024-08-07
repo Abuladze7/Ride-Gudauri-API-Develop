@@ -17,27 +17,54 @@ const {
   updateOtherActivitiesCarouselImage,
   deleteImageToBanner,
   deleteOtherActivitiesPageCarouselImage,
+  createOtherActivitiesPageSeoOptimization,
+  updateOtherActivitiesPageSeoOptimization,
 } = require("../controllers/otherActivitiesPageController");
 const admin = require("../middleware/adminMiddleware");
 const auth = require("../middleware/authMiddleware");
 
 const router = require("express").Router();
 
-// ========== All Data =========== //
+// ========== All Data ========== //
 /**
  * @swagger
  * /api/otherActivitiesPage:
  *   get:
- *     summary: Retrieves all data for the Other Activities page
- *     tags: [Other Activities Page]
+ *     tags:
+ *       - Other Activities Page
+ *     summary: Retrieve all Other Activities page data
+ *     description: Get SEO, banner, main section, forms for various activities, and carousel images for the Other Activities page.
  *     responses:
  *       200:
- *         description: Successfully retrieved all data
+ *         description: A JSON object containing all Other Activities page data.
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
+ *                 seo:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     page_title:
+ *                       type: string
+ *                     meta_title:
+ *                       type: string
+ *                     meta_description:
+ *                       type: string
+ *                     meta_keywords:
+ *                       type: string
+ *                     meta_url:
+ *                       type: string
+ *                     meta_img:
+ *                       type: string
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
  *                 banner:
  *                   type: object
  *                   properties:
@@ -245,10 +272,163 @@ const router = require("express").Router();
  *                     updatedAt:
  *                       type: string
  *                       format: date-time
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
  */
 router.get("/", getAllData);
 
-// ========== Banner =========== //
+// ========== SEO ========== //
+/**
+ * @swagger
+ * /api/otherActivitiesPage/seo:
+ *   post:
+ *     tags:
+ *       - Other Activities Page
+ *     summary: Create Other Activities Page SEO Optimization
+ *     description: Create a new SEO optimization entry for the Other Activities page.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               page_title:
+ *                 type: string
+ *                 example: "Other Activities - Explore More Adventures"
+ *               meta_title:
+ *                 type: string
+ *                 example: "Other Activities | Discover More Adventures"
+ *               meta_description:
+ *                 type: string
+ *                 example: "Find out more about the exciting activities we offer. Explore more adventures on our Other Activities page."
+ *               meta_keywords:
+ *                 type: string
+ *                 example: "activities, adventures, explore, fun"
+ *               meta_url:
+ *                 type: string
+ *                 example: "https://example.com/other-activities"
+ *               meta_img:
+ *                 type: string
+ *                 example: "https://example.com/images/other-activities-meta.png"
+ *     responses:
+ *       201:
+ *         description: SEO optimization created successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                 page_title:
+ *                   type: string
+ *                 meta_title:
+ *                   type: string
+ *                 meta_description:
+ *                   type: string
+ *                 meta_keywords:
+ *                   type: string
+ *                 meta_url:
+ *                   type: string
+ *                 meta_img:
+ *                   type: string
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *                 updatedAt:
+ *                   type: string
+ *                   format: date-time
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *
+ * /api/otherActivitiesPage/seo/{id}:
+ *   put:
+ *     tags:
+ *       - Other Activities Page
+ *     summary: Update Other Activities Page SEO Optimization
+ *     description: Update an existing SEO optimization entry for the Other Activities page.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The SEO ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               page_title:
+ *                 type: string
+ *                 example: "Other Activities - Explore More Adventures"
+ *               meta_title:
+ *                 type: string
+ *                 example: "Other Activities | Discover More Adventures"
+ *               meta_description:
+ *                 type: string
+ *                 example: "Find out more about the exciting activities we offer. Explore more adventures on our Other Activities page."
+ *               meta_keywords:
+ *                 type: string
+ *                 example: "activities, adventures, explore, fun"
+ *               meta_url:
+ *                 type: string
+ *                 example: "https://example.com/other-activities"
+ *               meta_img:
+ *                 type: string
+ *                 example: "https://example.com/images/other-activities-meta.png"
+ *     responses:
+ *       200:
+ *         description: SEO optimization updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "SEO Optimization updated successfully"
+ *       404:
+ *         description: SEO not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "SEO not found"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
+router.post("/seo", auth, admin, createOtherActivitiesPageSeoOptimization);
+router.put("/seo/:id", auth, admin, updateOtherActivitiesPageSeoOptimization);
+
+// ========== Banner ========== //
 /**
  * @swagger
  * /api/otherActivitiesPage/banner:
@@ -338,7 +518,7 @@ router.put("/banner", auth, admin, updateOtherActivitiesPageBanner);
 router.post("/banner/images/add", auth, admin, addImageToBanner);
 router.delete("/banner/images/:id", auth, admin, deleteImageToBanner);
 
-// ========== Main Section =========== //
+// ========== Main Section ========== //
 /**
  * @swagger
  * /api/otherActivitiesPage/mainSection:
@@ -381,7 +561,7 @@ router.delete("/banner/images/:id", auth, admin, deleteImageToBanner);
 // router.post("/mainSection", createOtherActivitiesPageMainSection);
 router.put("/mainSection", auth, admin, updateOtherActivitiesPageMainSection);
 
-// ========== Transfers Form =========== //
+// ========== Transfers Form ========== //
 /**
  * @swagger
  * /api/otherActivitiesPage/transfersForm:
@@ -433,7 +613,7 @@ router.put(
   updateOtherActivitiesPageTransfersForm
 );
 
-// ========== Snowmobile Form =========== //
+// ========== Snowmobile Form ========== //
 /**
  * @swagger
  * /api/otherActivitiesPage/snowmobileForm:
@@ -485,7 +665,7 @@ router.put(
   updateOtherActivitiesPageSnowMobileForm
 );
 
-// ========== Horse riding form =========== //
+// ========== Horse riding form ========== //
 /**
  * @swagger
  * /api/otherActivitiesPage/horseRidingForm:
@@ -537,7 +717,7 @@ router.put(
   updateOtherActivitiesPageHorseRidingForm
 );
 
-// ========== Quad Bike Form =========== //
+// ========== Quad Bike Form ========== //
 /**
  * @swagger
  * /api/otherActivitiesPage/quadBikeForm:
@@ -584,7 +764,7 @@ router.put(
 // router.post("/quadBikeForm", createOtherActivitiesPageQuadBikeForm);
 router.put("/quadBikeForm", auth, admin, updateOtherActivitiesPageQuadBikeForm);
 
-// ========== Carousel Image =========== //
+// ========== Carousel Image ========== //
 /**
  * @swagger
  * /api/otherActivitiesPage/carouselImage:
