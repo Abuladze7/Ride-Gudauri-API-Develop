@@ -17,6 +17,8 @@ const {
   updateGudauriCarouselImage,
   deleteGudauriCarouselImage,
   deleteImageToBanner,
+  createGudauriPageSeoOptimization,
+  updateGudauriPageSeoOptimization,
 } = require("../controllers/gudauriPageController");
 const admin = require("../middleware/adminMiddleware");
 const auth = require("../middleware/authMiddleware");
@@ -28,26 +30,48 @@ const router = require("express").Router();
  * @swagger
  * /api/gudauriPage:
  *   get:
- *     summary: Retrieves all sections of the Gudauri page
  *     tags:
  *       - Gudauri Page
+ *     summary: Retrieve all Gudauri page data
+ *     description: Get SEO, banner, wonderland section, plan trip section, why Gudauri section, spirit section, how to get there section, and carousel images for the Gudauri page.
  *     responses:
  *       200:
- *         description: Successfully retrieved all sections of the Gudauri page
+ *         description: A JSON object containing all Gudauri page data.
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
+ *                 seo:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     page_title:
+ *                       type: string
+ *                     meta_title:
+ *                       type: string
+ *                     meta_description:
+ *                       type: string
+ *                     meta_keywords:
+ *                       type: string
+ *                     meta_url:
+ *                       type: string
+ *                     meta_img:
+ *                       type: string
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
  *                 banner:
  *                   type: object
  *                   properties:
  *                     _id:
  *                       type: string
- *                       example: "string"
  *                     title:
  *                       type: string
- *                       example: "string"
  *                     images:
  *                       type: array
  *                       items:
@@ -55,76 +79,60 @@ const router = require("express").Router();
  *                         properties:
  *                           public_id:
  *                             type: string
- *                             example: "string"
  *                           url:
  *                             type: string
- *                             example: "string"
  *                           _id:
  *                             type: string
- *                             example: "string"
  *                     createdAt:
  *                       type: string
  *                       format: date-time
- *                       example: "string"
  *                     updatedAt:
  *                       type: string
  *                       format: date-time
- *                       example: "string"
  *                 wonderlandSection:
  *                   type: object
  *                   properties:
  *                     _id:
  *                       type: string
- *                       example: "string"
  *                     title:
  *                       type: string
- *                       example: "string"
  *                     subtitle:
  *                       type: string
- *                       example: "string"
  *                     image:
  *                       type: object
  *                       properties:
+ *                         url:
+ *                           type: string
  *                         public_id:
  *                           type: string
- *                           example: "string"
  *                     createdAt:
  *                       type: string
  *                       format: date-time
- *                       example: "string"
  *                     updatedAt:
  *                       type: string
  *                       format: date-time
- *                       example: "string"
  *                 planTripSection:
  *                   type: object
  *                   properties:
  *                     _id:
  *                       type: string
- *                       example: "string"
  *                     title:
  *                       type: string
- *                       example: "string"
  *                     subtitle:
  *                       type: string
- *                       example: "string"
  *                     image:
  *                       type: object
  *                       properties:
- *                         public_id:
- *                           type: string
- *                           example: "string"
  *                         url:
  *                           type: string
- *                           example: "string"
+ *                         public_id:
+ *                           type: string
  *                     createdAt:
  *                       type: string
  *                       format: date-time
- *                       example: "string"
  *                     updatedAt:
  *                       type: string
  *                       format: date-time
- *                       example: "string"
  *                 whyGudauriSection:
  *                   type: array
  *                   items:
@@ -132,88 +140,67 @@ const router = require("express").Router();
  *                     properties:
  *                       _id:
  *                         type: string
- *                         example: "string"
  *                       title:
  *                         type: string
- *                         example: "string"
  *                       subtitle:
  *                         type: string
- *                         example: "string"
  *                       image:
  *                         type: object
  *                         properties:
- *                           public_id:
- *                             type: string
- *                             example: "string"
  *                           url:
  *                             type: string
- *                             example: "string"
+ *                           public_id:
+ *                             type: string
  *                       createdAt:
  *                         type: string
  *                         format: date-time
- *                         example: "string"
  *                       updatedAt:
  *                         type: string
  *                         format: date-time
- *                         example: "string"
  *                 spiritSection:
  *                   type: object
  *                   properties:
  *                     _id:
  *                       type: string
- *                       example: "string"
  *                     title:
  *                       type: string
- *                       example: "string"
  *                     subtitle:
  *                       type: string
- *                       example: "string"
  *                     image:
  *                       type: object
  *                       properties:
- *                         public_id:
- *                           type: string
- *                           example: "string"
  *                         url:
  *                           type: string
- *                           example: "string"
+ *                         public_id:
+ *                           type: string
  *                     createdAt:
  *                       type: string
  *                       format: date-time
- *                       example: "string"
  *                     updatedAt:
  *                       type: string
  *                       format: date-time
- *                       example: "string"
  *                 howToGetThereSection:
  *                   type: object
  *                   properties:
  *                     _id:
  *                       type: string
- *                       example: "string"
  *                     title:
  *                       type: string
- *                       example: "string"
  *                     subtitle:
  *                       type: string
- *                       example: "string"
  *                     description:
  *                       type: string
- *                       example: "string"
  *                     createdAt:
  *                       type: string
  *                       format: date-time
- *                       example: "string"
  *                     updatedAt:
  *                       type: string
  *                       format: date-time
- *                       example: "string"
  *                 carouselImages:
  *                   type: object
  *                   properties:
  *                     _id:
  *                       type: string
- *                       example: "string"
  *                     images:
  *                       type: array
  *                       items:
@@ -221,23 +208,171 @@ const router = require("express").Router();
  *                         properties:
  *                           public_id:
  *                             type: string
- *                             example: "string"
  *                           url:
  *                             type: string
- *                             example: "string"
  *                           _id:
  *                             type: string
- *                             example: "string"
  *                     createdAt:
  *                       type: string
  *                       format: date-time
- *                       example: "string"
  *                     updatedAt:
  *                       type: string
  *                       format: date-time
- *                       example: "string"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
  */
 router.get("/", getAllData);
+
+// ========== SEO ========== //
+/**
+ * @swagger
+ * /api/gudauriPage/seo:
+ *   post:
+ *     tags:
+ *       - Gudauri Page
+ *     summary: Create Gudauri Page SEO Optimization
+ *     description: Create a new SEO optimization entry for the Gudauri page.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               page_title:
+ *                 type: string
+ *                 example: "Gudauri - Best Ski Resort"
+ *               meta_title:
+ *                 type: string
+ *                 example: "Gudauri | Top Ski Resort in Georgia"
+ *               meta_description:
+ *                 type: string
+ *                 example: "Experience the best skiing in Gudauri, Georgia. Find out more about our top-rated resort."
+ *               meta_keywords:
+ *                 type: string
+ *                 example: "Gudauri, ski resort, Georgia, skiing, winter sports"
+ *               meta_url:
+ *                 type: string
+ *                 example: "https://example.com/gudauri"
+ *               meta_img:
+ *                 type: string
+ *                 example: "https://example.com/images/gudauri-meta.png"
+ *     responses:
+ *       201:
+ *         description: SEO optimization created successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                 page_title:
+ *                   type: string
+ *                 meta_title:
+ *                   type: string
+ *                 meta_description:
+ *                   type: string
+ *                 meta_keywords:
+ *                   type: string
+ *                 meta_url:
+ *                   type: string
+ *                 meta_img:
+ *                   type: string
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *                 updatedAt:
+ *                   type: string
+ *                   format: date-time
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *
+ * /api/gudauriPage/seo/{id}:
+ *   put:
+ *     tags:
+ *       - Gudauri Page
+ *     summary: Update Gudauri Page SEO Optimization
+ *     description: Update an existing SEO optimization entry for the Gudauri page.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The SEO ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               page_title:
+ *                 type: string
+ *                 example: "Gudauri - Best Ski Resort"
+ *               meta_title:
+ *                 type: string
+ *                 example: "Gudauri | Top Ski Resort in Georgia"
+ *               meta_description:
+ *                 type: string
+ *                 example: "Experience the best skiing in Gudauri, Georgia. Find out more about our top-rated resort."
+ *               meta_keywords:
+ *                 type: string
+ *                 example: "Gudauri, ski resort, Georgia, skiing, winter sports"
+ *               meta_url:
+ *                 type: string
+ *                 example: "https://example.com/gudauri"
+ *               meta_img:
+ *                 type: string
+ *                 example: "https://example.com/images/gudauri-meta.png"
+ *     responses:
+ *       200:
+ *         description: SEO optimization updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "SEO Optimization updated successfully"
+ *       404:
+ *         description: SEO not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "SEO not found"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
+router.post("/seo", auth, admin, createGudauriPageSeoOptimization);
+router.put("/seo/:id", auth, admin, updateGudauriPageSeoOptimization);
 
 // ========== Banner ========== //
 /**

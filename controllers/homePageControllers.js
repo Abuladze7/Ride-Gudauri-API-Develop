@@ -5,9 +5,37 @@ const HomePageWhatSetsApartSection = require("../models/homePage/whatSetsApartSe
 const WelcomeSection = require("../models/homePage/welcomeSection");
 const WonderlandSection = require("../models/homePage/wonderlandSection");
 const HomepageCarouselImages = require("../models/homePage/carouselImages");
+const HomePageSeoOptimization = require("../models/homePage/seoOptimizationSchema");
 const cloudinary = require("../config/cloudinary");
 
-// ========= Hero Section ========== //
+// ========= SEO ========= //
+exports.createHomePageSeoOptimization = async (req, res) => {
+  try {
+    const seo = await HomePageSeoOptimization.create(req.body);
+
+    res.status(201).json(seo);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.updateHomPageSeoOptimization = async (req, res) => {
+  try {
+    const seo = await HomePageSeoOptimization.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+
+    if (!seo) return res.status(404).json({ message: "SEO not found" });
+
+    res.status(200).json({ message: "SEO Optimization updated successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// ========= Hero Section ========= //
 
 exports.createBanner = async (req, res) => {
   try {
@@ -415,6 +443,7 @@ exports.deleteCarouselImage = async (req, res) => {
 exports.getAllData = async (req, res) => {
   try {
     const [
+      seo,
       banner,
       ourActivities,
       discountCoupon,
@@ -423,6 +452,7 @@ exports.getAllData = async (req, res) => {
       wonderlandSection,
       carouselImages,
     ] = await Promise.all([
+      HomePageSeoOptimization.findOne().lean(),
       Banner.find().lean(),
       Activity.findOne(),
       DiscountCoupon.findOne().lean(),
@@ -433,6 +463,7 @@ exports.getAllData = async (req, res) => {
     ]);
 
     const homePage = {
+      seo,
       banner,
       ourActivities,
       discountCoupon,

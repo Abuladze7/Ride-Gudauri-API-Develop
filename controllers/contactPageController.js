@@ -1,17 +1,47 @@
 const ContactPageFaqTitles = require("../models/contact-page/contactPageFaqTitlesModel");
 const ContactPageFaqQuestion = require("../models/contact-page/contactPageFaqQuestionsModel");
 const ContactPageCarouselImage = require("../models/contact-page/contactPageCarouselImageModel");
-const GudauriPageBanner = require("../models/contact-page/contactPageBannerModel");
+const ContactPageBanner = require("../models/contact-page/contactPageBannerModel");
+const ContactPageSeoOptimization = require("../models/contact-page/contactPageSeoOptimizationModel");
 const cloudinary = require("../config/cloudinary");
-const carouselImages = require("../models/homePage/carouselImages");
+
+// ========== SEO =========== //
+exports.createContactPageSeoOptimization = async (req, res) => {
+  try {
+    const seo = await ContactPageSeoOptimization.create(req.body);
+
+    res.status(201).json(seo);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.updateContactPageSeoOptimization = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const seo = await ContactPageSeoOptimization.findByIdAndUpdate(
+      id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+
+    if (!seo) {
+      return res.status(404).json({ message: "SEO not found" });
+    }
+
+    res.json({ message: "SEO optimization updated successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 
 // ========== Banner ========== //
 exports.createContactPageBanner = async (req, res) => {
   try {
     const { images } = req.body;
-    let banner = await GudauriPageBanner.findOne();
+    let banner = await ContactPageBanner.findOne();
     if (!banner) {
-      banner = await GudauriPageBanner.create({
+      banner = await ContactPageBanner.create({
         images: [...images],
       });
 
@@ -38,7 +68,7 @@ exports.updateContactPageBanner = async (req, res) => {
     const { id } = req.params;
     const { image } = req.body;
 
-    const banner = await GudauriPageBanner.findOne();
+    const banner = await ContactPageBanner.findOne();
     if (!banner) return res.status(404).json({ message: "Images not found" });
 
     const img = banner.images.id(id);
@@ -63,7 +93,7 @@ exports.deleteContactPageBanner = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const banner = await GudauriPageBanner.findOne();
+    const banner = await ContactPageBanner.findOne();
     if (!banner) return res.status(404).json({ message: "Images not found" });
 
     const index = banner.images.findIndex((img) => img._id.toString() === id);
@@ -94,7 +124,7 @@ exports.createContactPageFaqTitle = async (req, res) => {
   try {
     const faq = await ContactPageFaqTitles.create(req.body);
 
-    res.status(201).json({message: "Title created successfully" });
+    res.status(201).json({ message: "Title created successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -282,14 +312,14 @@ exports.deleteContactPageCarouselImage = async (req, res) => {
 
 exports.getAllData = async (req, res) => {
   try {
-    const [banner, faqTitles, faqQuestions, carouselImages] = await Promise.all(
-      [
-        GudauriPageBanner.findOne().lean(),
+    const [seo, banner, faqTitles, faqQuestions, carouselImages] =
+      await Promise.all([
+        ContactPageSeoOptimization.findOne().lean(),
+        ContactPageBanner.findOne().lean(),
         ContactPageFaqTitles.find().lean(),
         ContactPageFaqQuestion.find().lean(),
         ContactPageCarouselImage.findOne().lean(),
-      ]
-    );
+      ]);
 
     const faq = faqTitles.map((e) => ({
       _id: e._id,
@@ -300,6 +330,7 @@ exports.getAllData = async (req, res) => {
     }));
 
     const contactPage = {
+      seo,
       banner,
       faqTitles,
       faqQuestions,

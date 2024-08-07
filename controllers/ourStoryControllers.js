@@ -3,7 +3,40 @@ const HowStartedMiddleSections = require("../models/our-story/startedMiddleSecti
 const BeginningOfParaglidingSection = require("../models/our-story/beginningOfParaglidingModel");
 const OurStoryBanner = require("../models/our-story/bannerModel");
 const OurStoryCarouselImages = require("../models/our-story/ourStoryImageCarouselModel");
+const OurStoryPageSeoOptimization = require("../models/our-story/ourStorySeoOptimizationModel");
 const cloudinary = require("../config/cloudinary");
+
+// ========== SEO ========== //
+exports.createOurStoryPageSeoOptimization = async (req, res) => {
+  try {
+    const seoOptimization = await OurStoryPageSeoOptimization.create(req.body);
+
+    res.status(201).json(seoOptimization);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.updateOurStoryPageSeoOptimization = async (req, res) => {
+  try {
+    const seo = await OurStoryPageSeoOptimization.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!seo) {
+      return res.status(404).json({ message: "SEO Optimization not found" });
+    }
+
+    res.status(200).json({ message: "SEO Optimization updated successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 
 // ========== Banner ========== //
 
@@ -320,12 +353,14 @@ exports.deleteOurStoryCarouselImage = async (req, res) => {
 exports.getAllData = async (req, res) => {
   try {
     const [
+      seo,
       banner,
       howStartedSection,
       middleSections,
       beginningOfParaglidingSection,
       carouselImages,
     ] = await Promise.all([
+      OurStoryPageSeoOptimization.findOne().lean(),
       OurStoryBanner.findOne().lean(),
       HowStartedSection.findOne().lean(),
       HowStartedMiddleSections.find().lean(),
@@ -334,6 +369,7 @@ exports.getAllData = async (req, res) => {
     ]);
 
     const ourStory = {
+      seo,
       banner,
       howStartedSection,
       middleSections,

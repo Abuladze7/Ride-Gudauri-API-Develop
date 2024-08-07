@@ -12,6 +12,8 @@ const {
   createContactPageBanner,
   updateContactPageBanner,
   deleteContactPageBanner,
+  createContactPageSeoOptimization,
+  updateContactPageSeoOptimization,
 } = require("../controllers/contactPageController");
 const admin = require("../middleware/adminMiddleware");
 const auth = require("../middleware/authMiddleware");
@@ -22,16 +24,41 @@ const router = require("express").Router();
  * @swagger
  * /api/contactPage:
  *   get:
- *     summary: Retrieve all data for the contact page
- *     tags: [Contact Page]
+ *     tags:
+ *       - Contact Page
+ *     summary: Retrieve all contact page data
+ *     description: Get SEO, banner, FAQ titles, FAQ questions, and carousel images for the contact page.
  *     responses:
  *       200:
- *         description: Successfully retrieved contact page data
+ *         description: A JSON object containing all contact page data.
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
+ *                 seo:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     page_title:
+ *                       type: string
+ *                     meta_title:
+ *                       type: string
+ *                     meta_description:
+ *                       type: string
+ *                     meta_keywords:
+ *                       type: string
+ *                     meta_url:
+ *                       type: string
+ *                     meta_img:
+ *                       type: string
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
  *                 banner:
  *                   type: object
  *                   properties:
@@ -50,8 +77,10 @@ const router = require("express").Router();
  *                             type: string
  *                     createdAt:
  *                       type: string
+ *                       format: date-time
  *                     updatedAt:
  *                       type: string
+ *                       format: date-time
  *                 faqTitles:
  *                   type: array
  *                   items:
@@ -63,8 +92,10 @@ const router = require("express").Router();
  *                         type: string
  *                       createdAt:
  *                         type: string
+ *                         format: date-time
  *                       updatedAt:
  *                         type: string
+ *                         format: date-time
  *                 faqQuestions:
  *                   type: array
  *                   items:
@@ -80,8 +111,10 @@ const router = require("express").Router();
  *                         type: string
  *                       createdAt:
  *                         type: string
+ *                         format: date-time
  *                       updatedAt:
  *                         type: string
+ *                         format: date-time
  *                 faq:
  *                   type: array
  *                   items:
@@ -106,8 +139,10 @@ const router = require("express").Router();
  *                               type: string
  *                             createdAt:
  *                               type: string
+ *                               format: date-time
  *                             updatedAt:
  *                               type: string
+ *                               format: date-time
  *                 carouselImages:
  *                   type: object
  *                   properties:
@@ -124,14 +159,137 @@ const router = require("express").Router();
  *                             type: string
  *                           _id:
  *                             type: string
- *                     createdAt:
- *                       type: string
- *                     updatedAt:
- *                       type: string
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
+router.get("/", getAllData);
+
+// ========== SEO =========== //
+/**
+ * @swagger
+ * /api/contactPage/seo:
+ *   post:
+ *     summary: Create a new SEO optimization entry for the contact page
+ *     tags: [Contact Page]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               page_title:
+ *                 type: string
+ *                 example: "Contact Us - Best Services"
+ *               meta_title:
+ *                 type: string
+ *                 example: "Contact Us | Top Services Company"
+ *               meta_description:
+ *                 type: string
+ *                 example: "Get in touch with us for the best services in the industry."
+ *               meta_keywords:
+ *                 type: string
+ *                 example: "contact, services, top company"
+ *               meta_url:
+ *                 type: string
+ *                 example: "https://example.com/contact-us"
+ *               meta_img:
+ *                 type: string
+ *                 example: "https://example.com/images/contact-meta.png"
+ *     responses:
+ *       201:
+ *         description: Successfully created SEO optimization entry
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                 page_title:
+ *                   type: string
+ *                 meta_title:
+ *                   type: string
+ *                 meta_description:
+ *                   type: string
+ *                 meta_keywords:
+ *                   type: string
+ *                 meta_url:
+ *                   type: string
+ *                 meta_img:
+ *                   type: string
+ *                 createdAt:
+ *                   type: string
+ *                 updatedAt:
+ *                   type: string
+ *       500:
+ *         description: Internal server error
+ *
+ * /api/contactPage/seo/{id}:
+ *   put:
+ *     summary: Update an existing SEO optimization entry for the contact page
+ *     tags: [Contact Page]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the SEO optimization entry to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               page_title:
+ *                 type: string
+ *                 example: "Contact Us - Best Services"
+ *               meta_title:
+ *                 type: string
+ *                 example: "Contact Us | Top Services Company"
+ *               meta_description:
+ *                 type: string
+ *                 example: "Get in touch with us for the best services in the industry."
+ *               meta_keywords:
+ *                 type: string
+ *                 example: "contact, services, top company"
+ *               meta_url:
+ *                 type: string
+ *                 example: "https://example.com/contact-us"
+ *               meta_img:
+ *                 type: string
+ *                 example: "https://example.com/images/contact-meta.png"
+ *     responses:
+ *       200:
+ *         description: Successfully updated SEO optimization entry
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "SEO optimization updated successfully"
+ *       404:
+ *         description: SEO optimization entry not found
  *       500:
  *         description: Internal server error
  */
-router.get("/", getAllData);
+router.post("/seo", auth, admin, createContactPageSeoOptimization);
+router.put("/seo/:id", auth, admin, updateContactPageSeoOptimization);
 
 // ========== Banner ============ //
 /**

@@ -6,7 +6,40 @@ const SkiSchoolPagePrivateGroupLesson = require("../models/ski-school-page/skiSc
 const SkiSchoolPageRentalShop = require("../models/ski-school-page/skiSchoolShopModel");
 const SkiSchoolPageRepair = require("../models/ski-school-page/skiSchoolRepairModel");
 const SkiSchoolPageTeam = require("../models/ski-school-page/skiSchoolTeamModel");
+const SkiSchoolPageSeoOptimization = require("../models/ski-school-page/skiSchoolPageSeoOptimizationModel");
 const cloudinary = require("../config/cloudinary");
+
+// ========== SEO ========== //
+exports.createSkiSchoolPageSeoOptimization = async (req, res) => {
+  try {
+    const seo = await SkiSchoolPageSeoOptimization.create(req.body);
+
+    res.status(201).json(seo);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.updateSkiSchoolPageSeoOptimization = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const seo = await SkiSchoolPageSeoOptimization.findByIdAndUpdate(
+      id,
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!seo) return res.status(404).json({ message: "SEO not found" });
+
+    res.status(200).json({ message: "SEO Optimization updated successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 // ========== Banner ========== //
 
 exports.createSkiSchoolPageBanner = async (req, res) => {
@@ -448,6 +481,7 @@ exports.updateSkiSchoolTEamSection = async (req, res) => {
 exports.getAllData = async (req, res) => {
   try {
     const [
+      seo,
       banner,
       aboutSection,
       individualLesson,
@@ -457,6 +491,7 @@ exports.getAllData = async (req, res) => {
       repairSection,
       teamSection,
     ] = await Promise.all([
+      SkiSchoolPageSeoOptimization.findOne().lean(),
       SkiSchoolPageBanner.findOne().lean(),
       SkiSchoolPageAbout.findOne().lean(),
       SkiSchoolPageIndividualLesson.findOne().lean(),
@@ -468,6 +503,7 @@ exports.getAllData = async (req, res) => {
     ]);
 
     const skiSchoolPage = {
+      seo,
       banner,
       aboutSection,
       lessons: {

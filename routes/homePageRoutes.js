@@ -18,26 +18,52 @@ const {
   addApartItemToSection,
   deleteItemFromSection,
   deleteCarouselImage,
+  createHomePageSeoOptimization,
+  updateHomPageSeoOptimization,
 } = require("../controllers/homePageControllers");
 const admin = require("../middleware/adminMiddleware");
 const auth = require("../middleware/authMiddleware");
 
-// ========= All Data ========== //
+// ========= All Data ========= //
 /**
  * @swagger
  * /api/homepage:
  *   get:
- *     summary: Get all homepage data
  *     tags:
  *       - Home Page
+ *     summary: Retrieve all Home page data
+ *     description: Get SEO, banner, our activities, discount coupon, what sets us apart, welcome section, wonderland section, and carousel images for the Home page.
  *     responses:
  *       200:
- *         description: Successfully retrieved homepage data
+ *         description: A JSON object containing all Home page data.
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
+ *                 seo:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     page_title:
+ *                       type: string
+ *                     meta_title:
+ *                       type: string
+ *                     meta_description:
+ *                       type: string
+ *                     meta_keywords:
+ *                       type: string
+ *                     meta_url:
+ *                       type: string
+ *                     meta_img:
+ *                       type: string
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
  *                 banner:
  *                   type: array
  *                   items:
@@ -45,37 +71,30 @@ const auth = require("../middleware/authMiddleware");
  *                     properties:
  *                       _id:
  *                         type: string
- *                         example: "66a0e5d8fda5e0633479f23d"
  *                       title:
  *                         type: string
- *                         example: "Test-title"
  *                       subtitle:
  *                         type: string
- *                         example: "Test-subtitle"
  *                       image:
  *                         type: object
  *                         properties:
- *                           public_id:
- *                             type: string
- *                             example: "string"
  *                           url:
  *                             type: string
- *                             example: "string"
+ *                           public_id:
+ *                             type: string
  *                       createdAt:
  *                         type: string
- *                         example: "2024-07-24T11:30:32.814Z"
+ *                         format: date-time
  *                       updatedAt:
  *                         type: string
- *                         example: "2024-07-24T11:30:32.814Z"
+ *                         format: date-time
  *                 ourActivities:
  *                   type: object
  *                   properties:
  *                     _id:
  *                       type: string
- *                       example: "66a0e6d959398a8b6f99a2a9"
  *                     title:
  *                       type: string
- *                       example: "Our Activities"
  *                     items:
  *                       type: array
  *                       items:
@@ -86,91 +105,73 @@ const auth = require("../middleware/authMiddleware");
  *                             properties:
  *                               public_id:
  *                                 type: string
- *                                 example: "update_imgUrl.png"
  *                               url:
  *                                 type: string
- *                                 example: "string"
  *                           title:
  *                             type: string
- *                             example: "Ski Lessons"
  *                           subtitle:
  *                             type: string
- *                             example: "Embark on an unforgettable winter journey with our renowned ski school in Gudauri"
  *                           _id:
  *                             type: string
- *                             example: "66a0e6d959398a8b6f99a2aa"
  *                     createdAt:
  *                       type: string
- *                       example: "2024-07-24T11:34:49.919Z"
+ *                       format: date-time
  *                     updatedAt:
  *                       type: string
- *                       example: "2024-07-24T11:35:24.139Z"
+ *                       format: date-time
  *                 discountCoupon:
  *                   type: object
  *                   properties:
  *                     _id:
  *                       type: string
- *                       example: "66a0e84da107bc2410a3b9b6"
  *                     title:
  *                       type: string
- *                       example: "coupon title"
  *                     subtitle:
  *                       type: string
- *                       example: "coupon subtitle"
  *                     image:
  *                       type: object
  *                       properties:
- *                         public_id:
- *                           type: string
- *                           example: "updated_image"
  *                         url:
  *                           type: string
- *                           example: "string"
+ *                         public_id:
+ *                           type: string
  *                     addressLink:
  *                       type: string
- *                       example: "string"
  *                     createdAt:
  *                       type: string
- *                       example: "2024-07-24T11:41:01.221Z"
+ *                       format: date-time
  *                     updatedAt:
  *                       type: string
- *                       example: "2024-07-24T11:41:22.212Z"
+ *                       format: date-time
  *                 welcomeSection:
  *                   type: object
  *                   properties:
  *                     _id:
  *                       type: string
- *                       example: "66a0e9e6db7dac7b6b75331d"
  *                     title:
  *                       type: string
- *                       example: "Welcome to Ride Gudauri"
  *                     subtitle:
  *                       type: string
- *                       example: "Discover Gudauri Adventures with RideGudauri..."
  *                     image:
  *                       type: object
  *                       properties:
- *                         public_id:
- *                           type: string
- *                           example: "updated_img_id"
  *                         url:
  *                           type: string
- *                           example: "updated_imgUrl.png"
+ *                         public_id:
+ *                           type: string
  *                     createdAt:
  *                       type: string
- *                       example: "2024-07-24T11:47:50.346Z"
+ *                       format: date-time
  *                     updatedAt:
  *                       type: string
- *                       example: "2024-07-24T11:48:20.697Z"
+ *                       format: date-time
  *                 whatSetsApart:
  *                   type: object
  *                   properties:
  *                     _id:
  *                       type: string
- *                       example: "66a0eb6d47cfc4aae6719232"
  *                     title:
  *                       type: string
- *                       example: "What Sets Apart"
  *                     items:
  *                       type: array
  *                       items:
@@ -181,55 +182,47 @@ const auth = require("../middleware/authMiddleware");
  *                             properties:
  *                               public_id:
  *                                 type: string
- *                                 example: "img_public_id"
  *                               url:
  *                                 type: string
- *                                 example: "imgUrl_1.png"
  *                           title:
  *                             type: string
- *                             example: "Expertise and Local Insight"
  *                           subtitle:
  *                             type: string
- *                             example: "Benefit from our deep local knowledge and expertise in Gudauri..."
  *                           _id:
  *                             type: string
- *                             example: "66a0eb6d47cfc4aae6719233"
  *                     createdAt:
  *                       type: string
- *                       example: "2024-07-24T11:54:21.370Z"
+ *                       format: date-time
  *                     updatedAt:
  *                       type: string
- *                       example: "2024-07-24T11:58:04.370Z"
+ *                       format: date-time
  *                 wonderlandSection:
  *                   type: object
  *                   properties:
  *                     _id:
  *                       type: string
- *                       example: "66a0ed74a7d5d99b92a449e6"
  *                     title:
  *                       type: string
- *                       example: "Welcome to GUDAURI - Georgia's Alpine Wonderland"
  *                     subtitle:
  *                       type: string
- *                       example: "Gudauri is nothing short of a treasure nestled within our country's majestic landscapes..."
  *                     image:
  *                       type: object
  *                       properties:
+ *                         url:
+ *                           type: string
  *                         public_id:
  *                           type: string
- *                           example: "updated_id"
  *                     createdAt:
  *                       type: string
- *                       example: "2024-07-24T12:03:00.358Z"
+ *                       format: date-time
  *                     updatedAt:
  *                       type: string
- *                       example: "2024-07-24T12:04:18.563Z"
+ *                       format: date-time
  *                 carouselImages:
  *                   type: object
  *                   properties:
  *                     _id:
  *                       type: string
- *                       example: "66a0eed296399d71af1b65dc"
  *                     images:
  *                       type: array
  *                       items:
@@ -237,19 +230,16 @@ const auth = require("../middleware/authMiddleware");
  *                         properties:
  *                           public_id:
  *                             type: string
- *                             example: "image_id"
  *                           url:
  *                             type: string
- *                             example: "image_url"
  *                           _id:
  *                             type: string
- *                             example: "66a0eed296399d71af1b65dd"
  *                     createdAt:
  *                       type: string
- *                       example: "2024-07-24T12:08:50.388Z"
+ *                       format: date-time
  *                     updatedAt:
  *                       type: string
- *                       example: "2024-07-24T12:16:55.153Z"
+ *                       format: date-time
  *       500:
  *         description: Internal server error
  *         content:
@@ -259,11 +249,155 @@ const auth = require("../middleware/authMiddleware");
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "string"
  */
 router.get("/", getAllData);
 
-// ========= Hero Section ========== //
+// ========= SEO ========= //
+/**
+ * @swagger
+ * /api/homepage/seo:
+ *   post:
+ *     tags:
+ *       - Home Page
+ *     summary: Create Home Page SEO Optimization
+ *     description: Create a new SEO optimization entry for the Home page.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               page_title:
+ *                 type: string
+ *                 example: "Home - Welcome to Our Website"
+ *               meta_title:
+ *                 type: string
+ *                 example: "Home | Leading Company in Industry"
+ *               meta_description:
+ *                 type: string
+ *                 example: "Discover our services and offerings. Welcome to our home page."
+ *               meta_keywords:
+ *                 type: string
+ *                 example: "home, services, company, industry"
+ *               meta_url:
+ *                 type: string
+ *                 example: "https://example.com/home"
+ *               meta_img:
+ *                 type: string
+ *                 example: "https://example.com/images/home-meta.png"
+ *     responses:
+ *       201:
+ *         description: SEO optimization created successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                 page_title:
+ *                   type: string
+ *                 meta_title:
+ *                   type: string
+ *                 meta_description:
+ *                   type: string
+ *                 meta_keywords:
+ *                   type: string
+ *                 meta_url:
+ *                   type: string
+ *                 meta_img:
+ *                   type: string
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *                 updatedAt:
+ *                   type: string
+ *                   format: date-time
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *
+ * /api/homepage/seo/{id}:
+ *   put:
+ *     tags:
+ *       - Home Page
+ *     summary: Update Home Page SEO Optimization
+ *     description: Update an existing SEO optimization entry for the Home page.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The SEO ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               page_title:
+ *                 type: string
+ *                 example: "Home - Welcome to Our Website"
+ *               meta_title:
+ *                 type: string
+ *                 example: "Home | Leading Company in Industry"
+ *               meta_description:
+ *                 type: string
+ *                 example: "Discover our services and offerings. Welcome to our home page."
+ *               meta_keywords:
+ *                 type: string
+ *                 example: "home, services, company, industry"
+ *               meta_url:
+ *                 type: string
+ *                 example: "https://example.com/home"
+ *               meta_img:
+ *                 type: string
+ *                 example: "https://example.com/images/home-meta.png"
+ *     responses:
+ *       200:
+ *         description: SEO optimization updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "SEO Optimization updated successfully"
+ *       404:
+ *         description: SEO not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "SEO not found"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
+
+router.post("/seo", auth, admin, createHomePageSeoOptimization);
+router.put("/seo/:id", auth, admin, updateHomPageSeoOptimization);
+
+// ========= Hero Section ========= //
 /**
  * @swagger
  * /api/homepage/banner/{id}:
@@ -339,7 +473,7 @@ router.get("/", getAllData);
 // router.post("/banner", createBanner);
 router.put("/banner/:id", auth, admin, updateBanner);
 
-// ========== Our Activities ========== //
+// ========= Our Activities ========= //
 /**
  * @swagger
  * /api/homepage/ourActivitiesSection:
@@ -450,7 +584,7 @@ router.put("/banner/:id", auth, admin, updateBanner);
 // router.post("/ourActivitiesSection", createActivitiesSection);
 router.put("/ourActivitiesSection", auth, admin, updateActivitySection);
 
-// ========== Discount Coupon ========== //
+// ========= Discount Coupon ========= //
 /**
  * @swagger
  * /api/homepage/discountCoupon/{id}:
@@ -530,7 +664,7 @@ router.put("/ourActivitiesSection", auth, admin, updateActivitySection);
 // router.post("/discountCoupon", createDiscountCoupon);
 router.put("/discountCoupon/:id", auth, admin, updateDiscountCoupon);
 
-// ========== Welcome Section ========== //
+// ========= Welcome Section ========= //
 /**
  * @swagger
  * /api/homepage/welcomeSection/{id}:
@@ -606,7 +740,7 @@ router.put("/discountCoupon/:id", auth, admin, updateDiscountCoupon);
 // router.post("/welcomeSection", createWelcomeSection);
 router.put("/welcomeSection/:id", auth, admin, updateWelcomeSection);
 
-// ========== What Sets Apart Section ========== //
+// ========= What Sets Apart Section ========= //
 /**
  * @swagger
  * /api/homepage/whatSetsApart:
@@ -785,7 +919,7 @@ router.post("/whatSetsApart/item", auth, admin, addApartItemToSection);
 router.put("/whatSetsApart", auth, admin, updateWhatSetsApartSection);
 router.delete("/whatSetsApart/item/:id", auth, admin, deleteItemFromSection);
 
-// ========== Wonderland Section =========== //
+// ========= Wonderland Section ========== //
 /**
  * @swagger
  * /api/homepage/wonderlandSection/{id}:
@@ -861,7 +995,7 @@ router.delete("/whatSetsApart/item/:id", auth, admin, deleteItemFromSection);
 // router.post("/wonderlandSection", createWonderlandSection);
 router.put("/wonderlandSection/:id", auth, admin, updateWonderlandSection);
 
-// ========== Carousel Images ========== //
+// ========= Carousel Images ========= //
 /**
  * @swagger
  * /api/homepage/carouselImage:
