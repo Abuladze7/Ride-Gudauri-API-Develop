@@ -6,7 +6,7 @@ const SkiSchoolPagePrivateGroupLesson = require("../models/ski-school-page/skiSc
 const SkiSchoolPageRentalShop = require("../models/ski-school-page/skiSchoolShopModel");
 const SkiSchoolPageRepair = require("../models/ski-school-page/skiSchoolRepairModel");
 const SkiSchoolPageTeam = require("../models/ski-school-page/skiSchoolTeamModel");
-const SkiSchoolPageSeoOptimization = require("../models/ski-school-page/skiSchoolPageSeoOptimizationModel");
+const SkiSchoolPageSeoOptimization = require("../models/ski-school-page/skisSchoolPageSeoOptimizationModel");
 const cloudinary = require("../config/cloudinary");
 
 // ========== SEO ========== //
