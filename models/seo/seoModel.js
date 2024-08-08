@@ -7,7 +7,10 @@ const seoSchema = new Schema(
     meta_description: { type: String, required: true },
     meta_keywords: { type: String, required: true },
     meta_url: { type: String, required: true },
-    meta_img: { type: String, required: true },
+    meta_img: {
+      public_id: { type: String, required: true },
+      url: { type: String, required: true },
+    },
   },
   {
     _id: false,

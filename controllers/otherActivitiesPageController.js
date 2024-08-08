@@ -20,16 +20,22 @@ exports.createOtherActivitiesPageSeoOptimization = async (req, res) => {
 
 exports.updateOtherActivitiesPageSeoOptimization = async (req, res) => {
   try {
-    const seo = await OtherActivitiesPageSeoOptimization.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
+    const { id } = req.params;
+    const { meta_img, ...updateData } = req.body;
+    const seo = await OtherActivitiesPageSeoOptimization.findById(id);
 
     if (!seo) return res.status(404).json({ message: "SEO not found" });
+
+    if (meta_img && seo.meta_img.public_id) {
+      const imgId = seo.meta_img.public_id;
+      if (imgId) {
+        await cloudinary.uploader.destroy(imgId);
+      }
+    }
+
+    seo.set({ ...updateData, meta_img });
+
+    await seo.save();
 
     return res
       .status(200)

@@ -52,7 +52,12 @@ const router = require("express").Router();
  *                     meta_url:
  *                       type: string
  *                     meta_img:
- *                       type: string
+ *                       type: object
+ *                       properties:
+ *                         public_id:
+ *                           type: string
+ *                         url:
+ *                           type: string
  *                     createdAt:
  *                       type: string
  *                       format: date-time
@@ -169,75 +174,6 @@ router.get("/", getAllData);
 // ========== SEO ========== //
 /**
  * @swagger
- * /api/paraglidingPage/seo:
- *   post:
- *     tags:
- *       - Paragliding Page
- *     summary: Create Paragliding Page SEO Optimization
- *     description: Create a new SEO optimization entry for the Paragliding page.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               page_title:
- *                 type: string
- *                 example: "Paragliding - Experience the Thrill"
- *               meta_title:
- *                 type: string
- *                 example: "Paragliding | Thrilling Adventure"
- *               meta_description:
- *                 type: string
- *                 example: "Discover the thrill of paragliding with us. Learn more about our paragliding adventures."
- *               meta_keywords:
- *                 type: string
- *                 example: "paragliding, adventure, thrill, experience"
- *               meta_url:
- *                 type: string
- *                 example: "https://example.com/paragliding"
- *               meta_img:
- *                 type: string
- *                 example: "https://example.com/images/paragliding-meta.png"
- *     responses:
- *       201:
- *         description: SEO optimization created successfully.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 page_title:
- *                   type: string
- *                 meta_title:
- *                   type: string
- *                 meta_description:
- *                   type: string
- *                 meta_keywords:
- *                   type: string
- *                 meta_url:
- *                   type: string
- *                 meta_img:
- *                   type: string
- *                 createdAt:
- *                   type: string
- *                   format: date-time
- *                 updatedAt:
- *                   type: string
- *                   format: date-time
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *
  * /api/paraglidingPage/seo/{id}:
  *   put:
  *     tags:
@@ -274,8 +210,14 @@ router.get("/", getAllData);
  *                 type: string
  *                 example: "https://example.com/paragliding"
  *               meta_img:
- *                 type: string
- *                 example: "https://example.com/images/paragliding-meta.png"
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                     example: "sample_public_id"
+ *                   url:
+ *                     type: string
+ *                     example: "https://example.com/images/contact-meta.png"
  *     responses:
  *       200:
  *         description: SEO optimization updated successfully.
@@ -307,8 +249,8 @@ router.get("/", getAllData);
  *                 message:
  *                   type: string
  */
-router.post("/seo", createParaglidingPageSeoOptimization);
-router.put("/seo/:id", updateParaglidingPageSeoOptimization);
+router.post("/seo", auth, admin, createParaglidingPageSeoOptimization);
+router.put("/seo/:id", auth, admin, updateParaglidingPageSeoOptimization);
 
 // ========== Banner ========== //
 /**

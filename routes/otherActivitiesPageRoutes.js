@@ -58,7 +58,12 @@ const router = require("express").Router();
  *                     meta_url:
  *                       type: string
  *                     meta_img:
- *                       type: string
+ *                       type: object
+ *                       properties:
+ *                         public_id:
+ *                           type: string
+ *                         url:
+ *                           type: string
  *                     createdAt:
  *                       type: string
  *                       format: date-time
@@ -287,75 +292,6 @@ router.get("/", getAllData);
 // ========== SEO ========== //
 /**
  * @swagger
- * /api/otherActivitiesPage/seo:
- *   post:
- *     tags:
- *       - Other Activities Page
- *     summary: Create Other Activities Page SEO Optimization
- *     description: Create a new SEO optimization entry for the Other Activities page.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               page_title:
- *                 type: string
- *                 example: "Other Activities - Explore More Adventures"
- *               meta_title:
- *                 type: string
- *                 example: "Other Activities | Discover More Adventures"
- *               meta_description:
- *                 type: string
- *                 example: "Find out more about the exciting activities we offer. Explore more adventures on our Other Activities page."
- *               meta_keywords:
- *                 type: string
- *                 example: "activities, adventures, explore, fun"
- *               meta_url:
- *                 type: string
- *                 example: "https://example.com/other-activities"
- *               meta_img:
- *                 type: string
- *                 example: "https://example.com/images/other-activities-meta.png"
- *     responses:
- *       201:
- *         description: SEO optimization created successfully.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 page_title:
- *                   type: string
- *                 meta_title:
- *                   type: string
- *                 meta_description:
- *                   type: string
- *                 meta_keywords:
- *                   type: string
- *                 meta_url:
- *                   type: string
- *                 meta_img:
- *                   type: string
- *                 createdAt:
- *                   type: string
- *                   format: date-time
- *                 updatedAt:
- *                   type: string
- *                   format: date-time
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *
  * /api/otherActivitiesPage/seo/{id}:
  *   put:
  *     tags:
@@ -392,8 +328,14 @@ router.get("/", getAllData);
  *                 type: string
  *                 example: "https://example.com/other-activities"
  *               meta_img:
- *                 type: string
- *                 example: "https://example.com/images/other-activities-meta.png"
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                     example: "sample_public_id"
+ *                   url:
+ *                     type: string
+ *                     example: "https://example.com/images/contact-meta.png"
  *     responses:
  *       200:
  *         description: SEO optimization updated successfully.

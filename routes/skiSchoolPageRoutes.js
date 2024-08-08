@@ -58,7 +58,12 @@ const router = require("express").Router();
  *                     meta_url:
  *                       type: string
  *                     meta_img:
- *                       type: string
+ *                       type: object
+ *                       properties:
+ *                         public_id:
+ *                           type: string
+ *                         url:
+ *                           type: string
  *                     createdAt:
  *                       type: string
  *                       format: date-time
@@ -283,79 +288,10 @@ const router = require("express").Router();
  *                   type: string
  *                   example: Internal server error
  */
-
+router.get("/", getAllData);
 // ========== SEO ========== //
 /**
  * @swagger
- * /api/skiSchoolPage/seo:
- *   post:
- *     tags:
- *       - Ski School Page
- *     summary: Create SEO for Ski School Page
- *     description: Create a new SEO entry for the Ski School page.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               page_title:
- *                 type: string
- *                 example: Ski School - Learn to Ski with the Best
- *               meta_title:
- *                 type: string
- *                 example: Ski School | Top Ski Instructors
- *               meta_description:
- *                 type: string
- *                 example: Join our Ski School and learn from top instructors. Perfect for beginners and advanced skiers.
- *               meta_keywords:
- *                 type: string
- *                 example: ski school, ski lessons, skiing, ski instructors
- *               meta_url:
- *                 type: string
- *                 example: https://example.com/ski-school
- *               meta_img:
- *                 type: string
- *                 example: https://example.com/images/ski-school-meta.png
- *     responses:
- *       201:
- *         description: Successfully created SEO for Ski School page
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 page_title:
- *                   type: string
- *                 meta_title:
- *                   type: string
- *                 meta_description:
- *                   type: string
- *                 meta_keywords:
- *                   type: string
- *                 meta_url:
- *                   type: string
- *                 meta_img:
- *                   type: string
- *                 createdAt:
- *                   type: string
- *                   format: date-time
- *                 updatedAt:
- *                   type: string
- *                   format: date-time
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *
  * /api/skiSchoolPage/seo/{id}:
  *   put:
  *     tags:
@@ -392,8 +328,14 @@ const router = require("express").Router();
  *                 type: string
  *                 example: https://example.com/ski-school
  *               meta_img:
- *                 type: string
- *                 example: https://example.com/images/ski-school-meta.png
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                     example: "sample_public_id"
+ *                   url:
+ *                     type: string
+ *                     example: "https://example.com/images/contact-meta.png"
  *     responses:
  *       200:
  *         description: Successfully updated SEO for Ski School page
@@ -425,9 +367,8 @@ const router = require("express").Router();
  *                 message:
  *                   type: string
  */
-
-router.post("/seo", createSkiSchoolPageSeoOptimization);
-router.put("/seo/:id", updateSkiSchoolPageSeoOptimization);
+router.post("/seo", auth, admin, createSkiSchoolPageSeoOptimization);
+router.put("/seo/:id", auth, admin, updateSkiSchoolPageSeoOptimization);
 
 // ========== Banner ========== //
 /**

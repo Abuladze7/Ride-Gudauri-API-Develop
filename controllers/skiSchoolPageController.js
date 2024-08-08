@@ -23,18 +23,25 @@ exports.createSkiSchoolPageSeoOptimization = async (req, res) => {
 exports.updateSkiSchoolPageSeoOptimization = async (req, res) => {
   try {
     const { id } = req.params;
-    const seo = await SkiSchoolPageSeoOptimization.findByIdAndUpdate(
-      id,
-      req.body,
-      {
-        new: true,
-        runValidators: true,
+    const { meta_img, ...updateData } = req.body;
+    const seo = await SkiSchoolPageSeoOptimization.findById(id);
+
+    if (!seo) {
+      return res.status(404).json({ message: "SEO not found" });
+    }
+
+    if (meta_img && seo.meta_img.public_id) {
+      const imgId = seo.meta_img.public_id;
+      if (imgId) {
+        await cloudinary.uploader.destroy(imgId);
       }
-    );
+    }
 
-    if (!seo) return res.status(404).json({ message: "SEO not found" });
+    seo.set({ ...updateData, meta_img });
 
-    res.status(200).json({ message: "SEO Optimization updated successfully" });
+    await seo.save();
+
+    res.json({ message: "SEO optimization updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

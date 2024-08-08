@@ -53,7 +53,12 @@ const router = require("express").Router();
  *                     meta_url:
  *                       type: string
  *                     meta_img:
- *                       type: string
+ *                       type: object
+ *                       properties:
+ *                         public_id:
+ *                           type: string
+ *                         url:
+ *                           type: string
  *                     createdAt:
  *                       type: string
  *                       format: date-time
@@ -188,76 +193,6 @@ router.get("/", getAllData);
 // ========== SEO ========== //
 /**
  * @swagger
- * /api/ourStory/seo:
- *   post:
- *     tags:
- *       - Our Story
- *     summary: Create Our Story Page SEO Optimization
- *     description: Create a new SEO optimization entry for the Our Story page.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               page_title:
- *                 type: string
- *                 example: "Our Story - Learn More About Us"
- *               meta_title:
- *                 type: string
- *                 example: "Our Story | About Us"
- *               meta_description:
- *                 type: string
- *                 example: "Find out more about our journey and what drives us. Learn more about our story."
- *               meta_keywords:
- *                 type: string
- *                 example: "our story, about us, journey, company history"
- *               meta_url:
- *                 type: string
- *                 example: "https://example.com/our-story"
- *               meta_img:
- *                 type: string
- *                 example: "https://example.com/images/our-story-meta.png"
- *     responses:
- *       201:
- *         description: SEO optimization created successfully.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 page_title:
- *                   type: string
- *                 meta_title:
- *                   type: string
- *                 meta_description:
- *                   type: string
- *                 meta_keywords:
- *                   type: string
- *                 meta_url:
- *                   type: string
- *                 meta_img:
- *                   type: string
- *                 createdAt:
- *                   type: string
- *                   format: date-time
- *                 updatedAt:
- *                   type: string
- *                   format: date-time
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *
- * @swagger
  * /api/ourStory/seo/{id}:
  *   put:
  *     tags:
@@ -294,8 +229,14 @@ router.get("/", getAllData);
  *                 type: string
  *                 example: "https://example.com/our-story"
  *               meta_img:
- *                 type: string
- *                 example: "https://example.com/images/our-story-meta.png"
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                     example: "sample_public_id"
+ *                   url:
+ *                     type: string
+ *                     example: "https://example.com/images/contact-meta.png"
  *     responses:
  *       200:
  *         description: SEO optimization updated successfully.
@@ -328,7 +269,7 @@ router.get("/", getAllData);
  *                   type: string
  */
 router.post("/seo", auth, admin, createOurStoryPageSeoOptimization);
-router.put("/seo/:id", auth, admin, updateOurStoryPageSeoOptimization);
+router.put("/seo/:id", updateOurStoryPageSeoOptimization);
 
 // ========== Banner ========== //
 /**

@@ -58,7 +58,12 @@ const router = require("express").Router();
  *                     meta_url:
  *                       type: string
  *                     meta_img:
- *                       type: string
+ *                       type: object
+ *                       properties:
+ *                         public_id:
+ *                           type: string
+ *                         url:
+ *                           type: string
  *                     createdAt:
  *                       type: string
  *                       format: date-time
@@ -233,75 +238,6 @@ router.get("/", getAllData);
 // ========== SEO ========== //
 /**
  * @swagger
- * /api/gudauriPage/seo:
- *   post:
- *     tags:
- *       - Gudauri Page
- *     summary: Create Gudauri Page SEO Optimization
- *     description: Create a new SEO optimization entry for the Gudauri page.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               page_title:
- *                 type: string
- *                 example: "Gudauri - Best Ski Resort"
- *               meta_title:
- *                 type: string
- *                 example: "Gudauri | Top Ski Resort in Georgia"
- *               meta_description:
- *                 type: string
- *                 example: "Experience the best skiing in Gudauri, Georgia. Find out more about our top-rated resort."
- *               meta_keywords:
- *                 type: string
- *                 example: "Gudauri, ski resort, Georgia, skiing, winter sports"
- *               meta_url:
- *                 type: string
- *                 example: "https://example.com/gudauri"
- *               meta_img:
- *                 type: string
- *                 example: "https://example.com/images/gudauri-meta.png"
- *     responses:
- *       201:
- *         description: SEO optimization created successfully.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                 page_title:
- *                   type: string
- *                 meta_title:
- *                   type: string
- *                 meta_description:
- *                   type: string
- *                 meta_keywords:
- *                   type: string
- *                 meta_url:
- *                   type: string
- *                 meta_img:
- *                   type: string
- *                 createdAt:
- *                   type: string
- *                   format: date-time
- *                 updatedAt:
- *                   type: string
- *                   format: date-time
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *
  * /api/gudauriPage/seo/{id}:
  *   put:
  *     tags:
@@ -338,8 +274,14 @@ router.get("/", getAllData);
  *                 type: string
  *                 example: "https://example.com/gudauri"
  *               meta_img:
- *                 type: string
- *                 example: "https://example.com/images/gudauri-meta.png"
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                     example: "sample_public_id"
+ *                   url:
+ *                     type: string
+ *                     example: "https://example.com/images/contact-meta.png"
  *     responses:
  *       200:
  *         description: SEO optimization updated successfully.

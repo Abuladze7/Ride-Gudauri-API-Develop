@@ -19,20 +19,26 @@ exports.createOurStoryPageSeoOptimization = async (req, res) => {
 
 exports.updateOurStoryPageSeoOptimization = async (req, res) => {
   try {
-    const seo = await OurStoryPageSeoOptimization.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
+    const { id } = req.params;
+    const { meta_img, ...updateData } = req.body;
+    const seo = await OurStoryPageSeoOptimization.findById(id);
 
     if (!seo) {
-      return res.status(404).json({ message: "SEO Optimization not found" });
+      return res.status(404).json({ message: "SEO not found" });
     }
 
-    res.status(200).json({ message: "SEO Optimization updated successfully" });
+    if (meta_img && seo.meta_img.public_id) {
+      const imgId = seo.meta_img.public_id;
+      if (imgId) {
+        await cloudinary.uploader.destroy(imgId);
+      }
+    }
+
+    seo.set({ ...updateData, meta_img });
+
+    await seo.save();
+
+    res.json({ message: "SEO optimization updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
