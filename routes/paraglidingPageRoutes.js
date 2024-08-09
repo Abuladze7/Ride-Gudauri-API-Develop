@@ -11,8 +11,6 @@ const {
   addImageToBanner,
   deleteImageToBanner,
   deleteParaglidingPageCarouselImage,
-  createParaglidingPageSeoOptimization,
-  updateParaglidingPageSeoOptimization,
 } = require("../controllers/paraglidingPageController");
 const admin = require("../middleware/adminMiddleware");
 const auth = require("../middleware/authMiddleware");
@@ -36,34 +34,6 @@ const router = require("express").Router();
  *             schema:
  *               type: object
  *               properties:
- *                 seo:
- *                   type: object
- *                   properties:
- *                     _id:
- *                       type: string
- *                     page_title:
- *                       type: string
- *                     meta_title:
- *                       type: string
- *                     meta_description:
- *                       type: string
- *                     meta_keywords:
- *                       type: string
- *                     meta_url:
- *                       type: string
- *                     meta_img:
- *                       type: object
- *                       properties:
- *                         public_id:
- *                           type: string
- *                         url:
- *                           type: string
- *                     createdAt:
- *                       type: string
- *                       format: date-time
- *                     updatedAt:
- *                       type: string
- *                       format: date-time
  *                 banner:
  *                   type: object
  *                   properties:
@@ -170,87 +140,6 @@ const router = require("express").Router();
  *                   type: string
  */
 router.get("/", getAllData);
-
-// ========== SEO ========== //
-/**
- * @swagger
- * /api/paraglidingPage/seo/{id}:
- *   put:
- *     tags:
- *       - Paragliding Page
- *     summary: Update Paragliding Page SEO Optimization
- *     description: Update an existing SEO optimization entry for the Paragliding page.
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: The SEO ID
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               page_title:
- *                 type: string
- *                 example: "Paragliding - Experience the Thrill"
- *               meta_title:
- *                 type: string
- *                 example: "Paragliding | Thrilling Adventure"
- *               meta_description:
- *                 type: string
- *                 example: "Discover the thrill of paragliding with us. Learn more about our paragliding adventures."
- *               meta_keywords:
- *                 type: string
- *                 example: "paragliding, adventure, thrill, experience"
- *               meta_url:
- *                 type: string
- *                 example: "https://example.com/paragliding"
- *               meta_img:
- *                 type: object
- *                 properties:
- *                   public_id:
- *                     type: string
- *                     example: "sample_public_id"
- *                   url:
- *                     type: string
- *                     example: "https://example.com/images/contact-meta.png"
- *     responses:
- *       200:
- *         description: SEO optimization updated successfully.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "SEO Optimization updated successfully"
- *       404:
- *         description: SEO not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "SEO not found"
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- */
-router.post("/seo", auth, admin, createParaglidingPageSeoOptimization);
-router.put("/seo/:id", auth, admin, updateParaglidingPageSeoOptimization);
 
 // ========== Banner ========== //
 /**

@@ -3,46 +3,7 @@ const HowStartedMiddleSections = require("../models/our-story/startedMiddleSecti
 const BeginningOfParaglidingSection = require("../models/our-story/beginningOfParaglidingModel");
 const OurStoryBanner = require("../models/our-story/bannerModel");
 const OurStoryCarouselImages = require("../models/our-story/ourStoryImageCarouselModel");
-const OurStoryPageSeoOptimization = require("../models/our-story/ourStorySeoOptimizationModel");
 const cloudinary = require("../config/cloudinary");
-
-// ========== SEO ========== //
-exports.createOurStoryPageSeoOptimization = async (req, res) => {
-  try {
-    const seoOptimization = await OurStoryPageSeoOptimization.create(req.body);
-
-    res.status(201).json(seoOptimization);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
-
-exports.updateOurStoryPageSeoOptimization = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { meta_img, ...updateData } = req.body;
-    const seo = await OurStoryPageSeoOptimization.findById(id);
-
-    if (!seo) {
-      return res.status(404).json({ message: "SEO not found" });
-    }
-
-    if (meta_img && seo.meta_img.public_id) {
-      const imgId = seo.meta_img.public_id;
-      if (imgId) {
-        await cloudinary.uploader.destroy(imgId);
-      }
-    }
-
-    seo.set({ ...updateData, meta_img });
-
-    await seo.save();
-
-    res.json({ message: "SEO optimization updated successfully" });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
 
 // ========== Banner ========== //
 
@@ -359,14 +320,12 @@ exports.deleteOurStoryCarouselImage = async (req, res) => {
 exports.getAllData = async (req, res) => {
   try {
     const [
-      seo,
       banner,
       howStartedSection,
       middleSections,
       beginningOfParaglidingSection,
       carouselImages,
     ] = await Promise.all([
-      OurStoryPageSeoOptimization.findOne().lean(),
       OurStoryBanner.findOne().lean(),
       HowStartedSection.findOne().lean(),
       HowStartedMiddleSections.find().lean(),
@@ -375,7 +334,6 @@ exports.getAllData = async (req, res) => {
     ]);
 
     const ourStory = {
-      seo,
       banner,
       howStartedSection,
       middleSections,

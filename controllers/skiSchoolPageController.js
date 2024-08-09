@@ -6,46 +6,7 @@ const SkiSchoolPagePrivateGroupLesson = require("../models/ski-school-page/skiSc
 const SkiSchoolPageRentalShop = require("../models/ski-school-page/skiSchoolShopModel");
 const SkiSchoolPageRepair = require("../models/ski-school-page/skiSchoolRepairModel");
 const SkiSchoolPageTeam = require("../models/ski-school-page/skiSchoolTeamModel");
-const SkiSchoolPageSeoOptimization = require("../models/ski-school-page/skisSchoolPageSeoOptimizationModel");
 const cloudinary = require("../config/cloudinary");
-
-// ========== SEO ========== //
-exports.createSkiSchoolPageSeoOptimization = async (req, res) => {
-  try {
-    const seo = await SkiSchoolPageSeoOptimization.create(req.body);
-
-    res.status(201).json(seo);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
-
-exports.updateSkiSchoolPageSeoOptimization = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { meta_img, ...updateData } = req.body;
-    const seo = await SkiSchoolPageSeoOptimization.findById(id);
-
-    if (!seo) {
-      return res.status(404).json({ message: "SEO not found" });
-    }
-
-    if (meta_img && seo.meta_img.public_id) {
-      const imgId = seo.meta_img.public_id;
-      if (imgId) {
-        await cloudinary.uploader.destroy(imgId);
-      }
-    }
-
-    seo.set({ ...updateData, meta_img });
-
-    await seo.save();
-
-    res.json({ message: "SEO optimization updated successfully" });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
 
 // ========== Banner ========== //
 
@@ -488,7 +449,6 @@ exports.updateSkiSchoolTEamSection = async (req, res) => {
 exports.getAllData = async (req, res) => {
   try {
     const [
-      seo,
       banner,
       aboutSection,
       individualLesson,
@@ -498,7 +458,6 @@ exports.getAllData = async (req, res) => {
       repairSection,
       teamSection,
     ] = await Promise.all([
-      SkiSchoolPageSeoOptimization.findOne().lean(),
       SkiSchoolPageBanner.findOne().lean(),
       SkiSchoolPageAbout.findOne().lean(),
       SkiSchoolPageIndividualLesson.findOne().lean(),
@@ -510,7 +469,6 @@ exports.getAllData = async (req, res) => {
     ]);
 
     const skiSchoolPage = {
-      seo,
       banner,
       aboutSection,
       lessons: {

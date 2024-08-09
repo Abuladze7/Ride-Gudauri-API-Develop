@@ -2,46 +2,7 @@ const ParaglidingPageBanner = require("../models/paragliding-page/paraglidingPag
 const ParaglidingPageMainSection = require("../models/paragliding-page/paraglidingPageParaglidingModel");
 const ParaglidingPageFormSection = require("../models/paragliding-page/paraglidingPageFormSectionModel");
 const ParaglidingPageCarouselImage = require("../models/paragliding-page/paraglidingPageCarouselImage");
-const ParaglidingPageSeoOptimization = require("../models/paragliding-page/paraglidingPageSeoOptimizationModel");
 const cloudinary = require("../config/cloudinary");
-
-// ========== SEO ========== //
-exports.createParaglidingPageSeoOptimization = async (req, res) => {
-  try {
-    const seo = await ParaglidingPageSeoOptimization.create(req.body);
-
-    res.status(201).json(seo);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
-
-exports.updateParaglidingPageSeoOptimization = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { meta_img, ...updateData } = req.body;
-    const seo = await ParaglidingPageSeoOptimization.findById(id);
-
-    if (!seo) {
-      return res.status(404).json({ message: "SEO not found" });
-    }
-
-    if (meta_img && seo.meta_img.public_id) {
-      const imgId = seo.meta_img.public_id;
-      if (imgId) {
-        await cloudinary.uploader.destroy(imgId);
-      }
-    }
-
-    seo.set({ ...updateData, meta_img });
-
-    await seo.save();
-
-    res.json({ message: "SEO optimization updated successfully" });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
 
 // ========== Banner ========== //
 exports.createParaglidingPageBanner = async (req, res) => {
@@ -318,9 +279,8 @@ exports.deleteParaglidingPageCarouselImage = async (req, res) => {
 
 exports.getAllData = async (req, res) => {
   try {
-    const [seo, banner, mainSection, formSection, carouselImages] =
+    const [banner, mainSection, formSection, carouselImages] =
       await Promise.all([
-        ParaglidingPageSeoOptimization.findOne().lean(),
         ParaglidingPageBanner.findOne().lean(),
         ParaglidingPageMainSection.findOne().lean(),
         ParaglidingPageFormSection.findOne().lean(),
@@ -328,7 +288,6 @@ exports.getAllData = async (req, res) => {
       ]);
 
     const allData = {
-      seo,
       banner,
       mainSection,
       formSection,

@@ -17,6 +17,7 @@ const skiSchoolPageRoutes = require("../routes/skiSchoolPageRoutes");
 const paraglidingPageRoutes = require("../routes/paraglidingPageRoutes");
 const otherActivitiesPageRoutes = require("../routes/otherActivitiesPageRoutes");
 const contactPageRoutes = require("../routes/contactPageRoutes");
+const seoRoutes = require("../routes/seoRoutes");
 const { swaggerUi, specs, CSS_URL, customCss } = require("../config/swagger");
 
 connectDB();
@@ -70,6 +71,7 @@ app.use("/api/skischool", skischoolBookingRoutes);
 app.use("/api/otheractivities", otheractivitiesRoutes);
 app.use("/api/all", allDataRoutes);
 app.use("/api/activitiesmanagement", activitiesManagement);
+app.use("/api/seoSettings", seoRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

@@ -5,44 +5,7 @@ const WhyGudauriSection = require("../models/gudauri-page/whyGudauriSection");
 const GudauriSpiritSection = require("../models/gudauri-page/gudauriSpiritModel");
 const GudauriHowToGetThereSection = require("../models/gudauri-page/howToGetThereModel");
 const GudauriImageCarousel = require("../models/gudauri-page/gudauriImageCarousel");
-const GudauriSeoOptimization = require("../models/gudauri-page/gudauriSeoOptimizationModel");
 const cloudinary = require("../config/cloudinary");
-
-// ========== SEO ========== //
-exports.createGudauriPageSeoOptimization = async (req, res) => {
-  try {
-    const seo = await GudauriSeoOptimization.create(req.body);
-
-    res.status(201).json(seo);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
-
-exports.updateGudauriPageSeoOptimization = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { meta_img, ...updateData } = req.body;
-    const seo = await GudauriSeoOptimization.findById(id);
-
-    if (!seo) return res.status(404).json({ message: "SEO not found" });
-
-    if (meta_img && seo.meta_img.public_id) {
-      const imgId = seo.meta_img.public_id;
-      if (imgId) {
-        await cloudinary.uploader.destroy(imgId);
-      }
-    }
-
-    seo.set({ ...updateData, meta_img });
-
-    await seo.save();
-
-    res.status(200).json({ message: "SEO Optimization updated successfully" });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
 
 // ========== Banner ========== //
 
@@ -450,7 +413,6 @@ exports.deleteGudauriCarouselImage = async (req, res) => {
 exports.getAllData = async (req, res) => {
   try {
     const [
-      seo,
       banner,
       wonderlandSection,
       planTripSection,
@@ -459,7 +421,6 @@ exports.getAllData = async (req, res) => {
       howToGetThereSection,
       carouselImages,
     ] = await Promise.all([
-      GudauriSeoOptimization.findOne().lean(),
       GudauriBanner.findOne().lean(),
       GudauriWonderlandSection.findOne().lean(),
       PlanTripSection.findOne().lean(),
@@ -470,7 +431,6 @@ exports.getAllData = async (req, res) => {
     ]);
 
     const gudauriPage = {
-      seo,
       banner,
       wonderlandSection,
       planTripSection,

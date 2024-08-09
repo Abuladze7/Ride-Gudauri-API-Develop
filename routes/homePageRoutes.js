@@ -18,8 +18,6 @@ const {
   addApartItemToSection,
   deleteItemFromSection,
   deleteCarouselImage,
-  createHomePageSeoOptimization,
-  updateHomPageSeoOptimization,
 } = require("../controllers/homePageControllers");
 const admin = require("../middleware/adminMiddleware");
 const auth = require("../middleware/authMiddleware");
@@ -41,34 +39,6 @@ const auth = require("../middleware/authMiddleware");
  *             schema:
  *               type: object
  *               properties:
- *                 seo:
- *                   type: object
- *                   properties:
- *                     _id:
- *                       type: string
- *                     page_title:
- *                       type: string
- *                     meta_title:
- *                       type: string
- *                     meta_description:
- *                       type: string
- *                     meta_keywords:
- *                       type: string
- *                     meta_url:
- *                       type: string
- *                     meta_img:
- *                       type: object
- *                       properties:
- *                         public_id:
- *                           type: string
- *                         url:
- *                           type: string
- *                     createdAt:
- *                       type: string
- *                       format: date-time
- *                     updatedAt:
- *                       type: string
- *                       format: date-time
  *                 banner:
  *                   type: array
  *                   items:
@@ -256,87 +226,6 @@ const auth = require("../middleware/authMiddleware");
  *                   type: string
  */
 router.get("/", getAllData);
-
-// ========= SEO ========= //
-/**
- * @swagger
- * /api/homepage/seo/{id}:
- *   put:
- *     tags:
- *       - Home Page
- *     summary: Update Home Page SEO Optimization
- *     description: Update an existing SEO optimization entry for the Home page.
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: The SEO ID
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               page_title:
- *                 type: string
- *                 example: "Home - Welcome to Our Website"
- *               meta_title:
- *                 type: string
- *                 example: "Home | Leading Company in Industry"
- *               meta_description:
- *                 type: string
- *                 example: "Discover our services and offerings. Welcome to our home page."
- *               meta_keywords:
- *                 type: string
- *                 example: "home, services, company, industry"
- *               meta_url:
- *                 type: string
- *                 example: "https://example.com/home"
- *               meta_img:
- *                 type: object
- *                 properties:
- *                   public_id:
- *                     type: string
- *                     example: "sample_public_id"
- *                   url:
- *                     type: string
- *                     example: "https://example.com/images/contact-meta.png"
- *     responses:
- *       200:
- *         description: SEO optimization updated successfully.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "SEO Optimization updated successfully"
- *       404:
- *         description: SEO not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "SEO not found"
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- */
-router.post("/seo", auth, admin, createHomePageSeoOptimization);
-router.put("/seo/:id", auth, admin, updateHomPageSeoOptimization);
 
 // ========= Hero Section ========= //
 /**

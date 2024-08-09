@@ -5,45 +5,7 @@ const OtherActivitiesPageSnowMobileForm = require("../models/other-activities-pa
 const OtherActivitiesPageHorseRidingForm = require("../models/other-activities-page/otherActivitiesPageHorseRidingFormModel");
 const OtherActivitiesPageQuadBikeForm = require("../models/other-activities-page/otherActivitiesPageQuadBikeFormModel");
 const OtherActivitiesPageCarouselImages = require("../models/other-activities-page/otherActivitiesPageCarouselImagesModel");
-const OtherActivitiesPageSeoOptimization = require("../models/other-activities-page/otherActivitiesPageSeoOptimizationModel");
 const cloudinary = require("../config/cloudinary");
-
-// ========== SEO ========== //
-exports.createOtherActivitiesPageSeoOptimization = async (req, res) => {
-  try {
-    const seo = await OtherActivitiesPageSeoOptimization.create(req.body);
-    res.status(201).json(seo);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
-
-exports.updateOtherActivitiesPageSeoOptimization = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { meta_img, ...updateData } = req.body;
-    const seo = await OtherActivitiesPageSeoOptimization.findById(id);
-
-    if (!seo) return res.status(404).json({ message: "SEO not found" });
-
-    if (meta_img && seo.meta_img.public_id) {
-      const imgId = seo.meta_img.public_id;
-      if (imgId) {
-        await cloudinary.uploader.destroy(imgId);
-      }
-    }
-
-    seo.set({ ...updateData, meta_img });
-
-    await seo.save();
-
-    return res
-      .status(200)
-      .json({ message: "SEO Optimization updated successfully" });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
 
 // ========== Banner ========== //
 
@@ -483,7 +445,6 @@ exports.deleteOtherActivitiesPageCarouselImage = async (req, res) => {
 exports.getAllData = async (req, res) => {
   try {
     const [
-      seo,
       banner,
       mainSection,
       transfersForm,
@@ -492,7 +453,6 @@ exports.getAllData = async (req, res) => {
       quadBikeForm,
       carouselImages,
     ] = await Promise.all([
-      OtherActivitiesPageSeoOptimization.findOne().lean(),
       OtherActivitiesPageBanner.findOne().lean(),
       OtherActivitiesPageMainSection.findOne().lean(),
       OtherActivitiesPageTransfersForm.findOne().lean(),
@@ -510,7 +470,6 @@ exports.getAllData = async (req, res) => {
     };
 
     const otherActivitiesPage = {
-      seo,
       banner,
       mainSection,
       activities,

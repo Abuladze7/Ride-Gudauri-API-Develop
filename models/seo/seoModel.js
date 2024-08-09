@@ -1,4 +1,4 @@
-const { Schema } = require("mongoose");
+const { Schema, model } = require("mongoose");
 
 const seoSchema = new Schema(
   {
@@ -13,8 +13,9 @@ const seoSchema = new Schema(
     },
   },
   {
-    _id: false,
+    versionKey: false,
+    timestamps: true,
   }
 );
 
-module.exports = seoSchema;
+module.exports = model("SeoOptimizationSettings", seoSchema);
