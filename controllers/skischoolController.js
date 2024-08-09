@@ -1,10 +1,26 @@
-const skischoolBooking = require('../models/skischool');
+const { sendEmail } = require("../lib");
+const {
+  skiSchoolIndividualSessionBookingsTemplate,
+} = require("../lib/mail/templates");
+const skischoolBooking = require("../models/skischool");
 
 exports.createskischoolBooking = async (req, res) => {
   try {
     const newBooking = new skischoolBooking(req.body);
-    const savedBooking = await newBooking.save();
-    res.status(201).json(savedBooking);
+
+    const body = {
+      from: "Confirmation <noreplayridegudauri@gmail.com>",
+      to: `${req.body.email}`,
+      subject: "Ski School Booking Confirmation",
+      html: skiSchoolIndividualSessionBookingsTemplate(req.body),
+    };
+
+    await newBooking.save();
+
+    const message =
+      "Thank you for booking our service. Please check your email";
+
+    sendEmail(body, res, message);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -23,10 +39,14 @@ exports.updateSkischoolBooking = async (req, res) => {
   try {
     const bookingId = req.params.id;
     const updateData = req.body;
-    const updatedBooking = await skischoolBooking.findByIdAndUpdate(bookingId, updateData, { new: true, runValidators: true });
-    
+    const updatedBooking = await skischoolBooking.findByIdAndUpdate(
+      bookingId,
+      updateData,
+      { new: true, runValidators: true }
+    );
+
     if (!updatedBooking) {
-      return res.status(404).json({ message: 'Booking not found' });
+      return res.status(404).json({ message: "Booking not found" });
     }
     res.json(updatedBooking);
   } catch (err) {
@@ -36,16 +56,16 @@ exports.updateSkischoolBooking = async (req, res) => {
 
 exports.deleteSkischoolBooking = async (req, res) => {
   try {
-      const bookingId = req.params.id;
+    const bookingId = req.params.id;
 
-      const deletedBooking = await skischoolBooking.findByIdAndDelete(bookingId);
+    const deletedBooking = await skischoolBooking.findByIdAndDelete(bookingId);
 
-      if (!deletedBooking) {
-          return res.status(404).json({ message: 'Booking not found' });
-      }
+    if (!deletedBooking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
 
-      res.json({ message: 'Booking successfully deleted' });
+    res.json({ message: "Booking successfully deleted" });
   } catch (err) {
-      res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message });
   }
 };
