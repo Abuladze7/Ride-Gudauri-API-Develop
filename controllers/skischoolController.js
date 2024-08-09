@@ -9,14 +9,11 @@ exports.createskischoolBooking = async (req, res) => {
   try {
     const newBooking = new skischoolBooking(req.body);
 
-    const isIndividual = req.body.lessonType === "individual";
     const body = {
       from: process.env.GMAIL_USER,
       to: `${req.body.email}`,
       subject: "Ski School Booking Confirmation",
-      html: isIndividual
-        ? skiSchoolIndividualSessionBookingsTemplate(req.body)
-        : "<h2>Hello </h2>",
+      html: skiSchoolIndividualSessionBookingsTemplate(req.body),
       attachments: [
         {
           filename: "AccountDetail.pdf",
