@@ -3,16 +3,29 @@ const {
   skiSchoolIndividualSessionBookingsTemplate,
 } = require("../lib/mail/templates");
 const skischoolBooking = require("../models/skischool");
+const path = require("path");
 
 exports.createskischoolBooking = async (req, res) => {
   try {
     const newBooking = new skischoolBooking(req.body);
 
+    const isIndividual = req.body.lessonType === "individual";
     const body = {
-      from: "Confirmation <noreplayridegudauri@gmail.com>",
+      from: process.env.GMAIL_USER,
       to: `${req.body.email}`,
       subject: "Ski School Booking Confirmation",
-      html: skiSchoolIndividualSessionBookingsTemplate(req.body),
+      html: isIndividual
+        ? skiSchoolIndividualSessionBookingsTemplate(req.body)
+        : "<h2>Hello </h2>",
+      attachments: [
+        {
+          filename: "AccountDetail.pdf",
+          path: path.join(
+            __dirname,
+            "../lib/mail/attachments/AccountDetail.pdf"
+          ),
+        },
+      ],
     };
 
     await newBooking.save();
