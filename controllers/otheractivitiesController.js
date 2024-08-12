@@ -1,5 +1,10 @@
 const { sendEmail } = require("../lib");
-const { quadBikeBookingTemplate } = require("../lib/mail/templates");
+const {
+  quadBikeBookingTemplate,
+  horseRidingBookingTemplate,
+  snowmobileBookingTemplate,
+  transferAndToursBookingTemplate,
+} = require("../lib/mail/templates");
 const otheractivitiesBooking = require("../models/otherActivities");
 const path = require("path");
 
@@ -11,7 +16,11 @@ exports.createOtheractivitiesBooking = async (req, res) => {
     const templateRenderer = () => {
       if (type === "Quad Bike") return quadBikeBookingTemplate(req.body);
 
-      if (type === "Horse Riding") return "Hello";
+      if (type === "Horse Riding") return horseRidingBookingTemplate(req.body);
+
+      if (type === "Snow Mobile") return snowmobileBookingTemplate(req.body);
+
+      return transferAndToursBookingTemplate(req.body);
     };
 
     const body = {
