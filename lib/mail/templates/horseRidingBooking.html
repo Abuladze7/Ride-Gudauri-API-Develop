@@ -1,0 +1,182 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      .head-section {
+        width: 100%;
+      }
+
+      .head-section .content {
+        padding: 20px 24px;
+        max-width: 1280px;
+        width: 100%;
+        margin: 0 auto;
+      }
+      table {
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        padding: 5px;
+      }
+
+      .head-image-content {
+        width: 100%;
+      }
+
+      .head-image-content .head-texts p {
+        font-size: 18px;
+        font-weight: 500;
+        color: #333;
+        margin-top: 12px;
+      }
+
+      .head-section .content img {
+        width: 100px;
+        border-radius: 20%;
+      }
+
+      .booking-section {
+        width: 100%;
+      }
+
+      .total {
+        margin-top: 24px;
+      }
+
+      .currencies {
+        margin-top: 8px;
+      }
+
+      .currencies p {
+        font-size: 25px;
+        color: red;
+      }
+
+      .currencies p strong {
+        font-size: 16px;
+        color: #333;
+      }
+
+      .note-section {
+        margin-top: 80px;
+        width: 100%;
+      }
+
+      .note-section-content {
+        max-width: 1280px;
+        width: 100%;
+        margin: 0px auto;
+        padding: 0px 24px;
+      }
+
+      .important-information-section {
+        width: 100%;
+        margin-top: 80px;
+      }
+
+      .information-content {
+        max-width: 1280px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+    </style>
+  </head>
+
+  <body style="font-family: Arial, sans-serif; margin: 0; padding: 0">
+    <div class="head-section">
+      <div class="content">
+        <div class="head-image-content">
+          <img
+            src="https://res.cloudinary.com/dmw14gcns/image/upload/v1723188134/gudauri-logo_ychbkq.jpg"
+            alt="gudauri-logo"
+          />
+
+          <div class="head-texts">
+            <p>Dear ${fullName}</p>
+            <p>
+              Thank you for booking a Horse Riding experience with Ride Gudauri!
+            </p>
+            <p>We are excited to help you enjoy this exciting adventure.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="booking-section">
+      <div
+        style="
+          padding: 0px 24px;
+          max-width: 1280px;
+          width: 100%;
+          margin: 0 auto;
+        "
+      >
+        <div class="table-wrapper">
+          <h2 style="font-size: 28px; margin-bottom: 16px">Booking Details:</h2>
+          <table style="width: 100%; font-size: 16px; color: #333">
+            <tr>
+              <td>Name:</td>
+              <td>${fullName}</td>
+            </tr>
+            <tr>
+              <td>Date:</td>
+              <td>${date}</td>
+            </tr>
+            <tr>
+              <td>Time:</td>
+              <td>${time}</td>
+            </tr>
+            <tr>
+              <td>Amount of Participants:</td>
+              <td>${participants}</td>
+            </tr>
+          </table>
+          <div class="total">
+            <h2>Final Cost:</h2>
+            <div class="currencies">
+              <p><strong>Total amount (in GEL): </strong> ${gel}₾</p>
+              <p><strong>Total amount (in USD): </strong> ${usd}$</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note-section">
+      <div class="note-section-content">
+        <p>No need for previous payment request</p>
+      </div>
+    </div>
+    <div class="important-information-section">
+      <div class="information-content">
+        <p>
+          <strong>Important Information: </strong>
+          We might need to contact you 1-3 business days before your scheduled
+          session to provide specific information about the meeting location and
+          any other necessary details. This contact will be made through
+          WhatsApp, so please ensure that the phone number you provided on our
+          website is correct and up-to-date.
+        </p>
+
+        <p style="margin-top: 18px">
+          If you have any questions or need to update your contact information,
+          please do not hesitate to reach out to us at info@ridegudauri.com or
+          +995 591 144 114.
+        </p>
+
+        <p style="margin-top: 18px">We look forward to seeing you!</p>
+        <p style="margin-top: 18px">Best regards,</p>
+        <p style="margin-top: 18px">Ride Gudauri Team</p>
+      </div>
+    </div>
+  </body>
+</html>
