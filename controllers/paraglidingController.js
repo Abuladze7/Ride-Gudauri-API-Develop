@@ -1,10 +1,34 @@
-const paraglidingBooking = require('../models/paragliding');
+const { sendEmail } = require("../lib");
+const { paraglidingBookingTemplate } = require("../lib/mail/templates");
+const paraglidingBooking = require("../models/paragliding");
+const path = require("path");
 
 exports.createParaglidingBooking = async (req, res) => {
   try {
     const newBooking = new paraglidingBooking(req.body);
-    const savedBooking = await newBooking.save();
-    res.status(201).json(savedBooking);
+    const { email } = req.body;
+    const body = {
+      from: process.env.GMAIL_USER,
+      to: `${email}`,
+      subject: "Booking Confirmation",
+      html: paraglidingBookingTemplate(req.body),
+      attachments: [
+        {
+          filename: "AccountDetail.pdf",
+          path: path.join(
+            __dirname,
+            "../lib/mail/attachments/AccountDetail.pdf"
+          ),
+        },
+      ],
+    };
+
+    await newBooking.save();
+
+    const message =
+      "Thank you for booking our service. Please check your email";
+
+    sendEmail(body, res, message);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -21,14 +45,18 @@ exports.getParaglidingBooking = async (req, res) => {
 
 exports.updateParaglidingBooking = async (req, res) => {
   try {
-    const bookingId = req.params.id; 
+    const bookingId = req.params.id;
     const updateData = req.body;
-    const options = { new: true, runValidators: true }; 
+    const options = { new: true, runValidators: true };
 
-    const updatedBooking = await paraglidingBooking.findByIdAndUpdate(bookingId, updateData, options);
+    const updatedBooking = await paraglidingBooking.findByIdAndUpdate(
+      bookingId,
+      updateData,
+      options
+    );
 
     if (!updatedBooking) {
-      return res.status(404).json({ message: 'Booking not found' });
+      return res.status(404).json({ message: "Booking not found" });
     }
 
     res.json(updatedBooking);
@@ -39,16 +67,18 @@ exports.updateParaglidingBooking = async (req, res) => {
 
 exports.deleteParaglidingBooking = async (req, res) => {
   try {
-      const bookingId = req.params.id;
+    const bookingId = req.params.id;
 
-      const deletedBooking = await paraglidingBooking.findByIdAndDelete(bookingId);
+    const deletedBooking = await paraglidingBooking.findByIdAndDelete(
+      bookingId
+    );
 
-      if (!deletedBooking) {
-          return res.status(404).json({ message: 'Booking not found' });
-      }
+    if (!deletedBooking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
 
-      res.json({ message: 'Booking successfully deleted' });
+    res.json({ message: "Booking successfully deleted" });
   } catch (err) {
-      res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message });
   }
 };
