@@ -19,6 +19,7 @@ const otherActivitiesPageRoutes = require("../routes/otherActivitiesPageRoutes")
 const contactPageRoutes = require("../routes/contactPageRoutes");
 const seoRoutes = require("../routes/seoRoutes");
 const priceManagementRoutes = require("../routes/priceManagementRoutes");
+const notificationRoutes = require("../routes/notificationRoutes");
 const { swaggerUi, specs, CSS_URL, customCss } = require("../config/swagger");
 
 connectDB();
@@ -66,6 +67,7 @@ app.use("/api/otherActivitiesPage", otherActivitiesPageRoutes);
 app.use("/api/contactPage", contactPageRoutes);
 app.use("/api/pricemanagement", priceManagementRoutes);
 
+app.use("/api/notification", notificationRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/paragliding", paraglidingBookingRoutes);

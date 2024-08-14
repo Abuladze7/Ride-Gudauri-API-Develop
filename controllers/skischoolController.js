@@ -5,11 +5,13 @@ const {
 } = require("../lib/mail/templates");
 const skischoolBooking = require("../models/skischool");
 const path = require("path");
+const SkiSchoolNotification = require("../models/skiSchoolNotificationModel");
 
 exports.createskischoolBooking = async (req, res) => {
   try {
     const newBooking = new skischoolBooking(req.body);
     const { email, activityType } = req.body;
+    const notification = await SkiSchoolNotification.findOne();
 
     const body = {
       from: process.env.GMAIL_USER,
@@ -31,6 +33,10 @@ exports.createskischoolBooking = async (req, res) => {
     };
 
     await newBooking.save();
+
+    notification.set({ skiNotification: true });
+
+    await notification.save();
 
     const message =
       "Thank you for booking our service. Please check your email";

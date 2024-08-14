@@ -6,12 +6,15 @@ const {
   transferAndToursBookingTemplate,
 } = require("../lib/mail/templates");
 const otheractivitiesBooking = require("../models/otherActivities");
+const OtherActivitiesNotification = require("../models/otherActivitiesNotificationModel");
 const path = require("path");
 
 exports.createOtheractivitiesBooking = async (req, res) => {
   try {
     const newBooking = new otheractivitiesBooking(req.body);
     const { email, type } = req.body;
+
+    const notification = await OtherActivitiesNotification.findOne();
 
     const templateRenderer = () => {
       if (type === "Quad Bike") return quadBikeBookingTemplate(req.body);
@@ -40,6 +43,10 @@ exports.createOtheractivitiesBooking = async (req, res) => {
     };
 
     await newBooking.save();
+
+    notification.set({ otherActivitiesNotification: true });
+    await notification.save();
+
     const message =
       "Thank you for booking our service. Please check your email";
 

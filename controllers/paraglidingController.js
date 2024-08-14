@@ -1,12 +1,16 @@
 const { sendEmail } = require("../lib");
 const { paraglidingBookingTemplate } = require("../lib/mail/templates");
 const paraglidingBooking = require("../models/paragliding");
+const ParaglidingNotification = require("../models/paraglidingNotificationModel");
 const path = require("path");
 
 exports.createParaglidingBooking = async (req, res) => {
   try {
     const newBooking = new paraglidingBooking(req.body);
     const { email } = req.body;
+
+    const notification = await ParaglidingNotification.findOne();
+
     const body = {
       from: process.env.GMAIL_USER,
       to: `${email}`,
@@ -24,6 +28,9 @@ exports.createParaglidingBooking = async (req, res) => {
     };
 
     await newBooking.save();
+
+    notification.set({ paraglidingNotification: true });
+    await notification.save();
 
     const message =
       "Thank you for booking our service. Please check your email";
