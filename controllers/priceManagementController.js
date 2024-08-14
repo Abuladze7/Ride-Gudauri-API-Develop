@@ -10,6 +10,17 @@ const TransferAndToursPrices = require("../models/transferAndToursPricesModel");
 
 // ========== INDIVIDUAL SKI LESSON ========== //
 
+exports.getIndividualSkiLessonPrices = async (req, res) => {
+  try {
+    const prices = await IndividualSkiLessonPrices.findOne();
+    if (!prices) return res.status(404).json({ message: "Prices not found" });
+
+    res.status(200).json(prices);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 exports.createIndividualSkiLessonPrices = async (req, res) => {
   try {
     const prices = await IndividualSkiLessonPrices.create(req.body);
@@ -44,6 +55,17 @@ exports.updateIndividualSkiLessonPrices = async (req, res) => {
 };
 
 // ========== INDIVIDUAL SNOWBOARD LESSON ========== //
+
+exports.getIndividualSnowboardPricesPrices = async (req, res) => {
+  try {
+    const prices = await IndividualSnowboardPrices.findOne();
+    if (!prices) return res.status(404).json({ message: "Prices not found" });
+
+    res.status(200).json(prices);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 
 exports.createIndividualSnowboardLessonPrices = async (req, res) => {
   try {
@@ -81,6 +103,17 @@ exports.updateIndividualSnowboardLessonPrices = async (req, res) => {
 
 // ========== GROUP SKI LESSON ========== //
 
+exports.getGroupSkiPrices = async (req, res) => {
+  try {
+    const prices = await GroupSkiLessonPrices.findOne();
+    if (!prices) return res.status(404).json({ message: "Prices not found" });
+
+    res.status(200).json(prices);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 exports.createGroupSkiLessonPrices = async (req, res) => {
   try {
     const prices = await GroupSkiLessonPrices.create(req.body);
@@ -116,6 +149,17 @@ exports.updateGroupSkiLessonPrices = async (req, res) => {
 
 // ========== GROUP SNOWBOARD LESSON ========== //
 
+exports.getGroupSnowboardPrices = async (req, res) => {
+  try {
+    const prices = await GroupSnowboardPrices.findOne();
+    if (!prices) return res.status(404).json({ message: "Prices not found" });
+
+    res.status(200).json(prices);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 exports.createGroupSnowboardLessonPrices = async (req, res) => {
   try {
     const prices = await GroupSnowboardPrices.create(req.body);
@@ -150,6 +194,18 @@ exports.updateGroupSnowboardLessonPrices = async (req, res) => {
 };
 
 // ========== PARAGLIDING PRICES ========== //
+
+exports.getParaglidingPrices = async (req, res) => {
+  try {
+    const prices = await ParaglidingPrice.findOne();
+    if (!prices) return res.status(404).json({ message: "Prices not found" });
+
+    res.status(200).json(prices);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 exports.createParaglidingPrices = async (req, res) => {
   try {
     const prices = await ParaglidingPrice.create(req.body);
@@ -185,6 +241,17 @@ exports.updateParaglidingPrices = async (req, res) => {
 
 // ========== HOSE Riding PRICES ========== //
 
+exports.getHorseRidingPrices = async (req, res) => {
+  try {
+    const prices = await HorseRidingPrices.findOne();
+    if (!prices) return res.status(404).json({ message: "Prices not found" });
+
+    res.status(200).json(prices);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 exports.createHorseRidingPrices = async (req, res) => {
   try {
     const prices = await HorseRidingPrices.create(req.body);
@@ -217,6 +284,17 @@ exports.updateHorseRidingPrices = async (req, res) => {
 };
 
 // ========== QUADBIKE PRICES ========== //
+
+exports.getQuadBikePrices = async (req, res) => {
+  try {
+    const prices = await QuadBikePrices.findOne();
+    if (!prices) return res.status(404).json({ message: "Prices not found" });
+
+    res.status(200).json(prices);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 
 exports.createQuadBikePrices = async (req, res) => {
   try {
@@ -251,6 +329,17 @@ exports.updateQuadBikePrices = async (req, res) => {
 
 // ========== SNOWMOBILE PRICES ========== //
 
+exports.getSnowmobilePrices = async (req, res) => {
+  try {
+    const prices = await SnowmobilePrices.findOne();
+    if (!prices) return res.status(404).json({ message: "Prices not found" });
+
+    res.status(200).json(prices);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 exports.createSnowmobilePrices = async (req, res) => {
   try {
     const prices = await SnowmobilePrices.create(req.body);
@@ -283,6 +372,17 @@ exports.updateSnowmobilePrices = async (req, res) => {
 };
 
 // ========== TRANSFER AND TOURS PRICES ========== //
+
+exports.getTransferAndTorusPrices = async (req, res) => {
+  try {
+    const prices = await TransferAndToursPrices.findOne();
+    if (!prices) return res.status(404).json({ message: "Prices not found" });
+
+    res.status(200).json(prices);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 
 exports.createTransferAndToursPrices = async (req, res) => {
   try {

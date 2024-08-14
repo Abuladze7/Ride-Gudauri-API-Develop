@@ -18,6 +18,15 @@ const {
   updateSnowmobilePrices,
   createTransferAndToursPrices,
   updateTransferAndToursPrices,
+  getIndividualSkiLessonPrices,
+  getIndividualSnowboardPricesPrices,
+  getGroupSkiPrices,
+  getGroupSnowboardPrices,
+  getParaglidingPrices,
+  getHorseRidingPrices,
+  getQuadBikePrices,
+  getSnowmobilePrices,
+  getTransferAndTorusPrices,
 } = require("../controllers/priceManagementController");
 
 const router = require("express").Router();
@@ -215,31 +224,12 @@ router.get("/", getAllPrices);
 /**
  * @swagger
  * /api/pricemanagement/individualski:
- *   post:
- *     summary: Create new Individual Ski Lesson Prices
+ *   get:
+ *     summary: Retrieve Individual Ski Lesson Prices
  *     tags: [Price Management]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               one_hour:
- *                 type: number
- *                 example: 120
- *               two_hours:
- *                 type: number
- *                 example: 240
- *               three_hours:
- *                 type: number
- *                 example: 350
- *               full_day:
- *                 type: number
- *                 example: 680
  *     responses:
- *       201:
- *         description: Successfully created Individual Ski Lesson Prices
+ *       200:
+ *         description: Successfully retrieved Individual Ski Lesson Prices
  *         content:
  *           application/json:
  *             schema:
@@ -261,6 +251,8 @@ router.get("/", getAllPrices);
  *                 updatedAt:
  *                   type: string
  *                   format: date-time
+ *       404:
+ *         description: Prices not found
  *       500:
  *         description: Internal server error
  *
@@ -306,34 +298,20 @@ router.get("/", getAllPrices);
  *       500:
  *         description: Internal server error
  */
-router.post("/individualski", createIndividualSkiLessonPrices);
+router.get("/individualski", getIndividualSkiLessonPrices);
 router.put("/individualski/:id", updateIndividualSkiLessonPrices);
+// router.post("/individualski", createIndividualSkiLessonPrices);
 
 // ========== INDIVIDUAL SNOWBOARD LESSON ========== //
 /**
  * @swagger
  * /api/pricemanagement/individualsnowboard:
- *   post:
- *     summary: Create new Individual Snowboard Lesson Prices
+ *   get:
+ *     summary: Retrieve Individual Snowboard Lesson Prices
  *     tags: [Price Management]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               one_hour:
- *                 type: number
- *               two_hours:
- *                 type: number
- *               three_hours:
- *                 type: number
- *               full_day:
- *                 type: number
  *     responses:
- *       201:
- *         description: Successfully created Individual Snowboard Lesson Prices
+ *       200:
+ *         description: Successfully retrieved Individual Snowboard Lesson Prices
  *         content:
  *           application/json:
  *             schema:
@@ -355,6 +333,8 @@ router.put("/individualski/:id", updateIndividualSkiLessonPrices);
  *                 updatedAt:
  *                   type: string
  *                   format: date-time
+ *       404:
+ *         description: Prices not found
  *       500:
  *         description: Internal server error
  *
@@ -400,34 +380,20 @@ router.put("/individualski/:id", updateIndividualSkiLessonPrices);
  *       500:
  *         description: Internal server error
  */
-router.post("/individualsnowboard", createIndividualSnowboardLessonPrices);
+router.get("/individualsnowboard", getIndividualSnowboardPricesPrices);
 router.put("/individualsnowboard/:id", updateIndividualSnowboardLessonPrices);
+// router.post("/individualsnowboard", createIndividualSnowboardLessonPrices);
 
 // ========== GROUP SKI LESSON ========== //
 /**
  * @swagger
  * /api/pricemanagement/groupski:
- *   post:
- *     summary: Create new Group Ski Lesson Prices
+ *   get:
+ *     summary: Retrieve Group Ski Lesson Prices
  *     tags: [Price Management]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               two_hours:
- *                 type: number
- *               three_hours:
- *                 type: number
- *               four_hours:
- *                 type: number
- *               full_day:
- *                 type: number
  *     responses:
- *       201:
- *         description: Successfully created Group Ski Lesson Prices
+ *       200:
+ *         description: Successfully retrieved Group Ski Lesson Prices
  *         content:
  *           application/json:
  *             schema:
@@ -449,6 +415,8 @@ router.put("/individualsnowboard/:id", updateIndividualSnowboardLessonPrices);
  *                 updatedAt:
  *                   type: string
  *                   format: date-time
+ *       404:
+ *         description: Prices not found
  *       500:
  *         description: Internal server error
  *
@@ -488,40 +456,26 @@ router.put("/individualsnowboard/:id", updateIndividualSnowboardLessonPrices);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Private Group Ski Lesson prices updated successfully"
+ *                   example: "Group Ski Lesson prices updated successfully"
  *       404:
  *         description: Prices not found
  *       500:
  *         description: Internal server error
  */
-router.post("/groupski", createGroupSkiLessonPrices);
+router.get("/groupski", getGroupSkiPrices);
 router.put("/groupski/:id", updateGroupSkiLessonPrices);
+// router.post("/groupski", createGroupSkiLessonPrices);
 
 // ========== GROUP SNOWBOARD LESSON ========== //
 /**
  * @swagger
  * /api/pricemanagement/groupsnowboard:
- *   post:
- *     summary: Create new Group Snowboard Lesson Prices
+ *   get:
+ *     summary: Retrieve Group Snowboard Lesson Prices
  *     tags: [Price Management]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               two_hours:
- *                 type: number
- *               three_hours:
- *                 type: number
- *               four_hours:
- *                 type: number
- *               full_day:
- *                 type: number
  *     responses:
- *       201:
- *         description: Successfully created Group Snowboard Lesson Prices
+ *       200:
+ *         description: Successfully retrieved Group Snowboard Lesson Prices
  *         content:
  *           application/json:
  *             schema:
@@ -543,6 +497,8 @@ router.put("/groupski/:id", updateGroupSkiLessonPrices);
  *                 updatedAt:
  *                   type: string
  *                   format: date-time
+ *       404:
+ *         description: Prices not found
  *       500:
  *         description: Internal server error
  *
@@ -582,34 +538,26 @@ router.put("/groupski/:id", updateGroupSkiLessonPrices);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Private Group Snowboard Lesson prices updated successfully"
+ *                   example: "Group Snowboard Lesson prices updated successfully"
  *       404:
  *         description: Prices not found
  *       500:
  *         description: Internal server error
  */
-router.post("/groupsnowboard", createGroupSnowboardLessonPrices);
+router.get("/groupsnowboard", getGroupSnowboardPrices);
 router.put("/groupsnowboard/:id", updateGroupSnowboardLessonPrices);
+// router.post("/groupsnowboard", createGroupSnowboardLessonPrices);
 
 // ========== PARAGLIDING PRICES ========== //
 /**
  * @swagger
  * /api/pricemanagement/paragliding:
- *   post:
- *     summary: Create new Paragliding Prices
+ *   get:
+ *     summary: Retrieve Paragliding Prices
  *     tags: [Price Management]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               paragliding:
- *                 type: number
  *     responses:
- *       201:
- *         description: Successfully created Paragliding Prices
+ *       200:
+ *         description: Successfully retrieved Paragliding Prices
  *         content:
  *           application/json:
  *             schema:
@@ -625,6 +573,8 @@ router.put("/groupsnowboard/:id", updateGroupSnowboardLessonPrices);
  *                 updatedAt:
  *                   type: string
  *                   format: date-time
+ *       404:
+ *         description: Prices not found
  *       500:
  *         description: Internal server error
  *
@@ -664,34 +614,22 @@ router.put("/groupsnowboard/:id", updateGroupSnowboardLessonPrices);
  *       500:
  *         description: Internal server error
  */
-router.post("/paragliding", createParaglidingPrices);
+router.get("/paragliding", getParaglidingPrices);
 router.put("/paragliding/:id", updateParaglidingPrices);
+// router.post("/paragliding", createParaglidingPrices);
 
 // ※※※※※※ OTHER ACTIVITIES ※※※※※※ //
 
 // ========== HOSE Riding PRICES ========== //
 /**
  * @swagger
- * /api/pricemanagement/horseriding:
- *   post:
- *     summary: Create new Horse Riding Prices
+ * /api/pricemanagement/paragliding:
+ *   get:
+ *     summary: Retrieve Paragliding Prices
  *     tags: [Price Management]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               minutes_15:
- *                 type: number
- *               minutes_30:
- *                 type: number
- *               hour:
- *                 type: number
  *     responses:
- *       201:
- *         description: Successfully created Horse Riding Prices
+ *       200:
+ *         description: Successfully retrieved Paragliding Prices
  *         content:
  *           application/json:
  *             schema:
@@ -699,11 +637,7 @@ router.put("/paragliding/:id", updateParaglidingPrices);
  *               properties:
  *                 _id:
  *                   type: string
- *                 minutes_15:
- *                   type: number
- *                 minutes_30:
- *                   type: number
- *                 hour:
+ *                 paragliding:
  *                   type: number
  *                 createdAt:
  *                   type: string
@@ -711,12 +645,14 @@ router.put("/paragliding/:id", updateParaglidingPrices);
  *                 updatedAt:
  *                   type: string
  *                   format: date-time
+ *       404:
+ *         description: Prices not found
  *       500:
  *         description: Internal server error
  *
- * /api/pricemanagement/horseriding/{id}:
+ * /api/pricemanagement/paragliding/{id}:
  *   put:
- *     summary: Update Horse Riding Prices
+ *     summary: Update Paragliding Prices
  *     tags: [Price Management]
  *     parameters:
  *       - in: path
@@ -724,7 +660,7 @@ router.put("/paragliding/:id", updateParaglidingPrices);
  *         schema:
  *           type: string
  *         required: true
- *         description: The ID of the Horse Riding Prices to update
+ *         description: The ID of the Paragliding Prices to update
  *     requestBody:
  *       required: true
  *       content:
@@ -732,15 +668,11 @@ router.put("/paragliding/:id", updateParaglidingPrices);
  *           schema:
  *             type: object
  *             properties:
- *               minutes_15:
- *                 type: number
- *               minutes_30:
- *                 type: number
- *               hour:
+ *               paragliding:
  *                 type: number
  *     responses:
  *       200:
- *         description: Successfully updated Horse Riding Prices
+ *         description: Successfully updated Paragliding Prices
  *         content:
  *           application/json:
  *             schema:
@@ -748,38 +680,26 @@ router.put("/paragliding/:id", updateParaglidingPrices);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Horse Riding prices updated successfully"
+ *                   example: "Paragliding prices updated successfully"
  *       404:
  *         description: Prices not found
  *       500:
  *         description: Internal server error
  */
-router.post("/horseriding", createHorseRidingPrices);
+router.get("/horseriding", getHorseRidingPrices);
 router.put("/horseriding/:id", updateHorseRidingPrices);
+// router.post("/horseriding", createHorseRidingPrices);
 
 // ========== QUADBIKE PRICES ========== //
 /**
  * @swagger
  * /api/pricemanagement/quadbike:
- *   post:
- *     summary: Create new Quad Bike Prices
+ *   get:
+ *     summary: Retrieve Quad Bike Prices
  *     tags: [Price Management]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               quad_bike:
- *                 type: number
- *               buggy_2:
- *                 type: number
- *               buggy_3:
- *                 type: number
  *     responses:
- *       201:
- *         description: Successfully created Quad Bike Prices
+ *       200:
+ *         description: Successfully retrieved Quad Bike Prices
  *         content:
  *           application/json:
  *             schema:
@@ -799,6 +719,8 @@ router.put("/horseriding/:id", updateHorseRidingPrices);
  *                 updatedAt:
  *                   type: string
  *                   format: date-time
+ *       404:
+ *         description: Prices not found
  *       500:
  *         description: Internal server error
  *
@@ -842,32 +764,20 @@ router.put("/horseriding/:id", updateHorseRidingPrices);
  *       500:
  *         description: Internal server error
  */
-router.post("/quadbike", createQuadBikePrices);
+router.get("/quadbike", getQuadBikePrices);
 router.put("/quadbike/:id", updateQuadBikePrices);
+// router.post("/quadbike", createQuadBikePrices);
 
 // ========== SNOWMOBILE PRICES ========== //
 /**
  * @swagger
  * /api/pricemanagement/snowmobile:
- *   post:
- *     summary: Create new Snowmobile Prices
+ *   get:
+ *     summary: Retrieve Snowmobile Prices
  *     tags: [Price Management]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               minutes_15:
- *                 type: number
- *               minutes_30:
- *                 type: number
- *               hour:
- *                 type: number
  *     responses:
- *       201:
- *         description: Successfully created Snowmobile Prices
+ *       200:
+ *         description: Successfully retrieved Snowmobile Prices
  *         content:
  *           application/json:
  *             schema:
@@ -887,6 +797,8 @@ router.put("/quadbike/:id", updateQuadBikePrices);
  *                 updatedAt:
  *                   type: string
  *                   format: date-time
+ *       404:
+ *         description: Prices not found
  *       500:
  *         description: Internal server error
  *
@@ -930,44 +842,20 @@ router.put("/quadbike/:id", updateQuadBikePrices);
  *       500:
  *         description: Internal server error
  */
-router.post("/snowmobile", createSnowmobilePrices);
+router.get("/snowmobile", getSnowmobilePrices);
 router.put("/snowmobile/:id", updateSnowmobilePrices);
+// router.post("/snowmobile", createSnowmobilePrices);
 
 // ========== TRANSFER AND TOURS PRICES ========== //
 /**
  * @swagger
  * /api/pricemanagement/transfer:
- *   post:
- *     summary: Create new Transfer and Tours Prices
+ *   get:
+ *     summary: Retrieve Transfer and Tours Prices
  *     tags: [Price Management]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               gudauriToTbilisi:
- *                 type: number
- *               gudauriToTbilisiAirport:
- *                 type: number
- *               tbilisiAirportToGudauri:
- *                 type: number
- *               tbilisiFreedomSquareToGudauri:
- *                 type: number
- *               gudauriToKazbegi:
- *                 type: number
- *               gudauriToGergeti:
- *                 type: number
- *               gudauriToKhada:
- *                 type: number
- *               tbilisiToKazbegi:
- *                 type: number
- *               fullDayTourTbilisiToKazbegi:
- *                 type: number
  *     responses:
- *       201:
- *         description: Successfully created Transfer and Tours Prices
+ *       200:
+ *         description: Successfully retrieved Transfer and Tours Prices
  *         content:
  *           application/json:
  *             schema:
@@ -999,6 +887,8 @@ router.put("/snowmobile/:id", updateSnowmobilePrices);
  *                 updatedAt:
  *                   type: string
  *                   format: date-time
+ *       404:
+ *         description: Prices not found
  *       500:
  *         description: Internal server error
  *
@@ -1054,7 +944,8 @@ router.put("/snowmobile/:id", updateSnowmobilePrices);
  *       500:
  *         description: Internal server error
  */
-router.post("/transfer", createTransferAndToursPrices);
+router.get("/transfer", getTransferAndTorusPrices);
 router.put("/transfer/:id", updateTransferAndToursPrices);
+// router.post("/transfer", createTransferAndToursPrices);
 
 module.exports = router;
