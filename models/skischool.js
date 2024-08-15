@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const skischoolBookingSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -10,14 +10,14 @@ const skischoolBookingSchema = new mongoose.Schema({
   activityType: { type: String, required: true },
   experience: { type: String, required: true },
   groupMembers: { type: String },
-  hours: { type: String},
-  fromDate: { type: String},
-  toDate: { type: String},
-  fromHour: { type: String},
-  toHour: { type: String},
-  currency: { type: String },
+  hours: { type: String },
+  fromDate: { type: String },
+  toDate: { type: String },
+  fromHour: { type: String },
+  toHour: { type: String },
+  currency: { usd: Number, gel: Number },
   orderTime: { type: Date },
-  location: { type: String }
+  location: { type: String },
 });
 
-module.exports = mongoose.model('skischoolBooking', skischoolBookingSchema);
+module.exports = mongoose.model("skischoolBooking", skischoolBookingSchema);
