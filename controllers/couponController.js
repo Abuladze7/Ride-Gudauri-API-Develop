@@ -70,6 +70,10 @@ exports.applyCoupon = async (req, res) => {
     if (!coupon)
       return res.status(404).json({ message: "Coupon doesn't exists" });
 
+    if (coupon.expire < Date.now()) {
+      return res.status(403).json({ message: "Coupon has expired" });
+    }
+
     const [
       individualSkiLesson,
       individualSnowboard,

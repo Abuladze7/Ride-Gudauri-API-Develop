@@ -3,6 +3,7 @@ const { Schema, model } = require("mongoose");
 const couponSchema = new Schema(
   {
     name: { type: String, unique: true },
+    expire: { type: Date },
     skiLessonDiscount: { type: Number, default: 0 },
     snowboardDiscount: { type: Number, default: 0 },
     groupSkiLessonDiscount: { type: Number, default: 0 },

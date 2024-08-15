@@ -28,6 +28,9 @@ const router = require("express").Router();
  *                     type: string
  *                   name:
  *                     type: string
+ *                   expire:
+ *                     type: string
+ *                     format: date-time
  *                   skiLessonDiscount:
  *                     type: number
  *                   snowboardDiscount:
@@ -67,6 +70,9 @@ const router = require("express").Router();
  *             properties:
  *               name:
  *                 type: string
+ *               expire:
+ *                 type: string
+ *                 format: date-time
  *               skiLessonDiscount:
  *                 type: number
  *               snowboardDiscount:
@@ -97,6 +103,9 @@ const router = require("express").Router();
  *                   type: string
  *                 name:
  *                   type: string
+ *                 expire:
+ *                   type: string
+ *                   format: date-time
  *                 skiLessonDiscount:
  *                   type: number
  *                 snowboardDiscount:
@@ -144,6 +153,9 @@ const router = require("express").Router();
  *             properties:
  *               name:
  *                 type: string
+ *               expire:
+ *                 type: string
+ *                 format: date-time
  *               skiLessonDiscount:
  *                 type: number
  *               snowboardDiscount:
@@ -174,6 +186,9 @@ const router = require("express").Router();
  *                   type: string
  *                 name:
  *                   type: string
+ *                 expire:
+ *                   type: string
+ *                   format: date-time
  *                 skiLessonDiscount:
  *                   type: number
  *                 snowboardDiscount:
@@ -228,12 +243,7 @@ const router = require("express").Router();
  *         description: Coupon not found
  *       500:
  *         description: Internal server error
- */
-router.route("/").get(getAllCoupons).post(createCoupon);
-router.route("/:id").put(updateCoupon).delete(deleteCoupon);
-
-/**
- * @swagger
+ *
  * /api/coupon/apply:
  *   post:
  *     summary: Apply a coupon to various activities and retrieve discounted prices
@@ -436,6 +446,8 @@ router.route("/:id").put(updateCoupon).delete(deleteCoupon);
  *       500:
  *         description: Internal server error
  */
+router.route("/").get(getAllCoupons).post(createCoupon);
+router.route("/:id").put(updateCoupon).delete(deleteCoupon);
 router.post("/apply", applyCoupon);
 
 module.exports = router;
