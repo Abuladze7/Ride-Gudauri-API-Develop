@@ -18,6 +18,8 @@ const {
   addApartItemToSection,
   deleteItemFromSection,
   deleteCarouselImage,
+  createPopup,
+  updatePopup,
 } = require("../controllers/homePageControllers");
 const admin = require("../middleware/adminMiddleware");
 const auth = require("../middleware/authMiddleware");
@@ -226,6 +228,115 @@ const auth = require("../middleware/authMiddleware");
  *                   type: string
  */
 router.get("/", getAllData);
+
+// ========= Promotion Section ========= //
+/**
+ * @swagger
+ * /api/homePage/popup:
+ *   post:
+ *     summary: Create a new homepage promotion popup
+ *     tags:
+ *       - Home Page
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: Title of the popup
+ *               subtitle:
+ *                 type: string
+ *                 description: Subtitle of the popup
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                     description: Image public ID
+ *                   url:
+ *                     type: string
+ *                     description: Image URL
+ *     responses:
+ *       201:
+ *         description: Successfully created a new homepage promotion popup
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                 title:
+ *                   type: string
+ *                 subtitle:
+ *                   type: string
+ *                 image:
+ *                   type: object
+ *                   properties:
+ *                     public_id:
+ *                       type: string
+ *                     url:
+ *                       type: string
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *                 updatedAt:
+ *                   type: string
+ *                   format: date-time
+ *       500:
+ *         description: Internal server error
+ *
+ * /api/homePage/popup/{id}:
+ *   put:
+ *     summary: Update an existing homepage promotion popup
+ *     tags:
+ *       - Home Page
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the popup to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               subtitle:
+ *                 type: string
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
+ *     responses:
+ *       200:
+ *         description: Successfully updated the homepage promotion popup
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Section updated successfully"
+ *       404:
+ *         description: Section not found
+ *       500:
+ *         description: Internal server error
+ */
+router.post("/popup", createPopup);
+router.put("/popup/:id", updatePopup);
 
 // ========= Hero Section ========= //
 /**

@@ -21,7 +21,13 @@ exports.getAllCoupons = async (req, res) => {
 
 exports.createCoupon = async (req, res) => {
   try {
-    const savedCoupon = await Coupon.create(req.body);
+    let { expire, ...others } = req.body;
+
+    if (expire) {
+      expire = new Date(expire).toLocaleString();
+    }
+
+    const savedCoupon = await Coupon.create({ expire, ...others });
 
     res.status(201).json(savedCoupon);
   } catch (err) {

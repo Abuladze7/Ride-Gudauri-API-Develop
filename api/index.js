@@ -21,6 +21,7 @@ const seoRoutes = require("../routes/seoRoutes");
 const priceManagementRoutes = require("../routes/priceManagementRoutes");
 const notificationRoutes = require("../routes/notificationRoutes");
 const couponRoutes = require("../routes/couponRoutes");
+const subscribePromotionRoutes = require("../routes/subscribePromotionRoutes");
 const { swaggerUi, specs, CSS_URL, customCss } = require("../config/swagger");
 
 connectDB();
@@ -68,6 +69,7 @@ app.use("/api/otherActivitiesPage", otherActivitiesPageRoutes);
 app.use("/api/contactPage", contactPageRoutes);
 app.use("/api/pricemanagement", priceManagementRoutes);
 
+app.use("/api/subscribe", subscribePromotionRoutes);
 app.use("/api/coupon", couponRoutes);
 app.use("/api/notification", notificationRoutes);
 app.use("/api/auth", authRoutes);

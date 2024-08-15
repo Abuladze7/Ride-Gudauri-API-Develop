@@ -5,7 +5,38 @@ const HomePageWhatSetsApartSection = require("../models/homePage/whatSetsApartSe
 const WelcomeSection = require("../models/homePage/welcomeSection");
 const WonderlandSection = require("../models/homePage/wonderlandSection");
 const HomepageCarouselImages = require("../models/homePage/carouselImages");
+const HomepagePromotionPopup = require("../models/homePage/promotionSectionModel");
 const cloudinary = require("../config/cloudinary");
+
+// ========= Promotion Section ========= //
+exports.createPopup = async (req, res) => {
+  try {
+    const popup = await HomepagePromotionPopup.create(req.body);
+
+    res.status(201).json(popup);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.updatePopup = async (req, res) => {
+  try {
+    const popup = await HomepagePromotionPopup.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!popup) return res.status(404).json({ message: "Section not found" });
+
+    res.status(200).json({ message: "Section updated successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 
 // ========= Hero Section ========= //
 

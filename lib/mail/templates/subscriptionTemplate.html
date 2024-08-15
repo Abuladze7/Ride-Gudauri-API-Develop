@@ -1,0 +1,121 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      .head-section {
+        width: 100%;
+      }
+
+      .head-section .content {
+        padding: 20px 24px;
+        max-width: 1280px;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      .head-image-content {
+        width: 100%;
+      }
+
+      .head-image-content .head-texts p {
+        font-size: 18px;
+        font-weight: 500;
+        color: #333;
+        margin-top: 12px;
+      }
+
+      .head-section .content img {
+        width: 100px;
+        border-radius: 20%;
+      }
+
+      table {
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        padding: 5px;
+      }
+    </style>
+  </head>
+  <body style="font-family: Arial, sans-serif; margin: 0; padding: 0">
+    <div class="head-section">
+      <div class="content">
+        <div class="head-image-content">
+          <img
+            src="https://res.cloudinary.com/dmw14gcns/image/upload/v1723704073/gudauri-logo_citqv4.jpg"
+            alt="gudauri-logo"
+          />
+
+          <div class="head-texts" style="margin-top: 20px">
+            <h1>test email</h1>
+
+            <p>
+              Discount Coupon Code:
+              <strong style="font-size: 25px; color: red">${name}</strong>
+            </p>
+            <p>
+              Expire time:
+              <strong style="font-size: 25px">${expireTime}</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      style="padding: 0px 24px; max-width: 1280px; width: 100%; margin: 0 auto"
+    >
+      <div class="table-wrapper">
+        <h2 style="font-size: 28px; margin-bottom: 16px">
+          Discounted services:
+        </h2>
+        <table style="width: 100%; font-size: 16px; color: #333">
+          <tr>
+            <td>Individual Ski Lesson:</td>
+            <td>${skiLessonDiscount}% OFF</td>
+          </tr>
+          <tr>
+            <td>Individual Snowboard Lesson:</td>
+            <td>${snowboardDiscount}% OFF</td>
+          </tr>
+          <tr>
+            <td>Group Ski Lesson:</td>
+            <td>${groupSkiLessonDiscount}% OFF</td>
+          </tr>
+          <tr>
+            <td>Group Snowboard Lesson:</td>
+            <td>${groupSnowboardDiscount}% OFF</td>
+          </tr>
+          <tr>
+            <td>Paragliding:</td>
+            <td>${paraglidingDiscount}% OFF</td>
+          </tr>
+          <tr>
+            <td>Transfer and Tours:</td>
+            <td>${transferToursDiscount}% OFF</td>
+          </tr>
+          <tr>
+            <td>Snowmobile:</td>
+            <td>${snowmobileDiscount}% OFF</td>
+          </tr>
+          <tr>
+            <td>Horse Riding:</td>
+            <td>${horseRidingDiscount}% OFF</td>
+          </tr>
+          <tr>
+            <td>Quad Bike:</td>
+            <td>${quadBikeDiscount}% OFF</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>
