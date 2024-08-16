@@ -1,7 +1,16 @@
-const { subscriptionTemplate } = require("../lib/mail/templates");
+const {
+  subscriptionTemplate,
+  subscriptionLetterTemplate,
+} = require("../lib/mail/templates");
 const SubscribePromotion = require("../models/subscribeModel");
 const Coupon = require("../models/couponModel");
 const { sendEmail } = require("../lib");
+const path = require("path");
+const { promisify } = require("util");
+
+const fs = require("fs");
+
+const readFileAsync = promisify(fs.readFile);
 
 exports.getSubscribePromotion = async (req, res) => {
   try {
@@ -16,7 +25,9 @@ exports.getSubscribePromotion = async (req, res) => {
 exports.subscribePromotion = async (req, res) => {
   try {
     const { email } = req.body;
-    const coupon = await Coupon.findOne({ expire: { $gt: new Date() } });
+    const coupon = await Coupon.findOne({
+      expire: { $gt: new Date().toISOString() },
+    });
     if (!coupon) {
       return res.status(404).json({ message: "No valid coupon available" });
     }
@@ -27,11 +38,26 @@ exports.subscribePromotion = async (req, res) => {
 
     await SubscribePromotion.create({ email });
 
+    const htmlTemplate = await readFileAsync(
+      path.join(
+        __dirname,
+        "../lib/mail/templates/subscription-templates/newsletter-1.html"
+      )
+    );
+
     const body = {
       to: email,
       from: process.env.GMAIL_USER,
       subject: "Promotion",
-      html: subscriptionTemplate(coupon),
+      // html: subscriptionTemplate(coupon),
+      // html: subscriptionLetterTemplate(),
+      html: htmlTemplate,
+      // attachments: [
+      //   {
+      //     filename: "newsletter.pdf",
+      //     path: path.join(__dirname, "../lib/mail/attachments/newsletter.pdf"),
+      //   },
+      // ],
     };
 
     const message = "Thanks for subscribing, please check your E-mail";
