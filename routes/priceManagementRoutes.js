@@ -28,6 +28,8 @@ const {
   getSnowmobilePrices,
   getTransferAndTorusPrices,
 } = require("../controllers/priceManagementController");
+const admin = require("../middleware/adminMiddleware");
+const auth = require("../middleware/authMiddleware");
 
 const router = require("express").Router();
 
@@ -299,7 +301,7 @@ router.get("/", getAllPrices);
  *         description: Internal server error
  */
 router.get("/individualski", getIndividualSkiLessonPrices);
-router.put("/individualski/:id", updateIndividualSkiLessonPrices);
+router.put("/individualski/:id", auth, admin, updateIndividualSkiLessonPrices);
 // router.post("/individualski", createIndividualSkiLessonPrices);
 
 // ========== INDIVIDUAL SNOWBOARD LESSON ========== //
@@ -381,7 +383,12 @@ router.put("/individualski/:id", updateIndividualSkiLessonPrices);
  *         description: Internal server error
  */
 router.get("/individualsnowboard", getIndividualSnowboardPricesPrices);
-router.put("/individualsnowboard/:id", updateIndividualSnowboardLessonPrices);
+router.put(
+  "/individualsnowboard/:id",
+  auth,
+  admin,
+  updateIndividualSnowboardLessonPrices
+);
 // router.post("/individualsnowboard", createIndividualSnowboardLessonPrices);
 
 // ========== GROUP SKI LESSON ========== //
@@ -463,7 +470,7 @@ router.put("/individualsnowboard/:id", updateIndividualSnowboardLessonPrices);
  *         description: Internal server error
  */
 router.get("/groupski", getGroupSkiPrices);
-router.put("/groupski/:id", updateGroupSkiLessonPrices);
+router.put("/groupski/:id", auth, admin, updateGroupSkiLessonPrices);
 // router.post("/groupski", createGroupSkiLessonPrices);
 
 // ========== GROUP SNOWBOARD LESSON ========== //
@@ -545,7 +552,12 @@ router.put("/groupski/:id", updateGroupSkiLessonPrices);
  *         description: Internal server error
  */
 router.get("/groupsnowboard", getGroupSnowboardPrices);
-router.put("/groupsnowboard/:id", updateGroupSnowboardLessonPrices);
+router.put(
+  "/groupsnowboard/:id",
+  auth,
+  admin,
+  updateGroupSnowboardLessonPrices
+);
 // router.post("/groupsnowboard", createGroupSnowboardLessonPrices);
 
 // ========== PARAGLIDING PRICES ========== //
@@ -615,7 +627,7 @@ router.put("/groupsnowboard/:id", updateGroupSnowboardLessonPrices);
  *         description: Internal server error
  */
 router.get("/paragliding", getParaglidingPrices);
-router.put("/paragliding/:id", updateParaglidingPrices);
+router.put("/paragliding/:id", auth, admin, updateParaglidingPrices);
 // router.post("/paragliding", createParaglidingPrices);
 
 // ※※※※※※ OTHER ACTIVITIES ※※※※※※ //
@@ -687,7 +699,7 @@ router.put("/paragliding/:id", updateParaglidingPrices);
  *         description: Internal server error
  */
 router.get("/horseriding", getHorseRidingPrices);
-router.put("/horseriding/:id", updateHorseRidingPrices);
+router.put("/horseriding/:id", auth, admin, updateHorseRidingPrices);
 // router.post("/horseriding", createHorseRidingPrices);
 
 // ========== QUADBIKE PRICES ========== //
@@ -765,7 +777,7 @@ router.put("/horseriding/:id", updateHorseRidingPrices);
  *         description: Internal server error
  */
 router.get("/quadbike", getQuadBikePrices);
-router.put("/quadbike/:id", updateQuadBikePrices);
+router.put("/quadbike/:id", auth, admin, updateQuadBikePrices);
 // router.post("/quadbike", createQuadBikePrices);
 
 // ========== SNOWMOBILE PRICES ========== //
@@ -843,7 +855,7 @@ router.put("/quadbike/:id", updateQuadBikePrices);
  *         description: Internal server error
  */
 router.get("/snowmobile", getSnowmobilePrices);
-router.put("/snowmobile/:id", updateSnowmobilePrices);
+router.put("/snowmobile/:id", auth, admin, updateSnowmobilePrices);
 // router.post("/snowmobile", createSnowmobilePrices);
 
 // ========== TRANSFER AND TOURS PRICES ========== //
@@ -945,7 +957,7 @@ router.put("/snowmobile/:id", updateSnowmobilePrices);
  *         description: Internal server error
  */
 router.get("/transfer", getTransferAndTorusPrices);
-router.put("/transfer/:id", updateTransferAndToursPrices);
+router.put("/transfer/:id", auth, admin, updateTransferAndToursPrices);
 // router.post("/transfer", createTransferAndToursPrices);
 
 module.exports = router;
