@@ -6,11 +6,6 @@ const SubscribePromotion = require("../models/subscribeModel");
 const Coupon = require("../models/couponModel");
 const { sendEmail } = require("../lib");
 const path = require("path");
-const { promisify } = require("util");
-
-const fs = require("fs");
-
-const readFileAsync = promisify(fs.readFile);
 
 exports.getSubscribePromotion = async (req, res) => {
   try {
@@ -38,20 +33,12 @@ exports.subscribePromotion = async (req, res) => {
 
     await SubscribePromotion.create({ email });
 
-    const htmlTemplate = await readFileAsync(
-      path.join(
-        __dirname,
-        "../lib/mail/templates/subscription-templates/newsletter-1.html"
-      )
-    );
-
     const body = {
       to: email,
       from: process.env.GMAIL_USER,
       subject: "Promotion",
-      // html: subscriptionTemplate(coupon),
+      html: subscriptionTemplate(coupon),
       // html: subscriptionLetterTemplate(),
-      html: htmlTemplate,
       // attachments: [
       //   {
       //     filename: "newsletter.pdf",

@@ -22,6 +22,7 @@ const priceManagementRoutes = require("../routes/priceManagementRoutes");
 const notificationRoutes = require("../routes/notificationRoutes");
 const couponRoutes = require("../routes/couponRoutes");
 const subscribePromotionRoutes = require("../routes/subscribePromotionRoutes");
+const datesManagementRoutes = require("../routes/datesManagementRoutes");
 const { swaggerUi, specs, CSS_URL, customCss } = require("../config/swagger");
 
 connectDB();
@@ -68,6 +69,7 @@ app.use("/api/paraglidingPage", paraglidingPageRoutes);
 app.use("/api/otherActivitiesPage", otherActivitiesPageRoutes);
 app.use("/api/contactPage", contactPageRoutes);
 app.use("/api/pricemanagement", priceManagementRoutes);
+app.use("/api/datesmanagement", datesManagementRoutes);
 
 app.use("/api/subscribe", subscribePromotionRoutes);
 app.use("/api/coupon", couponRoutes);
