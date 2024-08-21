@@ -246,7 +246,7 @@ router.get("/", getAllData);
 // ========= Promotion Section ========= //
 /**
  * @swagger
- * /api/homePage/popup:
+ * /api/homepage/popup:
  *   post:
  *     summary: Create a new homepage promotion popup
  *     tags:
@@ -303,7 +303,7 @@ router.get("/", getAllData);
  *       500:
  *         description: Internal server error
  *
- * /api/homePage/popup/{id}:
+ * /api/homepage/popup/{id}:
  *   put:
  *     summary: Update an existing homepage promotion popup
  *     tags:
