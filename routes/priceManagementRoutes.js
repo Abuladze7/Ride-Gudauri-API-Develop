@@ -635,13 +635,14 @@ router.put("/paragliding/:id", auth, admin, updateParaglidingPrices);
 // ========== HOSE Riding PRICES ========== //
 /**
  * @swagger
- * /api/pricemanagement/paragliding:
+ * /api/pricemanagement/horseriding:
  *   get:
- *     summary: Retrieve Paragliding Prices
- *     tags: [Price Management]
+ *     summary: Retrieve horse riding prices
+ *     tags:
+ *       - Price Management
  *     responses:
  *       200:
- *         description: Successfully retrieved Paragliding Prices
+ *         description: Successfully retrieved horse riding prices
  *         content:
  *           application/json:
  *             schema:
@@ -649,7 +650,11 @@ router.put("/paragliding/:id", auth, admin, updateParaglidingPrices);
  *               properties:
  *                 _id:
  *                   type: string
- *                 paragliding:
+ *                 minutes_15:
+ *                   type: number
+ *                 minutes_30:
+ *                   type: number
+ *                 hour:
  *                   type: number
  *                 createdAt:
  *                   type: string
@@ -662,17 +667,18 @@ router.put("/paragliding/:id", auth, admin, updateParaglidingPrices);
  *       500:
  *         description: Internal server error
  *
- * /api/pricemanagement/paragliding/{id}:
+ * /api/pricemanagement/horseriding/{id}:
  *   put:
- *     summary: Update Paragliding Prices
- *     tags: [Price Management]
+ *     summary: Update horse riding prices
+ *     tags:
+ *       - Price Management
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: string
  *         required: true
- *         description: The ID of the Paragliding Prices to update
+ *         description: The ID of the horse riding prices to update
  *     requestBody:
  *       required: true
  *       content:
@@ -680,11 +686,15 @@ router.put("/paragliding/:id", auth, admin, updateParaglidingPrices);
  *           schema:
  *             type: object
  *             properties:
- *               paragliding:
+ *               minutes_15:
+ *                 type: number
+ *               minutes_30:
+ *                 type: number
+ *               hour:
  *                 type: number
  *     responses:
  *       200:
- *         description: Successfully updated Paragliding Prices
+ *         description: Horse riding prices updated successfully
  *         content:
  *           application/json:
  *             schema:
@@ -692,7 +702,7 @@ router.put("/paragliding/:id", auth, admin, updateParaglidingPrices);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Paragliding prices updated successfully"
+ *                   example: "Horse Riding prices updated successfully"
  *       404:
  *         description: Prices not found
  *       500:
