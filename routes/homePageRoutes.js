@@ -29,18 +29,39 @@ const auth = require("../middleware/authMiddleware");
  * @swagger
  * /api/homepage:
  *   get:
+ *     summary: Retrieve all homepage sections data
  *     tags:
  *       - Home Page
- *     summary: Retrieve all Home page data
- *     description: Get SEO, banner, our activities, discount coupon, what sets us apart, welcome section, wonderland section, and carousel images for the Home page.
  *     responses:
  *       200:
- *         description: A JSON object containing all Home page data.
+ *         description: Successfully retrieved homepage data
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
+ *                 popup:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     title:
+ *                       type: string
+ *                     subtitle:
+ *                       type: string
+ *                     image:
+ *                       type: object
+ *                       properties:
+ *                         public_id:
+ *                           type: string
+ *                         url:
+ *                           type: string
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
  *                 banner:
  *                   type: array
  *                   items:
@@ -55,9 +76,9 @@ const auth = require("../middleware/authMiddleware");
  *                       image:
  *                         type: object
  *                         properties:
- *                           url:
- *                             type: string
  *                           public_id:
+ *                             type: string
+ *                           url:
  *                             type: string
  *                       createdAt:
  *                         type: string
@@ -77,6 +98,12 @@ const auth = require("../middleware/authMiddleware");
  *                       items:
  *                         type: object
  *                         properties:
+ *                           _id:
+ *                             type: string
+ *                           title:
+ *                             type: string
+ *                           subtitle:
+ *                             type: string
  *                           image:
  *                             type: object
  *                             properties:
@@ -84,12 +111,6 @@ const auth = require("../middleware/authMiddleware");
  *                                 type: string
  *                               url:
  *                                 type: string
- *                           title:
- *                             type: string
- *                           subtitle:
- *                             type: string
- *                           _id:
- *                             type: string
  *                     createdAt:
  *                       type: string
  *                       format: date-time
@@ -108,9 +129,9 @@ const auth = require("../middleware/authMiddleware");
  *                     image:
  *                       type: object
  *                       properties:
- *                         url:
- *                           type: string
  *                         public_id:
+ *                           type: string
+ *                         url:
  *                           type: string
  *                     addressLink:
  *                       type: string
@@ -132,9 +153,9 @@ const auth = require("../middleware/authMiddleware");
  *                     image:
  *                       type: object
  *                       properties:
- *                         url:
- *                           type: string
  *                         public_id:
+ *                           type: string
+ *                         url:
  *                           type: string
  *                     createdAt:
  *                       type: string
@@ -154,6 +175,12 @@ const auth = require("../middleware/authMiddleware");
  *                       items:
  *                         type: object
  *                         properties:
+ *                           _id:
+ *                             type: string
+ *                           title:
+ *                             type: string
+ *                           subtitle:
+ *                             type: string
  *                           image:
  *                             type: object
  *                             properties:
@@ -161,12 +188,6 @@ const auth = require("../middleware/authMiddleware");
  *                                 type: string
  *                               url:
  *                                 type: string
- *                           title:
- *                             type: string
- *                           subtitle:
- *                             type: string
- *                           _id:
- *                             type: string
  *                     createdAt:
  *                       type: string
  *                       format: date-time
@@ -185,9 +206,9 @@ const auth = require("../middleware/authMiddleware");
  *                     image:
  *                       type: object
  *                       properties:
- *                         url:
- *                           type: string
  *                         public_id:
+ *                           type: string
+ *                         url:
  *                           type: string
  *                     createdAt:
  *                       type: string
@@ -205,11 +226,11 @@ const auth = require("../middleware/authMiddleware");
  *                       items:
  *                         type: object
  *                         properties:
+ *                           _id:
+ *                             type: string
  *                           public_id:
  *                             type: string
  *                           url:
- *                             type: string
- *                           _id:
  *                             type: string
  *                     createdAt:
  *                       type: string
@@ -219,13 +240,6 @@ const auth = require("../middleware/authMiddleware");
  *                       format: date-time
  *       500:
  *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
  */
 router.get("/", getAllData);
 

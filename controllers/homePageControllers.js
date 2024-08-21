@@ -446,6 +446,7 @@ exports.deleteCarouselImage = async (req, res) => {
 exports.getAllData = async (req, res) => {
   try {
     const [
+      popup,
       banner,
       ourActivities,
       discountCoupon,
@@ -454,6 +455,7 @@ exports.getAllData = async (req, res) => {
       wonderlandSection,
       carouselImages,
     ] = await Promise.all([
+      HomepagePromotionPopup.findOne().lean(),
       Banner.find().lean(),
       Activity.findOne(),
       DiscountCoupon.findOne().lean(),
@@ -464,6 +466,7 @@ exports.getAllData = async (req, res) => {
     ]);
 
     const homePage = {
+      popup,
       banner,
       ourActivities,
       discountCoupon,
