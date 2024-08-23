@@ -20,9 +20,6 @@ exports.subscribePromotion = async (req, res) => {
     const coupon = await Coupon.findOne({
       expire: { $gt: new Date().toISOString() },
     });
-    if (!coupon) {
-      return res.status(404).json({ message: "No valid coupon available" });
-    }
 
     if (await SubscribePromotion.findOne({ email })) {
       return res.status(400).json({ message: "Email already subscribed" });
@@ -34,7 +31,7 @@ exports.subscribePromotion = async (req, res) => {
       to: email,
       from: process.env.GMAIL_USER,
       subject: "Promotion",
-      html: subscriptionPromotionTemplate(),
+      html: subscriptionPromotionTemplate(coupon),
     };
 
     const message = "Thanks for subscribing, please check your E-mail";
