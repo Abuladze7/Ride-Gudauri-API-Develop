@@ -1,11 +1,8 @@
-const {
-  subscriptionTemplate,
-  subscriptionLetterTemplate,
-} = require("../lib/mail/templates");
 const SubscribePromotion = require("../models/subscribeModel");
 const Coupon = require("../models/couponModel");
 const { sendEmail } = require("../lib");
 const path = require("path");
+const { subscriptionPromotionTemplate } = require("../lib/mail/templates");
 
 exports.getSubscribePromotion = async (req, res) => {
   try {
@@ -37,14 +34,7 @@ exports.subscribePromotion = async (req, res) => {
       to: email,
       from: process.env.GMAIL_USER,
       subject: "Promotion",
-      html: subscriptionTemplate(coupon),
-      // html: subscriptionLetterTemplate(),
-      // attachments: [
-      //   {
-      //     filename: "newsletter.pdf",
-      //     path: path.join(__dirname, "../lib/mail/attachments/newsletter.pdf"),
-      //   },
-      // ],
+      html: subscriptionPromotionTemplate(),
     };
 
     const message = "Thanks for subscribing, please check your E-mail";
