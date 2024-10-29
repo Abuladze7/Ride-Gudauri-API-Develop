@@ -21,16 +21,24 @@ exports.createPopup = async (req, res) => {
 
 exports.updatePopup = async (req, res) => {
   try {
-    const popup = await HomepagePromotionPopup.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
+    const { title, subtitle, image, isShow } = req.body;
+    const popup = await HomepagePromotionPopup.findById(req.params.id);
 
     if (!popup) return res.status(404).json({ message: "Section not found" });
+
+    if (image) {
+      const imgId = popup.image.public_id;
+      if (imgId) {
+        await cloudinary.uploader.destroy(imgId);
+      }
+    }
+
+    await HomepagePromotionPopup.findByIdAndUpdate(req.params.id, {
+      title,
+      subtitle,
+      image,
+      isShow,
+    });
 
     res.status(200).json({ message: "Section updated successfully" });
   } catch (err) {

@@ -273,6 +273,10 @@ router.get("/", getAllData);
  *                   url:
  *                     type: string
  *                     description: Image URL
+ *               isShow:
+ *                 type: boolean
+ *                 description: Whether the popup is shown
+ *                 default: false
  *     responses:
  *       201:
  *         description: Successfully created a new homepage promotion popup
@@ -294,6 +298,8 @@ router.get("/", getAllData);
  *                       type: string
  *                     url:
  *                       type: string
+ *                 isShow:
+ *                   type: boolean
  *                 createdAt:
  *                   type: string
  *                   format: date-time
@@ -333,6 +339,9 @@ router.get("/", getAllData);
  *                     type: string
  *                   url:
  *                     type: string
+ *               isShow:
+ *                 type: boolean
+ *                 description: Whether the popup is shown
  *     responses:
  *       200:
  *         description: Successfully updated the homepage promotion popup
