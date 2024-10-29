@@ -3,8 +3,8 @@ const { Schema } = mongoose;
 
 const otherActivitiesPageBannerSchema = new Schema(
   {
-    title: { type: String, required: true },
-    subtitle: { type: String, required: true },
+    title: { type: String },
+    subtitle: { type: String },
     images: [
       {
         public_id: { type: String, required: true },

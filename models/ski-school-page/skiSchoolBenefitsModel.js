@@ -3,10 +3,10 @@ const { Schema } = mongoose;
 
 const benefitsSchema = new Schema(
   {
-    title: { type: String, required: true },
+    title: { type: String },
     items: [
       {
-        subtitle: { type: String, required: true },
+        subtitle: { type: String },
         image: {
           public_id: { type: String, required: true },
           url: { type: String, required: true },

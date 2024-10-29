@@ -3,11 +3,11 @@ const { Schema } = mongoose;
 
 const skiSchoolModelSchema = new Schema(
   {
-    title: { type: String, required: true },
+    title: { type: String },
     items: [
       {
-        title: { type: String, required: true },
-        subtitle: { type: String, required: true },
+        title: { type: String },
+        subtitle: { type: String },
         image: {
           public_id: { type: String, required: true },
           url: { type: String, required: true },

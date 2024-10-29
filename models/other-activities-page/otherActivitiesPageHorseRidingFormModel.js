@@ -3,8 +3,8 @@ const { Schema } = mongoose;
 
 const otherActivitiesPageHorseRidingSchema = new Schema(
   {
-    title: { type: String, required: true },
-    subtitle: { type: String, required: true },
+    title: { type: String },
+    subtitle: { type: String },
     warning: String,
     items: [
       {
