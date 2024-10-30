@@ -162,24 +162,36 @@ exports.createSkiSchoolIndividualLesson = async (req, res) => {
 
 exports.updateSkiSchoolIndividualLesson = async (req, res) => {
   try {
-    const { title, subtitle, image, description } = req.body;
-    const { itemId } = req.query;
+    const { title, subtitle, image, description, locationTitle, locationInfo } =
+      req.body;
+    const { itemId, locationInfoId } = req.query;
 
     const lesson = await SkiSchoolPageIndividualLesson.findOne();
 
     if (!lesson) return res.status(404).json({ message: "Lesson not found" });
 
     if (title) lesson.title = title;
-
     if (subtitle) lesson.subtitle = subtitle;
+    if (locationTitle) lesson.locationTitle = locationTitle;
+
+    // Update a specific locationInfo entry by ID
+    if (locationInfoId && locationInfo) {
+      const locationItem = lesson.locationInfo.id(locationInfoId);
+      if (locationItem) {
+        if (locationInfo.title) locationItem.title = locationInfo.title;
+        if (locationInfo.link) locationItem.link = locationInfo.link;
+      } else {
+        return res
+          .status(404)
+          .json({ message: "Location info item not found" });
+      }
+    }
 
     if (itemId) {
       const item = lesson.items.id(itemId);
 
       if (item) {
-        if (description) {
-          item.description = description;
-        }
+        if (description) item.description = description;
 
         if (image) {
           const imgId = item.image.public_id;
@@ -217,23 +229,36 @@ exports.createSkiSchoolPrivateGroupLesson = async (req, res) => {
 
 exports.updateSkiSchoolPrivateGroupLesson = async (req, res) => {
   try {
-    const { title, subtitle, image, description } = req.body;
-    const { itemId } = req.query;
+    const { title, subtitle, image, description, locationTitle, locationInfo } =
+      req.body;
+    const { itemId, locationInfoId } = req.query;
 
     const lesson = await SkiSchoolPagePrivateGroupLesson.findOne();
 
     if (!lesson) return res.status(404).json({ message: "Lesson not found" });
 
     if (title) lesson.title = title;
-
     if (subtitle) lesson.subtitle = subtitle;
+    if (locationTitle) lesson.locationTitle = locationTitle;
+
+    // Update a specific locationInfo entry by ID
+    if (locationInfoId && locationInfo) {
+      const locationItem = lesson.locationInfo.id(locationInfoId);
+      if (locationItem) {
+        if (locationInfo.title) locationItem.title = locationInfo.title;
+        if (locationInfo.link) locationItem.link = locationInfo.link;
+      } else {
+        return res
+          .status(404)
+          .json({ message: "Location info item not found" });
+      }
+    }
 
     if (itemId) {
       const item = lesson.items.id(itemId);
+
       if (item) {
-        if (description) {
-          item.description = description;
-        }
+        if (description) item.description = description;
 
         if (image) {
           const imgId = item.image.public_id;

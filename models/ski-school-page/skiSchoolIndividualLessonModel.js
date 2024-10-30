@@ -5,6 +5,13 @@ const skiSchoolPageIndividualLessonSchema = new Schema(
   {
     title: { type: String },
     subtitle: { type: String },
+    locationTitle: { type: String },
+    locationInfo: [
+      {
+        title: { type: String },
+        link: { type: String },
+      },
+    ],
     items: [
       {
         image: {

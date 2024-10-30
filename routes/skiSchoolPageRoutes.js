@@ -412,6 +412,12 @@ router.put("/aboutSection/:id", auth, admin, updateSkiSchoolPageAbout);
  *           type: string
  *         required: false
  *         description: The ID of the item to be updated
+ *       - in: query
+ *         name: locationInfoId
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: The ID of the location info item to be updated
  *     requestBody:
  *       required: true
  *       content:
@@ -421,22 +427,42 @@ router.put("/aboutSection/:id", auth, admin, updateSkiSchoolPageAbout);
  *             properties:
  *               title:
  *                 type: string
+ *                 description: Title of the lesson
  *               subtitle:
  *                 type: string
- *               description:
+ *                 description: Subtitle of the lesson
+ *               locationTitle:
  *                 type: string
- *               image:
+ *                 description: Title for the lesson location
+ *               locationInfo:
  *                 type: object
  *                 properties:
- *                   public_id:
+ *                   title:
  *                     type: string
- *                   url:
+ *                     description: Title of the location info
+ *                   link:
  *                     type: string
+ *                     description: Link associated with the location info
+ *               items:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     image:
+ *                       type: object
+ *                       properties:
+ *                         public_id:
+ *                           type: string
+ *                         url:
+ *                           type: string
+ *                     description:
+ *                       type: string
+ *                       description: Description of the item
  *     responses:
  *       200:
  *         description: Individual lesson updated successfully
  *       404:
- *         description: Lesson or item not found
+ *         description: Lesson, item, or location info not found
  *       500:
  *         description: Internal server error
  */
