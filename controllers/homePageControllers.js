@@ -50,14 +50,9 @@ exports.updatePopup = async (req, res) => {
 
 exports.createBanner = async (req, res) => {
   try {
-    const { title, subtitle, image } = req.body;
+    await Banner.create(req.body);
 
-    const banner = await Banner.create({
-      title,
-      subtitle,
-      image,
-    });
-    res.status(201).json(banner);
+    res.status(201).json({ message: "Banner created successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -90,6 +85,18 @@ exports.updateBanner = async (req, res) => {
     );
 
     res.status(200).json({ message: "Banner updated successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.deleteBanner = async (req, res) => {
+  try {
+    const banner = await Banner.findByIdAndDelete(req.params.id);
+
+    if (!banner) return res.status(404).json({ message: "Banner not found" });
+
+    res.status(200).json({ message: "Banner deleted successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

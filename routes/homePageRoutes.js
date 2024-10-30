@@ -20,6 +20,7 @@ const {
   deleteCarouselImage,
   createPopup,
   updatePopup,
+  deleteBanner,
 } = require("../controllers/homePageControllers");
 const admin = require("../middleware/adminMiddleware");
 const auth = require("../middleware/authMiddleware");
@@ -364,6 +365,51 @@ router.put("/popup/:id", updatePopup);
 // ========= Hero Section ========= //
 /**
  * @swagger
+ * /api/homepage/banner:
+ *   post:
+ *     summary: Create a new homepage banner
+ *     tags:
+ *       - Home Page
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: The title of the banner
+ *                 example: "New Banner"
+ *               subtitle:
+ *                 type: string
+ *                 description: The subtitle of the banner
+ *                 example: "This is the banner subtitle"
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                     description: The public ID of the image
+ *                     example: "image_public_id"
+ *                   url:
+ *                     type: string
+ *                     description: The URL of the image
+ *                     example: "https://example.com/image.jpg"
+ *     responses:
+ *       201:
+ *         description: Successfully create the banner
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Banner created successfully"
+ *       500:
+ *         description: Internal server error
+ *
  * /api/homepage/banner/{id}:
  *   put:
  *     summary: Updates an existing banner
@@ -386,22 +432,22 @@ router.put("/popup/:id", updatePopup);
  *               title:
  *                 type: string
  *                 description: The title of the banner
- *                 example: "string"
+ *                 example: "Updated Banner"
  *               subtitle:
  *                 type: string
  *                 description: The subtitle of the banner
- *                 example: "string"
+ *                 example: "Updated subtitle"
  *               image:
  *                 type: object
  *                 properties:
  *                   public_id:
  *                     type: string
  *                     description: The public ID of the image
- *                     example: "string"
+ *                     example: "updated_image_id"
  *                   url:
  *                     type: string
  *                     description: The URL of the image
- *                     example: "string"
+ *                     example: "https://example.com/updated_image.jpg"
  *     responses:
  *       200:
  *         description: Successfully updated the banner
@@ -432,10 +478,55 @@ router.put("/popup/:id", updatePopup);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "string"
+ *                   example: "Internal server error"
+ *
+ *
+ *   delete:
+ *     summary: Deletes an existing banner
+ *     tags:
+ *       - Home Page
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the banner to delete
+ *     responses:
+ *       200:
+ *         description: Successfully deleted the banner
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Banner deleted successfully"
+ *       404:
+ *         description: Banner not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Banner not found"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Internal server error"
  */
-// router.post("/banner", createBanner);
+router.post("/banner", auth, admin, createBanner);
 router.put("/banner/:id", auth, admin, updateBanner);
+router.delete("/banner/:id", auth, admin, deleteBanner);
 
 // ========= Our Activities ========= //
 /**
