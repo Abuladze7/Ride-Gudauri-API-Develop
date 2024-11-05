@@ -18,6 +18,10 @@ const {
   addImageToBanner,
   getAllData,
   deleteImageToSkiSchoolPageBanner,
+  deleteSkiSchoolIndividualLessonLocationInfo,
+  addSkiSchoolIndividualLessonLocationInfo,
+  updateSkiSchoolIndividualLessonLocationInfo,
+  updateSkiSchoolPrivateGroupLessonLocationInfo,
 } = require("../controllers/skiSchoolPageController");
 const admin = require("../middleware/adminMiddleware");
 const auth = require("../middleware/authMiddleware");
@@ -411,13 +415,7 @@ router.put("/aboutSection/:id", auth, admin, updateSkiSchoolPageAbout);
  *         schema:
  *           type: string
  *         required: false
- *         description: The ID of the item to be updated
- *       - in: query
- *         name: locationInfoId
- *         schema:
- *           type: string
- *         required: false
- *         description: The ID of the location info item to be updated
+ *         description: The ID of the specific item to update within the lesson
  *     requestBody:
  *       required: true
  *       content:
@@ -431,43 +429,130 @@ router.put("/aboutSection/:id", auth, admin, updateSkiSchoolPageAbout);
  *               subtitle:
  *                 type: string
  *                 description: Subtitle of the lesson
+ *               image:
+ *                 type: object
+ *                 description: Image details to update
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                   url:
+ *                     type: string
+ *               description:
+ *                 type: string
+ *                 description: Description of the item
  *               locationTitle:
  *                 type: string
- *                 description: Title for the lesson location
- *               locationInfo:
- *                 type: object
- *                 properties:
- *                   title:
- *                     type: string
- *                     description: Title of the location info
- *                   link:
- *                     type: string
- *                     description: Link associated with the location info
- *               items:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     image:
- *                       type: object
- *                       properties:
- *                         public_id:
- *                           type: string
- *                         url:
- *                           type: string
- *                     description:
- *                       type: string
- *                       description: Description of the item
+ *                 description: Title of the lesson location
  *     responses:
  *       200:
- *         description: Individual lesson updated successfully
+ *         description: Section updated successfully
  *       404:
- *         description: Lesson, item, or location info not found
+ *         description: Lesson or item not found
  *       500:
  *         description: Internal server error
  */
 // router.post("/individualLesson", createSkiSchoolIndividualLesson);
 router.put("/individualLesson", auth, admin, updateSkiSchoolIndividualLesson);
+
+/**
+ * @swagger
+ * /api/skiSchoolPage/individualLocationInfo:
+ *   post:
+ *     summary: Adds a new location info item to an individual lesson
+ *     tags: [Ski School Page]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: Title of the location info
+ *                 example: "string"
+ *               link:
+ *                 type: string
+ *                 description: Link for the location info
+ *                 example: "string"
+ *     responses:
+ *       201:
+ *         description: Location info item added successfully
+ *       400:
+ *         description: Title and link are required
+ *       404:
+ *         description: Lesson not found
+ *       500:
+ *         description: Internal server error
+ *
+ * /api/skiSchoolPage/individualLocationInfo/{id}:
+ *   put:
+ *     summary: Updates an existing location info item in an individual lesson
+ *     tags: [Ski School Page]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the location info item to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: Updated title for the location info
+ *                 example: "string"
+ *               link:
+ *                 type: string
+ *                 description: Updated link for the location info
+ *                 example: "string"
+ *     responses:
+ *       200:
+ *         description: Location info item updated successfully
+ *       400:
+ *         description: locationInfoId is required
+ *       404:
+ *         description: Lesson or location info item not found
+ *       500:
+ *         description: Internal server error
+ *
+ *   delete:
+ *     summary: Deletes a location info item from an individual lesson
+ *     tags: [Ski School Page]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the location info item to be deleted
+ *     responses:
+ *       200:
+ *         description: Location info item deleted successfully
+ *       400:
+ *         description: locationInfoId is required
+ *       404:
+ *         description: Lesson or location info item not found
+ *       500:
+ *         description: Internal server error
+ */
+router.post(
+  "/individualLocationInfo",
+  addSkiSchoolIndividualLessonLocationInfo
+);
+router.put(
+  "/individualLocationInfo/:id",
+  updateSkiSchoolIndividualLessonLocationInfo
+);
+router.delete(
+  "/individualLocationInfo/:id",
+  deleteSkiSchoolIndividualLessonLocationInfo
+);
 
 // ========== Group Lessons ========== //
 /**
@@ -492,17 +577,24 @@ router.put("/individualLesson", auth, admin, updateSkiSchoolIndividualLesson);
  *             properties:
  *               title:
  *                 type: string
+ *                 description: Title of the lesson
  *               subtitle:
  *                 type: string
- *               description:
- *                 type: string
+ *                 description: Subtitle of the lesson
  *               image:
  *                 type: object
+ *                 description: Image details to update
  *                 properties:
  *                   public_id:
  *                     type: string
  *                   url:
  *                     type: string
+ *               description:
+ *                 type: string
+ *                 description: Description of the item
+ *               locationTitle:
+ *                 type: string
+ *                 description: Title of the lesson location
  *     responses:
  *       200:
  *         description: Private group lesson updated successfully
@@ -513,6 +605,13 @@ router.put("/individualLesson", auth, admin, updateSkiSchoolIndividualLesson);
  */
 // router.post("/groupLesson", createSkiSchoolPrivateGroupLesson);
 router.put("/groupLesson", auth, admin, updateSkiSchoolPrivateGroupLesson);
+
+router.put(
+  "/groupLocationInfo/:id",
+  auth,
+  admin,
+  updateSkiSchoolPrivateGroupLessonLocationInfo
+);
 
 // ========== Ski School Benefits ========== //
 /**

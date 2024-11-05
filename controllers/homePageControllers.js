@@ -470,14 +470,18 @@ exports.getAllData = async (req, res) => {
       wonderlandSection,
       carouselImages,
     ] = await Promise.all([
-      HomepagePromotionPopup.findOne().lean(),
-      Banner.find().lean(),
-      Activity.findOne(),
-      DiscountCoupon.findOne().lean(),
-      HomePageWhatSetsApartSection.findOne().lean(),
-      WelcomeSection.findOne().lean(),
-      WonderlandSection.findOne().lean(),
-      HomepageCarouselImages.findOne().lean(),
+      HomepagePromotionPopup.findOne()
+        .select("title subtitle image isShow")
+        .lean(),
+      Banner.find().select("title subtitle image").lean(),
+      Activity.findOne().select("title items"),
+      DiscountCoupon.findOne()
+        .select("title subtitle image addressLink")
+        .lean(),
+      HomePageWhatSetsApartSection.findOne().select("title items").lean(),
+      WelcomeSection.findOne().select("title subtitle image").lean(),
+      WonderlandSection.findOne().select("title subtitle image").lean(),
+      HomepageCarouselImages.findOne().select("images").lean(),
     ]);
 
     const homePage = {

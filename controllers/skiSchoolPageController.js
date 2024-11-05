@@ -164,7 +164,7 @@ exports.updateSkiSchoolIndividualLesson = async (req, res) => {
   try {
     const { title, subtitle, image, description, locationTitle, locationInfo } =
       req.body;
-    const { itemId, locationInfoId } = req.query;
+    const { itemId } = req.query;
 
     const lesson = await SkiSchoolPageIndividualLesson.findOne();
 
@@ -173,19 +173,6 @@ exports.updateSkiSchoolIndividualLesson = async (req, res) => {
     if (title) lesson.title = title;
     if (subtitle) lesson.subtitle = subtitle;
     if (locationTitle) lesson.locationTitle = locationTitle;
-
-    // Update a specific locationInfo entry by ID
-    if (locationInfoId && locationInfo) {
-      const locationItem = lesson.locationInfo.id(locationInfoId);
-      if (locationItem) {
-        if (locationInfo.title) locationItem.title = locationInfo.title;
-        if (locationInfo.link) locationItem.link = locationInfo.link;
-      } else {
-        return res
-          .status(404)
-          .json({ message: "Location info item not found" });
-      }
-    }
 
     if (itemId) {
       const item = lesson.items.id(itemId);
@@ -210,6 +197,94 @@ exports.updateSkiSchoolIndividualLesson = async (req, res) => {
     await lesson.save();
 
     res.status(200).json({ message: "Section updated successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.addSkiSchoolIndividualLessonLocationInfo = async (req, res) => {
+  try {
+    const { title, link } = req.body;
+
+    if (!title || !link) {
+      return res.status(400).json({ message: "Title and link are required" });
+    }
+
+    const lesson = await SkiSchoolPageIndividualLesson.findOne();
+
+    if (!lesson) return res.status(404).json({ message: "Lesson not found" });
+
+    // Add the new locationInfo item
+    lesson.locationInfo.push({ title, link });
+    await lesson.save();
+
+    res.status(201).json({
+      message: "Location info item added successfully",
+      locationInfo: lesson.locationInfo,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.updateSkiSchoolIndividualLessonLocationInfo = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, link } = req.body;
+
+    if (!id) {
+      return res.status(400).json({ message: "locationInfoId is required" });
+    }
+
+    const lesson = await SkiSchoolPageIndividualLesson.findOne();
+    if (!lesson) return res.status(404).json({ message: "Lesson not found" });
+
+    // Find the locationInfo item by ID
+    const locationItem = lesson.locationInfo.id(id);
+    if (!locationItem) {
+      return res.status(404).json({ message: "Location info item not found" });
+    }
+
+    // Update the fields if provided
+    if (title) locationItem.title = title;
+    if (link) locationItem.link = link;
+
+    await lesson.save();
+
+    res.status(200).json({
+      message: "Location info item updated successfully",
+      locationInfo: locationItem,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.deleteSkiSchoolIndividualLessonLocationInfo = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ message: "locationInfoId is required" });
+    }
+
+    const lesson = await SkiSchoolPageIndividualLesson.findOne();
+
+    if (!lesson) return res.status(404).json({ message: "Lesson not found" });
+
+    // Find the locationInfo item by ID
+    const locationItem = lesson.locationInfo.id(id);
+    if (!locationItem) {
+      return res.status(404).json({ message: "Location info item not found" });
+    }
+
+    // Use pull to remove the item from the locationInfo array
+    lesson.locationInfo.pull({ _id: id });
+    await lesson.save();
+
+    res
+      .status(200)
+      .json({ message: "Location info item deleted successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -229,9 +304,8 @@ exports.createSkiSchoolPrivateGroupLesson = async (req, res) => {
 
 exports.updateSkiSchoolPrivateGroupLesson = async (req, res) => {
   try {
-    const { title, subtitle, image, description, locationTitle, locationInfo } =
-      req.body;
-    const { itemId, locationInfoId } = req.query;
+    const { title, subtitle, image, description, locationTitle } = req.body;
+    const { itemId } = req.query;
 
     const lesson = await SkiSchoolPagePrivateGroupLesson.findOne();
 
@@ -240,19 +314,6 @@ exports.updateSkiSchoolPrivateGroupLesson = async (req, res) => {
     if (title) lesson.title = title;
     if (subtitle) lesson.subtitle = subtitle;
     if (locationTitle) lesson.locationTitle = locationTitle;
-
-    // Update a specific locationInfo entry by ID
-    if (locationInfoId && locationInfo) {
-      const locationItem = lesson.locationInfo.id(locationInfoId);
-      if (locationItem) {
-        if (locationInfo.title) locationItem.title = locationInfo.title;
-        if (locationInfo.link) locationItem.link = locationInfo.link;
-      } else {
-        return res
-          .status(404)
-          .json({ message: "Location info item not found" });
-      }
-    }
 
     if (itemId) {
       const item = lesson.items.id(itemId);
@@ -277,6 +338,39 @@ exports.updateSkiSchoolPrivateGroupLesson = async (req, res) => {
     await lesson.save();
 
     res.status(200).json({ message: "Section updated successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.updateSkiSchoolPrivateGroupLessonLocationInfo = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, link } = req.body;
+
+    if (!id) {
+      return res.status(400).json({ message: "locationInfoId is required" });
+    }
+
+    const lesson = await SkiSchoolPagePrivateGroupLesson.findOne();
+    if (!lesson) return res.status(404).json({ message: "Lesson not found" });
+
+    // Find the locationInfo item by ID
+    const locationItem = lesson.locationInfo.id(id);
+    if (!locationItem) {
+      return res.status(404).json({ message: "Location info item not found" });
+    }
+
+    // Update the fields if provided
+    if (title) locationItem.title = title;
+    if (link) locationItem.link = link;
+
+    await lesson.save();
+
+    res.status(200).json({
+      message: "Location info item updated successfully",
+      locationInfo: locationItem,
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
