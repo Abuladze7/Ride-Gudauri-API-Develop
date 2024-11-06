@@ -153,7 +153,7 @@ exports.createParaglidingFormSection = async (req, res) => {
 
 exports.updateParaglidingFormSection = async (req, res) => {
   try {
-    const { title, subtitle, image, description } = req.body;
+    const { title, subtitle, image, description, locationTitle } = req.body;
     const { itemId } = req.query;
 
     const formSection = await ParaglidingPageFormSection.findOne();
@@ -164,6 +164,8 @@ exports.updateParaglidingFormSection = async (req, res) => {
     if (title) formSection.title = title;
 
     if (subtitle) formSection.subtitle = subtitle;
+
+    if (locationTitle) formSection.locationTitle = locationTitle;
 
     if (itemId) {
       const item = formSection.items.id(itemId);
@@ -186,6 +188,88 @@ exports.updateParaglidingFormSection = async (req, res) => {
     await formSection.save();
 
     res.status(200).json({ message: "Section updated successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.addParaglidingLocationInfo = async (req, res) => {
+  try {
+    const { title, link } = req.body;
+
+    if (!title || !link) {
+      return res.status(400).json({ message: "Title and link are required" });
+    }
+
+    const form = await ParaglidingPageFormSection.findOne();
+
+    if (!form) return res.status(404).json({ message: "Form  not found" });
+
+    form.locationInfo.push({ title, link });
+    await form.save();
+
+    res.status(201).json({
+      message: "Location info item added successfully",
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.updateParaglidingLocationInfo = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, link } = req.body;
+
+    if (!id) return res.status(400).json({ message: "Id is required" });
+
+    const form = await ParaglidingPageFormSection.findOne();
+
+    if (!form) return res.status(404).json({ message: "Form not found" });
+
+    const locationItem = form.locationInfo.id(id);
+
+    if (!locationItem)
+      return res.status(404).json({ message: "Location item not found" });
+
+    if (title) locationItem.title = title;
+    if (link) locationItem.link = link;
+
+    await form.save();
+
+    res
+      .status(200)
+      .json({ message: "Location info item updated successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.deleteParaglidingLocationInfo = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ message: "locationInfoId is required" });
+    }
+
+    const form = await ParaglidingPageFormSection.findOne();
+
+    if (!form) return res.status(404).json({ message: "Form not found" });
+
+    // Find the locationInfo item by ID
+    const locationItem = form.locationInfo.id(id);
+    if (!locationItem) {
+      return res.status(404).json({ message: "Location info item not found" });
+    }
+
+    // Use pull to remove the item from the locationInfo array
+    form.locationInfo.pull({ _id: id });
+    await form.save();
+
+    res
+      .status(200)
+      .json({ message: "Location info item deleted successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -281,10 +365,14 @@ exports.getAllData = async (req, res) => {
   try {
     const [banner, mainSection, formSection, carouselImages] =
       await Promise.all([
-        ParaglidingPageBanner.findOne().lean(),
-        ParaglidingPageMainSection.findOne().lean(),
-        ParaglidingPageFormSection.findOne().lean(),
-        ParaglidingPageCarouselImage.findOne().lean(),
+        ParaglidingPageBanner.findOne().select("title subtitle images").lean(),
+        ParaglidingPageMainSection.findOne()
+          .select("title subtitle image")
+          .lean(),
+        ParaglidingPageFormSection.findOne()
+          .select("title subtitle locationTitle locationInfo items")
+          .lean(),
+        ParaglidingPageCarouselImage.findOne().select("images").lean(),
       ]);
 
     const allData = {

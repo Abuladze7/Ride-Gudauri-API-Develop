@@ -162,8 +162,7 @@ exports.createSkiSchoolIndividualLesson = async (req, res) => {
 
 exports.updateSkiSchoolIndividualLesson = async (req, res) => {
   try {
-    const { title, subtitle, image, description, locationTitle, locationInfo } =
-      req.body;
+    const { title, subtitle, image, description, locationTitle } = req.body;
     const { itemId } = req.query;
 
     const lesson = await SkiSchoolPageIndividualLesson.findOne();

@@ -11,6 +11,9 @@ const {
   addImageToBanner,
   deleteImageToBanner,
   deleteParaglidingPageCarouselImage,
+  addParaglidingLocationInfo,
+  updateParaglidingLocationInfo,
+  deleteParaglidingLocationInfo,
 } = require("../controllers/paraglidingPageController");
 const admin = require("../middleware/adminMiddleware");
 const auth = require("../middleware/authMiddleware");
@@ -304,6 +307,8 @@ router.put(
  *                 type: string
  *               subtitle:
  *                 type: string
+ *               locationTitle:
+ *                 type: string
  *               description:
  *                 type: string
  *               image:
@@ -323,6 +328,93 @@ router.put(
  */
 // router.post("/formSection", createParaglidingFormSection);
 router.put("/formSection", auth, admin, updateParaglidingFormSection);
+
+/**
+ * @swagger
+ * /api/paraglidingPage/formSection/location:
+ *   post:
+ *     summary: Adds a new location info item to the Paragliding page form section
+ *     tags: [Paragliding Page]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: The title of the location
+ *               link:
+ *                 type: string
+ *                 description: The link to the location
+ *     responses:
+ *       201:
+ *         description: Location info item added successfully
+ *       400:
+ *         description: Title and link are required
+ *       404:
+ *         description: Form not found
+ *       500:
+ *         description: Internal server error
+ *
+ * /api/paraglidingPage/formSection/location/{id}:
+ *   put:
+ *     summary: Updates an existing location info item in the Paragliding page form section
+ *     tags: [Paragliding Page]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the location info item to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: Updated title of the location
+ *               link:
+ *                 type: string
+ *                 description: Updated link to the location
+ *     responses:
+ *       200:
+ *         description: Location info item updated successfully
+ *       400:
+ *         description: Id is required
+ *       404:
+ *         description: Form or location item not found
+ *       500:
+ *         description: Internal server error
+ *   delete:
+ *     summary: Deletes a location info item from the Paragliding page form section
+ *     tags: [Paragliding Page]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the location info item to delete
+ *     responses:
+ *       200:
+ *         description: Location info item deleted successfully
+ *       400:
+ *         description: Id is required
+ *       404:
+ *         description: Form or location item not found
+ *       500:
+ *         description: Internal server error
+ */
+
+router.post("/formSection/location", addParaglidingLocationInfo);
+router.put("/formSection/location/:id", updateParaglidingLocationInfo);
+router.delete("/formSection/location/:id", deleteParaglidingLocationInfo);
 
 // ========== Carousel Images ========== //
 /**

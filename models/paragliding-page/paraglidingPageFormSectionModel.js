@@ -5,6 +5,13 @@ const paraglidingFormSectionSchema = new Schema(
   {
     title: { type: String },
     subtitle: { type: String },
+    locationTitle: { type: String },
+    locationInfo: [
+      {
+        link: { type: String },
+        title: { type: String },
+      },
+    ],
     items: [
       {
         description: { type: String, required: true },
