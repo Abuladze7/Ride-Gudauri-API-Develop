@@ -7,7 +7,24 @@ const cloudinary = require("../config/cloudinary");
 // ========== SEO =========== //
 
 // ========== Banner ========== //
-exports.createContactPageBanner = async (req, res) => {
+
+exports.updateContactPageBanner = async (req, res) => {
+  try {
+    const { title, email, workDays, phoneNumber, location, locationLink } =
+      req.body;
+    await ContactPageBanner.findOneAndUpdate(
+      {},
+      { title, email, workDays, phoneNumber, location, locationLink },
+      { new: true, runValidators: true }
+    );
+
+    res.status(200).json({ message: "Contact page updated successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.createContactPageBannerImage = async (req, res) => {
   try {
     const { images } = req.body;
     let banner = await ContactPageBanner.findOne();
@@ -34,7 +51,7 @@ exports.createContactPageBanner = async (req, res) => {
   }
 };
 
-exports.updateContactPageBanner = async (req, res) => {
+exports.updateContactPageBannerImage = async (req, res) => {
   try {
     const { id } = req.params;
     const { image } = req.body;
@@ -60,7 +77,7 @@ exports.updateContactPageBanner = async (req, res) => {
   }
 };
 
-exports.deleteContactPageBanner = async (req, res) => {
+exports.deleteContactPageBannerImage = async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -285,10 +302,12 @@ exports.getAllData = async (req, res) => {
   try {
     const [banner, faqTitles, faqQuestions, carouselImages] = await Promise.all(
       [
-        ContactPageBanner.findOne().lean(),
-        ContactPageFaqTitles.find().lean(),
-        ContactPageFaqQuestion.find().lean(),
-        ContactPageCarouselImage.findOne().lean(),
+        ContactPageBanner.findOne().select("-createdAt -updatedAt").lean(),
+        ContactPageFaqTitles.find().select("-createdAt -updatedAt").lean(),
+        ContactPageFaqQuestion.find().select("-createdAt -updatedAt").lean(),
+        ContactPageCarouselImage.findOne()
+          .select("-createdAt -updatedAt")
+          .lean(),
       ]
     );
 

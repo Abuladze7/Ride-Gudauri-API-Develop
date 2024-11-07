@@ -9,9 +9,10 @@ const {
   createContactPageCarouselImage,
   updateContactPageCarouselImage,
   deleteContactPageCarouselImage,
-  createContactPageBanner,
+  createContactPageBannerImage,
+  updateContactPageBannerImage,
+  deleteContactPageBannerImage,
   updateContactPageBanner,
-  deleteContactPageBanner,
 } = require("../controllers/contactPageController");
 const admin = require("../middleware/adminMiddleware");
 const auth = require("../middleware/authMiddleware");
@@ -151,6 +152,50 @@ router.get("/", getAllData);
 /**
  * @swagger
  * /api/contactPage/banner:
+ *   put:
+ *     summary: Updates the contact page banner details
+ *     tags: [Contact Page]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: The title of the contact page banner
+ *                 example: "Welcome to Gudauri"
+ *               email:
+ *                 type: string
+ *                 description: Contact email
+ *                 example: "contact@example.com"
+ *               workDays:
+ *                 type: string
+ *                 description: Working days information
+ *                 example: "Mon-Fri"
+ *               phoneNumber:
+ *                 type: string
+ *                 description: Contact phone number
+ *                 example: "+123456789"
+ *               location:
+ *                 type: string
+ *                 description: Physical location of the contact
+ *                 example: "Gudauri, Georgia"
+ *               locationLink:
+ *                 type: string
+ *                 description: Google Maps location link
+ *     responses:
+ *       200:
+ *         description: Contact page updated successfully
+ *       500:
+ *         description: Internal server error
+ */
+router.put("/banner", updateContactPageBanner);
+
+/**
+ * @swagger
+ * /api/contactPage/banner/image:
  *   post:
  *     summary: Creates a new banner for the Contact page
  *     tags: [Contact Page]
@@ -176,7 +221,7 @@ router.get("/", getAllData);
  *       500:
  *         description: Internal server error
  *
- * /api/contactPage/banner/{id}:
+ * /api/contactPage/banner/image/{id}:
  *   put:
  *     summary: Updates an existing image in the banner for the Contact page
  *     tags: [Contact Page]
@@ -227,11 +272,11 @@ router.get("/", getAllData);
  *       500:
  *         description: Internal server error
  */
-router.post("/banner", auth, admin, createContactPageBanner);
+router.post("/banner/image", auth, admin, createContactPageBannerImage);
 router
-  .route("/banner/:id")
-  .put(auth, admin, updateContactPageBanner)
-  .delete(auth, admin, deleteContactPageBanner);
+  .route("/banner/image/:id")
+  .put(auth, admin, updateContactPageBannerImage)
+  .delete(auth, admin, deleteContactPageBannerImage);
 
 // ========== FAQ Title ========== //
 /**
