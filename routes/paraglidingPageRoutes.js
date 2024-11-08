@@ -318,6 +318,10 @@ router.put(
  *                     type: string
  *                   url:
  *                     type: string
+ *               warningTitle:
+ *                 type: string
+ *               warning:
+ *                 type: string
  *     responses:
  *       200:
  *         description: Form section updated successfully

@@ -21,6 +21,8 @@ const paraglidingFormSectionSchema = new Schema(
         },
       },
     ],
+    warningTitle: { type: String },
+    warning: { type: String },
   },
   { versionKey: false, timestamps: true }
 );

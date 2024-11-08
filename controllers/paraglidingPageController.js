@@ -153,7 +153,15 @@ exports.createParaglidingFormSection = async (req, res) => {
 
 exports.updateParaglidingFormSection = async (req, res) => {
   try {
-    const { title, subtitle, image, description, locationTitle } = req.body;
+    const {
+      title,
+      subtitle,
+      image,
+      description,
+      locationTitle,
+      warningTitle,
+      warning,
+    } = req.body;
     const { itemId } = req.query;
 
     const formSection = await ParaglidingPageFormSection.findOne();
@@ -166,6 +174,10 @@ exports.updateParaglidingFormSection = async (req, res) => {
     if (subtitle) formSection.subtitle = subtitle;
 
     if (locationTitle) formSection.locationTitle = locationTitle;
+
+    if (warningTitle) formSection.warningTitle = warningTitle;
+
+    if (warning) formSection.warning = warning;
 
     if (itemId) {
       const item = formSection.items.id(itemId);
@@ -365,14 +377,16 @@ exports.getAllData = async (req, res) => {
   try {
     const [banner, mainSection, formSection, carouselImages] =
       await Promise.all([
-        ParaglidingPageBanner.findOne().select("title subtitle images").lean(),
+        ParaglidingPageBanner.findOne().select("-createdAt -updatedAt").lean(),
         ParaglidingPageMainSection.findOne()
-          .select("title subtitle image")
+          .select("-createdAt -updatedAt")
           .lean(),
         ParaglidingPageFormSection.findOne()
-          .select("title subtitle locationTitle locationInfo items")
+          .select("-createdAt -updatedAt")
           .lean(),
-        ParaglidingPageCarouselImage.findOne().select("images").lean(),
+        ParaglidingPageCarouselImage.findOne()
+          .select("-createdAt -updatedAt")
+          .lean(),
       ]);
 
     const allData = {
