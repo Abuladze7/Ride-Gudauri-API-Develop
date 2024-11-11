@@ -4,7 +4,15 @@ const { Schema } = mongoose;
 const otherActivitiesPageTransferFormSchema = new Schema(
   {
     title: { type: String },
-    subtitle: { type: String },
+    gudauriToTbilisiTransferDesc: { type: String },
+    gudauriToTbilisiAirportDesc: { type: String },
+    tbilisiAirportToGudauriDesc: { type: String },
+    tbilisiFreedomSquareToGudauriDesc: { type: String },
+    gudauriToKazbegiTourDesc: { type: String },
+    gudauriToGergetiExcursionDesc: { type: String },
+    gudauriToKhadaExplorationDesc: { type: String },
+    transferFromTbilisiToKazbegiDesc: { type: String },
+    fullDayTourTbilisiToKazbegiDesc: { type: String },
     warning: String,
     items: [
       {

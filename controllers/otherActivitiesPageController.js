@@ -169,7 +169,22 @@ exports.createOtherActivitiesPageTransfersForm = async (req, res) => {
 
 exports.updateOtherActivitiesPageTransfersForm = async (req, res) => {
   try {
-    const { title, subtitle, warning, description, image } = req.body;
+    const {
+      title,
+      subtitle,
+      warning,
+      description,
+      image,
+      gudauriToTbilisiTransferDesc,
+      gudauriToTbilisiAirportDesc,
+      tbilisiAirportToGudauriDesc,
+      tbilisiFreedomSquareToGudauriDesc,
+      gudauriToKazbegiTourDesc,
+      gudauriToGergetiExcursionDesc,
+      gudauriToKhadaExplorationDesc,
+      transferFromTbilisiToKazbegiDesc,
+      fullDayTourTbilisiToKazbegiDesc,
+    } = req.body;
     const { itemId } = req.query;
 
     const transfersForm = await OtherActivitiesPageTransfersForm.findOne();
@@ -195,6 +210,31 @@ exports.updateOtherActivitiesPageTransfersForm = async (req, res) => {
 
     if (title) transfersForm.title = title;
     if (subtitle) transfersForm.subtitle = subtitle;
+
+    if (gudauriToTbilisiTransferDesc)
+      transfersForm.gudauriToTbilisiTransferDesc = gudauriToTbilisiTransferDesc;
+    if (gudauriToTbilisiAirportDesc)
+      transfersForm.gudauriToTbilisiAirportDesc = gudauriToTbilisiAirportDesc;
+    if (tbilisiAirportToGudauriDesc)
+      transfersForm.tbilisiAirportToGudauriDesc = tbilisiAirportToGudauriDesc;
+    if (tbilisiFreedomSquareToGudauriDesc)
+      transfersForm.tbilisiFreedomSquareToGudauriDesc =
+        tbilisiFreedomSquareToGudauriDesc;
+    if (gudauriToKazbegiTourDesc)
+      transfersForm.gudauriToKazbegiTourDesc = gudauriToKazbegiTourDesc;
+    if (gudauriToGergetiExcursionDesc)
+      transfersForm.gudauriToGergetiExcursionDesc =
+        gudauriToGergetiExcursionDesc;
+    if (gudauriToKhadaExplorationDesc)
+      transfersForm.gudauriToKhadaExplorationDesc =
+        gudauriToKhadaExplorationDesc;
+    if (transferFromTbilisiToKazbegiDesc)
+      transfersForm.transferFromTbilisiToKazbegiDesc =
+        transferFromTbilisiToKazbegiDesc;
+    if (fullDayTourTbilisiToKazbegiDesc)
+      transfersForm.fullDayTourTbilisiToKazbegiDesc =
+        fullDayTourTbilisiToKazbegiDesc;
+
     if (warning) transfersForm.warning = warning;
 
     await transfersForm.save();

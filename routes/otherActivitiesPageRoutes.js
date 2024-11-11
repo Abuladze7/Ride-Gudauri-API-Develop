@@ -436,20 +436,15 @@ router.put("/mainSection", auth, admin, updateOtherActivitiesPageMainSection);
  *       500:
  *         description: Internal server error
  */
+router.put("/transfersForm", updateOtherActivitiesPageTransfersForm);
 // router.post("/transfersForm", createOtherActivitiesPageTransfersForm);
-router.put(
-  "/transfersForm",
-  auth,
-  admin,
-  updateOtherActivitiesPageTransfersForm
-);
 
 // ========== Snowmobile Form ========== //
 /**
  * @swagger
- * /api/otherActivitiesPage/snowmobileForm:
+ * /api/otherActivitiesPage/transfersForm:
  *   put:
- *     summary: Updates an existing snowmobile form section for the Other Activities page
+ *     summary: Updates an existing transfers form section for the Other Activities page
  *     tags: [Other Activities Page]
  *     parameters:
  *       - in: query
@@ -480,9 +475,27 @@ router.put(
  *                     type: string
  *                   url:
  *                     type: string
+ *               gudauriToTbilisiTransferDesc:
+ *                 type: string
+ *               gudauriToTbilisiAirportDesc:
+ *                 type: string
+ *               tbilisiAirportToGudauriDesc:
+ *                 type: string
+ *               tbilisiFreedomSquareToGudauriDesc:
+ *                 type: string
+ *               gudauriToKazbegiTourDesc:
+ *                 type: string
+ *               gudauriToGergetiExcursionDesc:
+ *                 type: string
+ *               gudauriToKhadaExplorationDesc:
+ *                 type: string
+ *               transferFromTbilisiToKazbegiDesc:
+ *                 type: string
+ *               fullDayTourTbilisiToKazbegiDesc:
+ *                 type: string
  *     responses:
  *       200:
- *         description: Snowmobile form section updated successfully
+ *         description: Transfers form section updated successfully
  *       404:
  *         description: Section or item not found
  *       500:
