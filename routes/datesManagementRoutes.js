@@ -120,8 +120,11 @@ router.get("/", getAllDates);
  *                     type: string
  *                     format: date-time
  *                   dayOff:
- *                     type: string
- *                     format: date-time
+ *                     type: array
+ *                     items:
+ *                       type: string
+ *                       format: date-time
+ *                     description: An array of exactly two date-time strings. The first value is the start of the day off, and the second is the end.
  *       500:
  *         description: Internal server error
  *
@@ -148,8 +151,11 @@ router.get("/", getAllDates);
  *                 type: string
  *                 format: date-time
  *               dayOff:
- *                 type: string
- *                 format: date-time
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: date-time
+ *                 description: An array of exactly two date-time strings. The first value is the start of the day off, and the second is the end.
  *     responses:
  *       201:
  *         description: Successfully created new ski school dates
@@ -173,8 +179,11 @@ router.get("/", getAllDates);
  *                   type: string
  *                   format: date-time
  *                 dayOff:
- *                   type: string
- *                   format: date-time
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                     format: date-time
+ *                   description: An array of exactly two date-time strings. The first value is the start of the day off, and the second is the end.
  *       500:
  *         description: Internal server error
  *
@@ -209,8 +218,11 @@ router.get("/", getAllDates);
  *                 type: string
  *                 format: date-time
  *               dayOff:
- *                 type: string
- *                 format: date-time
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: date-time
+ *                 description: An array of exactly two date-time strings. The first value is the start of the day off, and the second is the end.
  *     responses:
  *       200:
  *         description: Dates updated successfully
