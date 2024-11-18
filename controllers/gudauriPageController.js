@@ -338,13 +338,24 @@ exports.createHowToGetThereMapImages = async (req, res) => {
 
 exports.updateHowToGetThereMapImage = async (req, res) => {
   try {
-    const image = await GudauriHowToGetThereMapImages.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true }
-    );
+    const { image, link } = req.body;
+    const section = await GudauriHowToGetThereMapImages.findById(req.params.id);
 
-    if (!image) return res.status(404).json({ message: "Image not found" });
+    if (!section) return res.status(404).json({ message: "Image not found" });
+
+    if (image) {
+      const imgId = section.image.public_id;
+      if (imgId) {
+        await cloudinary.uploader.destroy(imgId);
+      }
+      section.image = image;
+    }
+
+    if (link) {
+      section.link = link;
+    }
+
+    await section.save();
 
     res.status(200).json({ message: "Image updated successfully " });
   } catch (err) {
