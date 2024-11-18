@@ -17,6 +17,8 @@ const {
   updateGudauriCarouselImage,
   deleteGudauriCarouselImage,
   deleteImageToBanner,
+  createHowToGetThereMapImages,
+  updateHowToGetThereMapImage,
 } = require("../controllers/gudauriPageController");
 const admin = require("../middleware/adminMiddleware");
 const auth = require("../middleware/authMiddleware");
@@ -595,7 +597,7 @@ router.put("/spiritSection/:id", auth, admin, updateGudauriSpiritSection);
  * @swagger
  * /api/gudauriPage/howtoget/{id}:
  *   put:
- *     summary: Updates an existing How to Get There section
+ *     summary: Updates an existing "How to Get There" section
  *     tags:
  *       - Gudauri Page
  *     parameters:
@@ -604,7 +606,7 @@ router.put("/spiritSection/:id", auth, admin, updateGudauriSpiritSection);
  *         required: true
  *         schema:
  *           type: string
- *         description: The ID of the How to Get There section to update
+ *         description: The ID of the "How to Get There" section to update
  *     requestBody:
  *       required: true
  *       content:
@@ -614,19 +616,19 @@ router.put("/spiritSection/:id", auth, admin, updateGudauriSpiritSection);
  *             properties:
  *               title:
  *                 type: string
- *                 description: The new title for the How to Get There section
- *                 example: "string"
+ *                 description: The new title for the section
+ *                 example: "Getting to Gudauri"
  *               subtitle:
  *                 type: string
- *                 description: The new subtitle for the How to Get There section
- *                 example: "string"
+ *                 description: The new subtitle for the section
+ *                 example: "An Adventure Awaits"
  *               description:
  *                 type: string
- *                 description: The new detailed description of how to get there
- *                 example: "string"
+ *                 description: The detailed description of how to get there
+ *                 example: "Take the main highway and follow the signs."
  *     responses:
  *       200:
- *         description: Successfully updated the How to Get There section
+ *         description: Successfully updated the section
  *         content:
  *           application/json:
  *             schema:
@@ -636,7 +638,7 @@ router.put("/spiritSection/:id", auth, admin, updateGudauriSpiritSection);
  *                   type: string
  *                   example: "Section updated successfully"
  *       404:
- *         description: How to Get There section not found
+ *         description: Section not found
  *         content:
  *           application/json:
  *             schema:
@@ -654,10 +656,139 @@ router.put("/spiritSection/:id", auth, admin, updateGudauriSpiritSection);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "string"
+ *                   example: "Internal server error"
+ *
+ * /api/gudauriPage/howtoget/images:
+ *   post:
+ *     summary: Creates a new map image for the "How to Get There" section
+ *     tags:
+ *       - Gudauri Page
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                     description: The public ID of the image
+ *                     example: "abc123"
+ *                   url:
+ *                     type: string
+ *                     description: The URL of the image
+ *                     example: "https://example.com/image.jpg"
+ *               link:
+ *                 type: string
+ *                 description: The link associated with the image
+ *                 example: "https://example.com"
+ *     responses:
+ *       201:
+ *         description: Successfully created the image
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                   example: "60d21b4967d0d8992e610c85"
+ *                 image:
+ *                   type: object
+ *                   properties:
+ *                     public_id:
+ *                       type: string
+ *                       example: "abc123"
+ *                     url:
+ *                       type: string
+ *                       example: "https://example.com/image.jpg"
+ *                 link:
+ *                   type: string
+ *                   example: "https://example.com"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Internal server error"
+ *
+ * /api/gudauriPage/howtoget/images/{id}:
+ *   put:
+ *     summary: Updates an existing map image for the "How to Get There" section
+ *     tags:
+ *       - Gudauri Page
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the map image to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               image:
+ *                 type: object
+ *                 properties:
+ *                   public_id:
+ *                     type: string
+ *                     description: The public ID of the image
+ *                     example: "abc123"
+ *                   url:
+ *                     type: string
+ *                     description: The URL of the image
+ *                     example: "https://example.com/image.jpg"
+ *               link:
+ *                 type: string
+ *                 description: The new link associated with the image
+ *                 example: "https://example.com"
+ *     responses:
+ *       200:
+ *         description: Successfully updated the image
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Image updated successfully"
+ *       404:
+ *         description: Image not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Image not found"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Internal server error"
  */
-// router.post("/howtoget", createHowToGetThereSection);
 router.put("/howtoget/:id", auth, admin, updateHowToGetThereSection);
+router.post("/howtoget/images", createHowToGetThereMapImages);
+router.put("/howtoget/images/:id", updateHowToGetThereMapImage);
+// router.post("/howtoget", createHowToGetThereSection);
 
 // ========== Carousel Images ========== //
 /**

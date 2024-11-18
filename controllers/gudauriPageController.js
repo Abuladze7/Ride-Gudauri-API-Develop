@@ -5,6 +5,7 @@ const WhyGudauriSection = require("../models/gudauri-page/whyGudauriSection");
 const GudauriSpiritSection = require("../models/gudauri-page/gudauriSpiritModel");
 const GudauriHowToGetThereSection = require("../models/gudauri-page/howToGetThereModel");
 const GudauriImageCarousel = require("../models/gudauri-page/gudauriImageCarousel");
+const GudauriHowToGetThereMapImages = require("../models/gudauri-page/gudauriHowToGetMapImages");
 const cloudinary = require("../config/cloudinary");
 
 // ========== Banner ========== //
@@ -325,6 +326,32 @@ exports.updateHowToGetThereSection = async (req, res) => {
   }
 };
 
+exports.createHowToGetThereMapImages = async (req, res) => {
+  try {
+    const image = await GudauriHowToGetThereMapImages.create(req.body);
+
+    res.status(201).json(image);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.updateHowToGetThereMapImage = async (req, res) => {
+  try {
+    const image = await GudauriHowToGetThereMapImages.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+
+    if (!image) return res.status(404).json({ message: "Image not found" });
+
+    res.status(200).json({ message: "Image updated successfully " });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 // ========== Carousel Images ========== //
 
 exports.createGudauriCarouselImage = async (req, res) => {
@@ -419,15 +446,21 @@ exports.getAllData = async (req, res) => {
       whyGudauriSection,
       spiritSection,
       howToGetThereSection,
+      howToGetThereMapImages,
       carouselImages,
     ] = await Promise.all([
-      GudauriBanner.findOne().lean(),
-      GudauriWonderlandSection.findOne().lean(),
-      PlanTripSection.findOne().lean(),
-      WhyGudauriSection.find().lean(),
-      GudauriSpiritSection.findOne().lean(),
-      GudauriHowToGetThereSection.findOne().lean(),
-      GudauriImageCarousel.findOne().lean(),
+      GudauriBanner.findOne().select("-updatedAt -createdAt").lean(),
+      GudauriWonderlandSection.findOne().select("-updatedAt -createdAt").lean(),
+      PlanTripSection.findOne().select("-updatedAt -createdAt").lean(),
+      WhyGudauriSection.find().select("-updatedAt -createdAt").lean(),
+      GudauriSpiritSection.findOne().select("-updatedAt -createdAt").lean(),
+      GudauriHowToGetThereSection.findOne()
+        .select("-updatedAt -createdAt")
+        .lean(),
+      GudauriHowToGetThereMapImages.find()
+        .select("-updatedAt -createdAt")
+        .lean(),
+      GudauriImageCarousel.findOne().select("-updatedAt -createdAt").lean(),
     ]);
 
     const gudauriPage = {
@@ -436,7 +469,10 @@ exports.getAllData = async (req, res) => {
       planTripSection,
       whyGudauriSection,
       spiritSection,
-      howToGetThereSection,
+      howToGetThereSection: {
+        ...howToGetThereSection,
+        maps: howToGetThereMapImages,
+      },
       carouselImages,
     };
 
