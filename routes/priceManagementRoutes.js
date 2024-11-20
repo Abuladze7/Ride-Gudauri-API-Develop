@@ -567,28 +567,72 @@ router.put(
  *   get:
  *     summary: Retrieve Paragliding Prices
  *     tags: [Price Management]
+ *     parameters:
+ *       - in: query
+ *         name: participants
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         required: false
+ *         description: Number of participants (default is 1 if not provided).
+ *       - in: query
+ *         name: coupon
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: Coupon code for a potential discount.
  *     responses:
  *       200:
- *         description: Successfully retrieved Paragliding Prices
+ *         description: Successfully retrieved Paragliding Prices.
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 _id:
- *                   type: string
- *                 paragliding:
+ *                 originalGEL:
  *                   type: number
- *                 createdAt:
+ *                   description: Original price in GEL.
+ *                 originalUSD:
+ *                   type: number
+ *                   description: Original price in USD.
+ *                 discountedGEL:
+ *                   type: number
+ *                   nullable: true
+ *                   description: Discounted price in GEL, if applicable.
+ *                 discountedUSD:
+ *                   type: number
+ *                   nullable: true
+ *                   description: Discounted price in USD, if applicable.
+ *       400:
+ *         description: Invalid number of participants provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
  *                   type: string
- *                   format: date-time
- *                 updatedAt:
- *                   type: string
- *                   format: date-time
+ *                   example: Invalid number of participants
  *       404:
- *         description: Prices not found
+ *         description: Prices not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Prices not found
  *       500:
- *         description: Internal server error
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Internal server error
  *
  * /api/pricemanagement/paragliding/{id}:
  *   put:

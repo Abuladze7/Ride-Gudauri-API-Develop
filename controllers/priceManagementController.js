@@ -7,11 +7,14 @@ const HorseRidingPrices = require("../models/horseRidingPricesModel");
 const QuadBikePrices = require("../models/quadBikePricesModel");
 const SnowmobilePrices = require("../models/snowmobilePricesModel");
 const TransferAndToursPrices = require("../models/transferAndToursPricesModel");
+const Coupon = require("../models/couponModel");
+const { applyDiscount, getFormattedUsd } = require("../lib");
 
 // ========== INDIVIDUAL SKI LESSON ========== //
 
 exports.getIndividualSkiLessonPrices = async (req, res) => {
   try {
+    const { duration, fromDate, toDate } = req.query;
     const prices = await IndividualSkiLessonPrices.findOne();
     if (!prices) return res.status(404).json({ message: "Prices not found" });
 
@@ -197,11 +200,64 @@ exports.updateGroupSnowboardLessonPrices = async (req, res) => {
 
 exports.getParaglidingPrices = async (req, res) => {
   try {
-    const prices = await ParaglidingPrice.findOne();
-    if (!prices) return res.status(404).json({ message: "Prices not found" });
+    const { participants = 1, coupon } = req.query; // Default participants to 1 if not provided
 
-    res.status(200).json(prices);
+    // Validate participants only if provided
+    const participantsCount = parseInt(participants, 10);
+    if (
+      isNaN(participantsCount) ||
+      participantsCount <= 0 ||
+      participantsCount > 50
+    ) {
+      return res
+        .status(400)
+        .json({ message: "Invalid number of participants" });
+    }
+
+    const prices = await ParaglidingPrice.findOne();
+    if (!prices || !prices.paragliding) {
+      return res.status(404).json({ message: "Prices not found" });
+    }
+
+    let result = {};
+
+    const priceGel = prices.paragliding * participantsCount;
+    const priceUsd = await getFormattedUsd(priceGel);
+
+    const discount = await Coupon.findOne({ name: coupon });
+
+    if (discount !== null) {
+      const discountExpireDate = new Date(discount.expire);
+
+      if (discountExpireDate > Date.now()) {
+        const discountPrice = applyDiscount(
+          prices,
+          discount.paraglidingDiscount
+        );
+        const discountGel = discountPrice.paragliding * participantsCount;
+        const discountUsd = await getFormattedUsd(discountGel);
+
+        result = {
+          originalGel: priceGel,
+          originalUSD: priceUsd,
+          discountedGEL: discountGel,
+          discountedUSD: discountUsd,
+        };
+
+        return res.status(200).json(result);
+      }
+    }
+
+    result = {
+      originalGEL: priceGel,
+      originalUSD: priceUsd,
+      discountedGEL: null,
+      discountedUSD: null,
+    };
+
+    res.status(200).json(result);
   } catch (err) {
+    console.error("Error:", err.message);
     res.status(500).json({ error: err.message });
   }
 };

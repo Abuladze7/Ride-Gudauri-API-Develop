@@ -7,8 +7,11 @@ const paraglidingBookingSchema = new mongoose.Schema({
   date: { type: Date, required: true },
   time: { type: String, required: true },
   participants: { type: String, required: true },
-  currency: { usd: Number, gel: Number },
-  orderTime: { type: Date },
+  currency: {
+    usd: Number,
+    gel: Number,
+  },
+  orderTime: { type: Date, default: Date.now },
   additionalDetails: { type: String },
 });
 
