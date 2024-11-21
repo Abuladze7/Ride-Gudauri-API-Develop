@@ -227,8 +227,41 @@ router.get("/", getAllPrices);
  * @swagger
  * /api/pricemanagement/individualski:
  *   get:
- *     summary: Retrieve Individual Ski Lesson Prices
- *     tags: [Price Management]
+ *     summary: Retrieve Individual Ski Lesson Prices with optional discount
+ *     tags:
+ *       - Price Management
+ *     parameters:
+ *       - in: query
+ *         name: fromDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *         required: true
+ *         description: "Start date for the ski lesson (format: MM/DD/YYYY)"
+ *       - in: query
+ *         name: toDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *         required: true
+ *         description: "End date for the ski lesson (format: MM/DD/YYYY)"
+ *       - in: query
+ *         name: hours
+ *         schema:
+ *           type: string
+ *           enum:
+ *             - 2 Hours
+ *             - 3 Hours
+ *             - 4 Hours
+ *             - Full Day
+ *         required: true
+ *         description: "Duration of the lesson (e.g., '1 Hour', '2 Hours', 'Full Day')"
+ *       - in: query
+ *         name: coupon
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: "Optional coupon code for applying a discount"
  *     responses:
  *       200:
  *         description: Successfully retrieved Individual Ski Lesson Prices
@@ -237,22 +270,20 @@ router.get("/", getAllPrices);
  *             schema:
  *               type: object
  *               properties:
- *                 _id:
- *                   type: string
- *                 one_hour:
+ *                 originalUSD:
  *                   type: number
- *                 two_hours:
+ *                   description: Original price in USD
+ *                 originalGEL:
  *                   type: number
- *                 three_hours:
+ *                   description: Original price in GEL
+ *                 discountedUSD:
  *                   type: number
- *                 full_day:
+ *                   description: Discounted price in USD (if a valid coupon is applied, otherwise null)
+ *                 discountedGEL:
  *                   type: number
- *                 createdAt:
- *                   type: string
- *                   format: date-time
- *                 updatedAt:
- *                   type: string
- *                   format: date-time
+ *                   description: Discounted price in GEL (if a valid coupon is applied, otherwise null)
+ *       400:
+ *         description: Invalid date range or missing required parameters
  *       404:
  *         description: Prices not found
  *       500:
@@ -261,14 +292,15 @@ router.get("/", getAllPrices);
  * /api/pricemanagement/individualski/{id}:
  *   put:
  *     summary: Update Individual Ski Lesson Prices
- *     tags: [Price Management]
+ *     tags:
+ *       - Price Management
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: string
  *         required: true
- *         description: The ID of the Individual Ski Lesson Prices to update
+ *         description: "The ID of the Individual Ski Lesson Prices to update"
  *     requestBody:
  *       required: true
  *       content:
@@ -309,32 +341,63 @@ router.put("/individualski/:id", auth, admin, updateIndividualSkiLessonPrices);
  * @swagger
  * /api/pricemanagement/individualsnowboard:
  *   get:
- *     summary: Retrieve Individual Snowboard Lesson Prices
- *     tags: [Price Management]
+ *     summary: Retrieve Individual Snowboard Prices with optional discount
+ *     tags:
+ *       - Price Management
+ *     parameters:
+ *       - in: query
+ *         name: fromDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *         required: true
+ *         description: "Start date for the snowboard lesson (format: MM/DD/YYYY)"
+ *       - in: query
+ *         name: toDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *         required: true
+ *         description: "End date for the snowboard lesson (format: MM/DD/YYYY)"
+ *       - in: query
+ *         name: hours
+ *         schema:
+ *           type: string
+ *           enum:
+ *             - 2 Hours
+ *             - 3 Hours
+ *             - 4 Hours
+ *             - Full Day
+ *         required: true
+ *         description: "Duration of the lesson (e.g., '1 Hour', '2 Hours', 'Full Day')"
+ *       - in: query
+ *         name: coupon
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: "Optional coupon code for applying a discount"
  *     responses:
  *       200:
- *         description: Successfully retrieved Individual Snowboard Lesson Prices
+ *         description: Successfully retrieved Individual Snowboard Prices
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 _id:
- *                   type: string
- *                 one_hour:
+ *                 originalUSD:
  *                   type: number
- *                 two_hours:
+ *                   description: Original price in USD
+ *                 originalGEL:
  *                   type: number
- *                 three_hours:
+ *                   description: Original price in GEL
+ *                 discountedUSD:
  *                   type: number
- *                 full_day:
+ *                   description: Discounted price in USD (if a valid coupon is applied, otherwise null)
+ *                 discountedGEL:
  *                   type: number
- *                 createdAt:
- *                   type: string
- *                   format: date-time
- *                 updatedAt:
- *                   type: string
- *                   format: date-time
+ *                   description: Discounted price in GEL (if a valid coupon is applied, otherwise null)
+ *       400:
+ *         description: Invalid date range or missing required parameters
  *       404:
  *         description: Prices not found
  *       500:
@@ -476,34 +539,73 @@ router.put("/groupski/:id", auth, admin, updateGroupSkiLessonPrices);
 // ========== GROUP SNOWBOARD LESSON ========== //
 /**
  * @swagger
- * /api/pricemanagement/groupsnowboard:
+ * /api/pricemanagement/groupski:
  *   get:
- *     summary: Retrieve Group Snowboard Lesson Prices
- *     tags: [Price Management]
+ *     summary: Retrieve Group Ski Lesson Prices
+ *     tags:
+ *       - Price Management
+ *     parameters:
+ *       - in: query
+ *         name: fromDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *         required: true
+ *         description: "Start date for the group ski lesson (format: MM/DD/YYYY)"
+ *       - in: query
+ *         name: toDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *         required: true
+ *         description: "End date for the group ski lesson (format: MM/DD/YYYY)"
+ *       - in: query
+ *         name: hours
+ *         schema:
+ *           type: string
+ *           enum:
+ *             - 2 Hours
+ *             - 3 Hours
+ *             - 4 Hours
+ *             - Full Day
+ *         required: true
+ *         description: "Duration of the lesson (e.g., '2 Hours')"
+ *       - in: query
+ *         name: groupMembers
+ *         schema:
+ *           type: integer
+ *           minimum: 2
+ *           maximum: 5
+ *         required: true
+ *         description: "Number of members in the group (must be between 2 and 5)"
+ *       - in: query
+ *         name: coupon
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: "Optional coupon code for applying a discount"
  *     responses:
  *       200:
- *         description: Successfully retrieved Group Snowboard Lesson Prices
+ *         description: Successfully retrieved Group Ski Lesson Prices
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 _id:
- *                   type: string
- *                 two_hours:
+ *                 originalGEL:
  *                   type: number
- *                 three_hours:
+ *                   description: Original total price in GEL
+ *                 originalUSD:
  *                   type: number
- *                 four_hours:
+ *                   description: Original total price in USD
+ *                 discountedGEL:
  *                   type: number
- *                 full_day:
+ *                   description: Discounted total price in GEL (if a valid coupon is applied, otherwise same as original)
+ *                 discountedUSD:
  *                   type: number
- *                 createdAt:
- *                   type: string
- *                   format: date-time
- *                 updatedAt:
- *                   type: string
- *                   format: date-time
+ *                   description: Discounted total price in USD (if a valid coupon is applied, otherwise same as original)
+ *       400:
+ *         description: Invalid input (e.g., missing or invalid query parameters)
  *       404:
  *         description: Prices not found
  *       500:

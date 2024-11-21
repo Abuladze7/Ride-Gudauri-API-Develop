@@ -8,17 +8,72 @@ const QuadBikePrices = require("../models/quadBikePricesModel");
 const SnowmobilePrices = require("../models/snowmobilePricesModel");
 const TransferAndToursPrices = require("../models/transferAndToursPricesModel");
 const Coupon = require("../models/couponModel");
-const { applyDiscount, getFormattedUsd } = require("../lib");
+const {
+  applyDiscount,
+  getFormattedUsd,
+  convertToSnakeCase,
+} = require("../lib");
 
 // ========== INDIVIDUAL SKI LESSON ========== //
 
 exports.getIndividualSkiLessonPrices = async (req, res) => {
   try {
-    const { duration, fromDate, toDate } = req.query;
-    const prices = await IndividualSkiLessonPrices.findOne();
-    if (!prices) return res.status(404).json({ message: "Prices not found" });
+    const { fromDate, toDate, hours, coupon } = req.query;
 
-    res.status(200).json(prices);
+    if (!fromDate || !toDate || !hours) {
+      return res
+        .status(400)
+        .json({ message: "fromDate, toDate and hours are required" });
+    }
+    const prices = await IndividualSkiLessonPrices.findOne();
+
+    const getPrice = prices[convertToSnakeCase(hours)];
+
+    if (!getPrice) {
+      return res.status(404).json({ message: "Prices not found" });
+    }
+
+    const startDay = new Date(fromDate);
+    const endDay = new Date(toDate);
+
+    if (startDay > endDay) {
+      return res.status(400).json({ message: "Invalid date range" });
+    }
+
+    const differencesInDays = (endDay - startDay) / (1000 * 60 * 60 * 24) + 1;
+
+    const priceInGel = getPrice * differencesInDays;
+    const priceInUSD = await getFormattedUsd(priceInGel);
+
+    let result = {
+      originalUSD: priceInUSD,
+      originalGEL: priceInGel,
+      discountedUSD: null,
+      discountedGEL: null,
+    };
+
+    if (coupon) {
+      const discountCoupon = await Coupon.findOne({
+        name: coupon,
+      });
+
+      if (discountCoupon) {
+        const isExpired = new Date(discountCoupon.expire) < new Date();
+
+        if (!isExpired && discountCoupon.skiLessonDiscount > 0) {
+          const discountRate = discountCoupon.skiLessonDiscount / 100;
+
+          // Apply the discount
+          const discountedGel = priceInGel - priceInGel * discountRate;
+          const discountedUsd = priceInUSD - priceInUSD * discountRate;
+
+          result.discountedGEL = Math.round(discountedGel);
+          result.discountedUSD = Math.round(discountedUsd);
+        }
+      }
+    }
+
+    res.status(200).json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -61,10 +116,64 @@ exports.updateIndividualSkiLessonPrices = async (req, res) => {
 
 exports.getIndividualSnowboardPricesPrices = async (req, res) => {
   try {
+    const { fromDate, toDate, hours, coupon } = req.query;
+
+    if (!fromDate || !toDate || !hours) {
+      return res
+        .status(400)
+        .json({ message: "fromDate, toDate and hours are required" });
+    }
     const prices = await IndividualSnowboardPrices.findOne();
+
     if (!prices) return res.status(404).json({ message: "Prices not found" });
 
-    res.status(200).json(prices);
+    const getPrice = prices[convertToSnakeCase(hours)];
+
+    if (!getPrice) {
+      return res.status(404).json({ message: "Prices not found" });
+    }
+
+    const startDay = new Date(fromDate);
+    const endDay = new Date(toDate);
+
+    if (startDay > endDay) {
+      return res.status(400).json({ message: "Invalid date range" });
+    }
+
+    const differencesInDays = (endDay - startDay) / (1000 * 60 * 60 * 24) + 1;
+
+    const priceInGel = getPrice * differencesInDays;
+    const priceInUSD = await getFormattedUsd(priceInGel);
+
+    let result = {
+      originalUSD: priceInUSD,
+      originalGEL: priceInGel,
+      discountedUSD: null,
+      discountedGEL: null,
+    };
+
+    if (coupon) {
+      const discountCoupon = await Coupon.findOne({
+        name: coupon.toUpperCase(),
+      });
+
+      if (discountCoupon) {
+        const isExpired = new Date(discountCoupon.expire) < new Date();
+
+        if (!isExpired && discountCoupon.snowboardDiscount > 0) {
+          const discountRate = discountCoupon.snowboardDiscount / 100;
+
+          // Apply the discount
+          const discountedGel = priceInGel - priceInGel * discountRate;
+          const discountedUsd = priceInUSD - priceInUSD * discountRate;
+
+          result.discountedGEL = Math.round(discountedGel);
+          result.discountedUSD = Math.round(discountedUsd);
+        }
+      }
+    }
+
+    res.status(200).json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -108,10 +217,67 @@ exports.updateIndividualSnowboardLessonPrices = async (req, res) => {
 
 exports.getGroupSkiPrices = async (req, res) => {
   try {
+    const { fromDate, toDate, hours, groupMembers, coupon } = req.query;
+
+    if (!fromDate || !toDate || !hours || !groupMembers) {
+      return res.status(400).json({
+        message: "fromDate, toDate, hours, and groupMembers are required",
+      });
+    }
+
+    const startDay = new Date(fromDate);
+    const endDay = new Date(toDate);
+
+    if (startDay > endDay) {
+      return res.status(400).json({ message: "Invalid date range" });
+    }
+
+    const groupSize = parseInt(groupMembers, 10);
+    if (isNaN(groupSize) || groupSize < 2 || groupSize > 5) {
+      return res
+        .status(400)
+        .json({ message: "groupMembers must be a number between 2 and 5" });
+    }
+
     const prices = await GroupSkiLessonPrices.findOne();
     if (!prices) return res.status(404).json({ message: "Prices not found" });
 
-    res.status(200).json(prices);
+    const durationKey = convertToSnakeCase(hours); // Converts "two hours" to "two_hours"
+
+    const basePrice = prices[durationKey];
+    if (!basePrice) {
+      return res.status(400).json({ message: "Invalid hours duration" });
+    }
+
+    const differencesInDays = (endDay - startDay) / (1000 * 60 * 60 * 24) + 1;
+    // Calculate the total price
+    let totalPriceInGel = basePrice * groupSize * differencesInDays;
+
+    // Optional: Apply coupon
+    if (coupon) {
+      const discountCoupon = await Coupon.findOne({
+        name: coupon.toUpperCase(),
+      });
+      if (discountCoupon) {
+        const isExpired = new Date(discountCoupon.expire) < new Date();
+
+        if (!isExpired && discountCoupon.groupSkiLessonDiscount > 0) {
+          const discountRate = discountCoupon.groupSkiLessonDiscount / 100;
+          totalPriceInGel -= totalPriceInGel * discountRate;
+        }
+      }
+    }
+
+    const totalPriceInUsd = await getFormattedUsd(totalPriceInGel);
+
+    res.status(200).json({
+      originalGEL: basePrice * groupSize * differencesInDays,
+      originalUSD: await getFormattedUsd(
+        basePrice * groupSize * differencesInDays
+      ),
+      discountedGEL: totalPriceInGel,
+      discountedUSD: totalPriceInUsd,
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -154,10 +320,68 @@ exports.updateGroupSkiLessonPrices = async (req, res) => {
 
 exports.getGroupSnowboardPrices = async (req, res) => {
   try {
+    const { fromDate, toDate, hours, groupMembers, coupon } = req.query;
+
+    if (!fromDate || !toDate || !hours || !groupMembers) {
+      return res.status(400).json({
+        message: "fromDate, toDate, hours, and groupMembers are required",
+      });
+    }
+
+    const startDay = new Date(fromDate);
+    const endDay = new Date(toDate);
+
+    if (startDay > endDay) {
+      return res.status(400).json({ message: "Invalid date range" });
+    }
+
+    const groupSize = parseInt(groupMembers, 10);
+    if (isNaN(groupSize) || groupSize < 2 || groupSize > 5) {
+      return res
+        .status(400)
+        .json({ message: "groupMembers must be a number between 2 and 5" });
+    }
+
     const prices = await GroupSnowboardPrices.findOne();
     if (!prices) return res.status(404).json({ message: "Prices not found" });
 
-    res.status(200).json(prices);
+    const durationKey = convertToSnakeCase(hours); // Converts "two hours" to "two_hours"
+
+    const basePrice = prices[durationKey];
+    if (!basePrice) {
+      return res.status(400).json({ message: "Invalid hours duration" });
+    }
+
+    const differencesInDays = (endDay - startDay) / (1000 * 60 * 60 * 24) + 1;
+
+    // Calculate the total price
+    let totalPriceInGel = basePrice * groupSize * differencesInDays;
+
+    // Optional: Apply coupon
+    if (coupon) {
+      const discountCoupon = await Coupon.findOne({
+        name: coupon.toUpperCase(),
+      });
+      if (discountCoupon) {
+        const isExpired = new Date(discountCoupon.expire) < new Date();
+
+        if (!isExpired && discountCoupon.groupSnowboardDiscount > 0) {
+          const discountRate = discountCoupon.groupSnowboardDiscount / 100;
+          totalPriceInGel -= totalPriceInGel * discountRate;
+        }
+      }
+    }
+
+    const totalPriceInUsd = await getFormattedUsd(totalPriceInGel);
+
+    res.status(200).json({
+      originalGEL: basePrice * groupSize * differencesInDays,
+      originalUSD: await getFormattedUsd(
+        basePrice * groupSize * differencesInDays
+      ),
+      discountedGEL: totalPriceInGel,
+      discountedUSD: totalPriceInUsd,
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
