@@ -26,7 +26,7 @@ const {
   getHorseRidingPrices,
   getQuadBikePrices,
   getSnowmobilePrices,
-  getTransferAndTorusPrices,
+  getTransferAndToursPrices,
 } = require("../controllers/priceManagementController");
 const admin = require("../middleware/adminMiddleware");
 const auth = require("../middleware/authMiddleware");
@@ -783,35 +783,62 @@ router.put("/paragliding/:id", auth, admin, updateParaglidingPrices);
  * @swagger
  * /api/pricemanagement/horseriding:
  *   get:
- *     summary: Retrieve horse riding prices
+ *     summary: Retrieve horseriding prices
  *     tags:
  *       - Price Management
+ *     parameters:
+ *       - in: query
+ *         name: selector
+ *         required: true
+ *         schema:
+ *           type: string
+ *           enum:
+ *             - 15 Mins
+ *             - 30 Mins
+ *             - 1 Hour
+ *         description: Duration for the horseriding ride.
+ *       - in: query
+ *         name: participants
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 15
+ *         description: Number of participants (1 to 15).
+ *       - in: query
+ *         name: coupon
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: Coupon code to apply a discount (optional).
  *     responses:
  *       200:
- *         description: Successfully retrieved horse riding prices
+ *         description: Successfully retrieved horseriding prices
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 _id:
- *                   type: string
- *                 minutes_15:
+ *                 originalGEL:
  *                   type: number
- *                 minutes_30:
+ *                   description: Original price in GEL for the selected duration and participants.
+ *                 originalUSD:
  *                   type: number
- *                 hour:
+ *                   description: Original price in USD for the selected duration and participants.
+ *                 discountedGEL:
  *                   type: number
- *                 createdAt:
- *                   type: string
- *                   format: date-time
- *                 updatedAt:
- *                   type: string
- *                   format: date-time
+ *                   nullable: true
+ *                   description: Discounted price in GEL (null if no coupon applied or invalid).
+ *                 discountedUSD:
+ *                   type: number
+ *                   nullable: true
+ *                   description: Discounted price in USD (null if no coupon applied or invalid).
+ *       400:
+ *         description: Invalid request (missing or invalid selector or participants).
  *       404:
- *         description: Prices not found
+ *         description: Horseriding prices not found.
  *       500:
- *         description: Internal server error
+ *         description: Internal server error.
  *
  * /api/pricemanagement/horseriding/{id}:
  *   put:
@@ -865,6 +892,31 @@ router.put("/horseriding/:id", auth, admin, updateHorseRidingPrices);
  *   get:
  *     summary: Retrieve Quad Bike Prices
  *     tags: [Price Management]
+ *     parameters:
+ *       - in: query
+ *         name: selector
+ *         required: true
+ *         schema:
+ *           type: string
+ *           enum:
+ *             - Quad Bike
+ *             - 2 Person Buggy
+ *             - 3 Person Buggy
+ *         description: Type of bike for the session.
+ *       - in: query
+ *         name: participants
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 4
+ *         description: Number of participants (1 to 4).
+ *       - in: query
+ *         name: coupon
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: Coupon code to apply a discount (optional).
  *     responses:
  *       200:
  *         description: Successfully retrieved Quad Bike Prices
@@ -873,24 +925,26 @@ router.put("/horseriding/:id", auth, admin, updateHorseRidingPrices);
  *             schema:
  *               type: object
  *               properties:
- *                 _id:
- *                   type: string
- *                 quad_bike:
+ *                 originalGEL:
  *                   type: number
- *                 buggy_2:
+ *                   description: Original price in GEL for the selected bike type and participants.
+ *                 originalUSD:
  *                   type: number
- *                 buggy_3:
+ *                   description: Original price in USD for the selected bike type and participants.
+ *                 discountedGEL:
  *                   type: number
- *                 createdAt:
- *                   type: string
- *                   format: date-time
- *                 updatedAt:
- *                   type: string
- *                   format: date-time
+ *                   nullable: true
+ *                   description: Discounted price in GEL (null if no coupon applied or invalid).
+ *                 discountedUSD:
+ *                   type: number
+ *                   nullable: true
+ *                   description: Discounted price in USD (null if no coupon applied or invalid).
+ *       400:
+ *         description: Invalid request (missing or invalid selector or participants).
  *       404:
- *         description: Prices not found
+ *         description: Prices not found.
  *       500:
- *         description: Internal server error
+ *         description: Internal server error.
  *
  * /api/pricemanagement/quadbike/{id}:
  *   put:
@@ -943,28 +997,48 @@ router.put("/quadbike/:id", auth, admin, updateQuadBikePrices);
  *   get:
  *     summary: Retrieve Snowmobile Prices
  *     tags: [Price Management]
+ *     parameters:
+ *       - in: query
+ *         name: selector
+ *         required: true
+ *         schema:
+ *           type: string
+ *           enum: ["15 Mins", "30 Mins", "1 Hour"]
+ *         description: Duration of the snowmobile ride
+ *       - in: query
+ *         name: participants
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 15
+ *         description: Number of participants
+ *       - in: query
+ *         name: coupon
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: Optional coupon code for discounts
  *     responses:
  *       200:
- *         description: Successfully retrieved Snowmobile Prices
+ *         description: Successfully retrieved snowmobile prices
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 _id:
- *                   type: string
- *                 minutes_15:
+ *                 originalGEL:
  *                   type: number
- *                 minutes_30:
+ *                 originalUSD:
  *                   type: number
- *                 hour:
+ *                 discountedGEL:
  *                   type: number
- *                 createdAt:
- *                   type: string
- *                   format: date-time
- *                 updatedAt:
- *                   type: string
- *                   format: date-time
+ *                   nullable: true
+ *                 discountedUSD:
+ *                   type: number
+ *                   nullable: true
+ *       400:
+ *         description: Invalid selector or participants value
  *       404:
  *         description: Prices not found
  *       500:
@@ -1021,6 +1095,37 @@ router.put("/snowmobile/:id", auth, admin, updateSnowmobilePrices);
  *   get:
  *     summary: Retrieve Transfer and Tours Prices
  *     tags: [Price Management]
+ *     parameters:
+ *       - in: query
+ *         name: selector
+ *         schema:
+ *           type: string
+ *           enum:
+ *             - Gudauri to Tbilisi Transfer
+ *             - Gudauri to Tbilisi Airport Transfer
+ *             - Tbilisi Airport to Gudauri Transfer
+ *             - Tbilisi Freedom Square to Gudauri Transfer
+ *             - Gudauri to Kazbegi Tour
+ *             - Gudauri to Gergeti Excursion
+ *             - Gudauri to Khada Exploration
+ *             - Transfer from Tbilisi to Kazbegi
+ *             - Full day journey - Tour from Tbilisi to Kazbegi
+ *         required: true
+ *         description: The selected transfer or tour type.
+ *       - in: query
+ *         name: participants
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 7
+ *         required: true
+ *         description: The number of participants (between 1 and 7).
+ *       - in: query
+ *         name: coupon
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: A coupon code to apply a discount.
  *     responses:
  *       200:
  *         description: Successfully retrieved Transfer and Tours Prices
@@ -1029,36 +1134,26 @@ router.put("/snowmobile/:id", auth, admin, updateSnowmobilePrices);
  *             schema:
  *               type: object
  *               properties:
- *                 _id:
- *                   type: string
- *                 gudauriToTbilisi:
+ *                 originalGEL:
  *                   type: number
- *                 gudauriToTbilisiAirport:
+ *                   description: The original price in GEL.
+ *                 originalUSD:
  *                   type: number
- *                 tbilisiAirportToGudauri:
+ *                   description: The original price in USD.
+ *                 discountedGEL:
  *                   type: number
- *                 tbilisiFreedomSquareToGudauri:
+ *                   nullable: true
+ *                   description: The discounted price in GEL, null if no coupon applied.
+ *                 discountedUSD:
  *                   type: number
- *                 gudauriToKazbegi:
- *                   type: number
- *                 gudauriToGergeti:
- *                   type: number
- *                 gudauriToKhada:
- *                   type: number
- *                 tbilisiToKazbegi:
- *                   type: number
- *                 fullDayTourTbilisiToKazbegi:
- *                   type: number
- *                 createdAt:
- *                   type: string
- *                   format: date-time
- *                 updatedAt:
- *                   type: string
- *                   format: date-time
+ *                   nullable: true
+ *                   description: The discounted price in USD, null if no coupon applied.
+ *       400:
+ *         description: Validation errors (e.g., invalid selector or participants count).
  *       404:
- *         description: Prices not found
+ *         description: Prices not found.
  *       500:
- *         description: Internal server error
+ *         description: Internal server error.
  *
  * /api/pricemanagement/transfer/{id}:
  *   put:
@@ -1112,7 +1207,7 @@ router.put("/snowmobile/:id", auth, admin, updateSnowmobilePrices);
  *       500:
  *         description: Internal server error
  */
-router.get("/transfer", getTransferAndTorusPrices);
+router.get("/transfer", getTransferAndToursPrices);
 router.put("/transfer/:id", auth, admin, updateTransferAndToursPrices);
 // router.post("/transfer", createTransferAndToursPrices);
 

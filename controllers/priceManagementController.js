@@ -523,10 +523,70 @@ exports.updateParaglidingPrices = async (req, res) => {
 
 exports.getHorseRidingPrices = async (req, res) => {
   try {
-    const prices = await HorseRidingPrices.findOne();
-    if (!prices) return res.status(404).json({ message: "Prices not found" });
+    const { selector, participants, coupon } = req.query;
+    const validSelectors = ["15 Mins", "30 Mins", "1 Hour"];
+    if (!selector || !validSelectors.includes(selector)) {
+      return res.status(400).json({
+        message: "Invalid or missing selector. Please choose a valid option.",
+      });
+    }
 
-    res.status(200).json(prices);
+    const numParticipants = parseInt(participants, 10);
+    if (isNaN(numParticipants) || numParticipants < 1 || numParticipants > 15) {
+      return res
+        .status(400)
+        .json({ message: "Participants must be a number between 1 and 15." });
+    }
+
+    const prices = await HorseRidingPrices.findOne();
+    if (!prices) {
+      return res.status(404).json({ message: "Snowmobile prices not found." });
+    }
+
+    const selectorMapping = {
+      "15 Mins": "minutes_15",
+      "30 Mins": "minutes_30",
+      "1 Hour": "hour",
+    };
+
+    const field = selectorMapping[selector];
+    const basePricePerParticipant = prices[field];
+
+    if (!basePricePerParticipant) {
+      return res.status(400).json({
+        message: `No price found for the selected option: ${selector}`,
+      });
+    }
+
+    const basePriceGEL = basePricePerParticipant * numParticipants;
+
+    let discountedPriceGEL = null;
+    let discountedPriceUSD = null;
+
+    if (coupon) {
+      const discountCoupon = await Coupon.findOne({
+        name: coupon.toUpperCase(),
+      });
+
+      if (discountCoupon) {
+        const isExpired = new Date(discountCoupon.expire) < new Date();
+        const discountRate = discountCoupon.snowmobileDiscount / 100;
+
+        if (!isExpired && discountRate > 0) {
+          discountedPriceGEL = basePriceGEL - basePriceGEL * discountRate;
+          discountedPriceUSD = await getFormattedUsd(discountedPriceGEL);
+        }
+      }
+    }
+
+    const basePriceUSD = await getFormattedUsd(basePriceGEL);
+
+    res.status(200).json({
+      originalGEL: basePriceGEL,
+      originalUSD: basePriceUSD,
+      discountedGEL: discountedPriceGEL,
+      discountedUSD: discountedPriceUSD,
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -567,10 +627,69 @@ exports.updateHorseRidingPrices = async (req, res) => {
 
 exports.getQuadBikePrices = async (req, res) => {
   try {
+    const { selector, participants, coupon } = req.query;
+
+    const validSelectors = ["Quad Bike", "2 Person Buggy", "3 Person Buggy"];
+    if (!selector || !validSelectors.includes(selector)) {
+      return res.status(400).json({
+        message: "Invalid or missing selector. Please choose a valid option.",
+      });
+    }
+
+    const numParticipants = parseInt(participants, 10);
+    if (isNaN(numParticipants) || numParticipants < 1 || numParticipants > 4) {
+      return res
+        .status(400)
+        .json({ message: "Participants must be a number between 1 and 15." });
+    }
+
     const prices = await QuadBikePrices.findOne();
     if (!prices) return res.status(404).json({ message: "Prices not found" });
 
-    res.status(200).json(prices);
+    const selectorMapping = {
+      "Quad Bike": "quad_bike",
+      "2 Person Buggy": "buggy_2",
+      "3 Person Buggy": "buggy_3",
+    };
+
+    const field = selectorMapping[selector];
+    const basePricePerParticipant = prices[field];
+
+    if (!basePricePerParticipant) {
+      return res.status(400).json({
+        message: `No price found for the selected option: ${selector}`,
+      });
+    }
+
+    const basePriceGEL = basePricePerParticipant * numParticipants;
+
+    let discountedPriceGEL = null;
+    let discountedPriceUSD = null;
+
+    if (coupon) {
+      const discountCoupon = await Coupon.findOne({
+        name: coupon.toUpperCase(),
+      });
+
+      if (discountCoupon) {
+        const isExpired = new Date(discountCoupon.expire) < new Date();
+        const discountRate = discountCoupon.snowmobileDiscount / 100;
+
+        if (!isExpired && discountRate > 0) {
+          discountedPriceGEL = basePriceGEL - basePriceGEL * discountRate;
+          discountedPriceUSD = await getFormattedUsd(discountedPriceGEL);
+        }
+      }
+    }
+
+    const basePriceUSD = await getFormattedUsd(basePriceGEL);
+
+    res.status(200).json({
+      originalGEL: basePriceGEL,
+      originalUSD: basePriceUSD,
+      discountedGEL: discountedPriceGEL,
+      discountedUSD: discountedPriceUSD,
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -611,11 +730,82 @@ exports.updateQuadBikePrices = async (req, res) => {
 
 exports.getSnowmobilePrices = async (req, res) => {
   try {
-    const prices = await SnowmobilePrices.findOne();
-    if (!prices) return res.status(404).json({ message: "Prices not found" });
+    const { selector, participants, coupon } = req.query;
 
-    res.status(200).json(prices);
+    // Validate `selector`
+    const validSelectors = ["15 Mins", "30 Mins", "1 Hour"];
+    if (!selector || !validSelectors.includes(selector)) {
+      return res.status(400).json({
+        message: "Invalid or missing selector. Please choose a valid option.",
+      });
+    }
+
+    // Validate `participants`
+    const numParticipants = parseInt(participants, 10);
+    if (isNaN(numParticipants) || numParticipants < 1 || numParticipants > 15) {
+      return res
+        .status(400)
+        .json({ message: "Participants must be a number between 1 and 15." });
+    }
+
+    // Fetch snowmobile prices from the database
+    const prices = await SnowmobilePrices.findOne();
+    if (!prices) {
+      return res.status(404).json({ message: "Snowmobile prices not found." });
+    }
+
+    // Map selector to the corresponding database field
+    const selectorMapping = {
+      "15 Mins": "minutes_15",
+      "30 Mins": "minutes_30",
+      "1 Hour": "hour",
+    };
+
+    const field = selectorMapping[selector];
+    const basePricePerParticipant = prices[field];
+
+    if (!basePricePerParticipant) {
+      return res.status(400).json({
+        message: `No price found for the selected option: ${selector}`,
+      });
+    }
+
+    // Calculate total price in GEL
+    const basePriceGEL = basePricePerParticipant * numParticipants;
+
+    // Initialize discounted prices
+    let discountedPriceGEL = null;
+    let discountedPriceUSD = null;
+
+    // Apply coupon if provided
+    if (coupon) {
+      const discountCoupon = await Coupon.findOne({
+        name: coupon.toUpperCase(),
+      });
+
+      if (discountCoupon) {
+        const isExpired = new Date(discountCoupon.expire) < new Date();
+        const discountRate = discountCoupon.snowmobileDiscount / 100;
+
+        if (!isExpired && discountRate > 0) {
+          discountedPriceGEL = basePriceGEL - basePriceGEL * discountRate;
+          discountedPriceUSD = await getFormattedUsd(discountedPriceGEL);
+        }
+      }
+    }
+
+    // Convert base price to USD
+    const basePriceUSD = await getFormattedUsd(basePriceGEL);
+
+    // Respond with original and discounted prices
+    res.status(200).json({
+      originalGEL: basePriceGEL,
+      originalUSD: basePriceUSD,
+      discountedGEL: discountedPriceGEL,
+      discountedUSD: discountedPriceUSD,
+    });
   } catch (err) {
+    console.error("Error in getSnowmobilePrices:", err);
     res.status(500).json({ error: err.message });
   }
 };
@@ -652,14 +842,102 @@ exports.updateSnowmobilePrices = async (req, res) => {
 };
 
 // ========== TRANSFER AND TOURS PRICES ========== //
-
-exports.getTransferAndTorusPrices = async (req, res) => {
+exports.getTransferAndToursPrices = async (req, res) => {
   try {
-    const prices = await TransferAndToursPrices.findOne();
-    if (!prices) return res.status(404).json({ message: "Prices not found" });
+    const { selector, participants, coupon } = req.query;
 
-    res.status(200).json(prices);
+    // Define valid selectors and their database mappings
+    const validSelectors = [
+      "Gudauri to Tbilisi Transfer",
+      "Gudauri to Tbilisi Airport Transfer",
+      "Tbilisi Airport to Gudauri Transfer",
+      "Tbilisi Freedom Square to Gudauri Transfer",
+      "Gudauri to Kazbegi Tour",
+      "Gudauri to Gergeti Excursion",
+      "Gudauri to Khada Exploration",
+      "Transfer from Tbilisi to Kazbegi",
+      "Full day journey - Tour from Tbilisi to Kazbegi",
+    ];
+
+    const selectorMapping = {
+      "Gudauri to Tbilisi Transfer": "gudauriToTbilisi",
+      "Gudauri to Tbilisi Airport Transfer": "gudauriToTbilisiAirport",
+      "Tbilisi Airport to Gudauri Transfer": "tbilisiAirportToGudauri",
+      "Tbilisi Freedom Square to Gudauri Transfer":
+        "tbilisiFreedomSquareToGudauri",
+      "Gudauri to Kazbegi Tour": "gudauriToKazbegi",
+      "Gudauri to Gergeti Excursion": "gudauriToGergeti",
+      "Gudauri to Khada Exploration": "gudauriToKhada",
+      "Transfer from Tbilisi to Kazbegi": "tbilisiToKazbegi",
+      "Full day journey - Tour from Tbilisi to Kazbegi":
+        "fullDayTourTbilisiToKazbegi",
+    };
+
+    // Validate `selector`
+    if (!selector || !validSelectors.includes(selector)) {
+      return res.status(400).json({
+        message: "Invalid or missing selector. Please choose a valid option.",
+      });
+    }
+
+    // Validate `participants`
+    const numParticipants = parseInt(participants, 10);
+    if (isNaN(numParticipants) || numParticipants < 1 || numParticipants > 7) {
+      return res
+        .status(400)
+        .json({ message: "Participants must be a number between 1 and 7." });
+    }
+
+    // Fetch prices from the database
+    const prices = await TransferAndToursPrices.findOne();
+    if (!prices) {
+      return res.status(404).json({ message: "Prices not found" });
+    }
+
+    // Fetch the base price
+    const field = selectorMapping[selector];
+    const basePricePerParticipant = prices[field];
+    if (!basePricePerParticipant) {
+      return res.status(400).json({
+        message: `No price found for the selected option: ${selector}`,
+      });
+    }
+
+    // Calculate the total price in GEL
+    const basePriceGEL = basePricePerParticipant * numParticipants;
+
+    // Initialize discount
+    let discountedPriceGEL = null;
+    let discountedPriceUSD = null;
+
+    // Apply coupon if provided
+    if (coupon) {
+      const discountCoupon = await Coupon.findOne({
+        name: coupon.toUpperCase(),
+      });
+      if (discountCoupon) {
+        const isExpired = new Date(discountCoupon.expire) < new Date();
+        const discountRate = discountCoupon.transferToursDiscount / 100;
+
+        if (!isExpired && discountRate > 0) {
+          discountedPriceGEL = basePriceGEL - basePriceGEL * discountRate;
+          discountedPriceUSD = await getFormattedUsd(discountedPriceGEL);
+        }
+      }
+    }
+
+    // Convert base price to USD
+    const basePriceUSD = await getFormattedUsd(basePriceGEL);
+
+    // Respond with formatted prices
+    res.status(200).json({
+      originalGEL: basePriceGEL,
+      originalUSD: basePriceUSD,
+      discountedGEL: discountedPriceGEL,
+      discountedUSD: discountedPriceUSD,
+    });
   } catch (err) {
+    console.error("Error in getTransferAndToursPrices:", err);
     res.status(500).json({ error: err.message });
   }
 };
