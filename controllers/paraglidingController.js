@@ -61,6 +61,11 @@ exports.createParaglidingBooking = async (req, res) => {
       }
     }
 
+    const currency = {
+      usd: discountedUsd || usdPrice, // Use discounted USD if available
+      gel: discountedGel || gelPrice, // Use discounted GEL if available
+    };
+
     const newBooking = new paraglidingBooking({
       fullName,
       email,
@@ -68,12 +73,25 @@ exports.createParaglidingBooking = async (req, res) => {
       date,
       time,
       participants: participantsCount,
-      currency: {
-        usd: discountedUsd || usdPrice, // Use discounted USD if available
-        gel: discountedGel || gelPrice, // Use discounted GEL if available
-      },
+      currency,
       additionalDetails,
     });
+
+    const body = {
+      from: process.env.GMAIL_USER,
+      to: `${email}`,
+      subject: "Booking Confirmation",
+      html: paraglidingBookingTemplate({ ...req.body, currency }),
+      attachments: [
+        {
+          filename: "AccountDetail.pdf",
+          path: path.join(
+            __dirname,
+            "../lib/mail/attachments/AccountDetail.pdf"
+          ),
+        },
+      ],
+    };
 
     await newBooking.save();
 
@@ -82,8 +100,10 @@ exports.createParaglidingBooking = async (req, res) => {
       notification.set({ paraglidingNotification: true });
       await notification.save();
     }
+    const message =
+      "Thank you for booking our service. Please check your email";
 
-    res.status(201).json(newBooking);
+    sendEmail(body, res, message);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
