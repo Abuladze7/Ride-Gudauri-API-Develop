@@ -95,7 +95,6 @@ exports.createOtheractivitiesBooking = async (req, res) => {
     }
 
     const totalUsd = await getFormattedUsd(totalGel);
-    console.log(totalGel, totalUsd);
 
     const currency = {
       gel: totalGel,
