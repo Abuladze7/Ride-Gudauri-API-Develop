@@ -8,6 +8,7 @@ const HorseRidingPrices = require("../models/horseRidingPricesModel");
 const QuadBikePrices = require("../models/quadBikePricesModel");
 const SnowmobilePrices = require("../models/snowmobilePricesModel");
 const TransferAndToursPrices = require("../models/transferAndToursPricesModel");
+const { applyDiscount } = require("../lib");
 
 exports.getAllCoupons = async (req, res) => {
   try {
@@ -76,7 +77,7 @@ exports.applyCoupon = async (req, res) => {
     if (!coupon)
       return res.status(404).json({ message: "Coupon doesn't exists" });
 
-    if (coupon.expire < Date.now()) {
+    if (new Date(coupon.expire) < Date.now()) {
       return res.status(403).json({ message: "Coupon has expired" });
     }
 
@@ -101,17 +102,6 @@ exports.applyCoupon = async (req, res) => {
       HorseRidingPrices.findOne(),
       QuadBikePrices.findOne(),
     ]);
-
-    const applyDiscount = (priceObj, discount) => {
-      if (!priceObj) return null;
-
-      for (const key in priceObj.toObject()) {
-        if (priceObj[key] && typeof priceObj[key] === "number") {
-          priceObj[key] = priceObj[key] - (priceObj[key] * discount) / 100;
-        }
-      }
-      return priceObj;
-    };
 
     const discountedIndividualSkiLesson = applyDiscount(
       individualSkiLesson,

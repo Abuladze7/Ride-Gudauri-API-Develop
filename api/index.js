@@ -23,6 +23,7 @@ const notificationRoutes = require("../routes/notificationRoutes");
 const couponRoutes = require("../routes/couponRoutes");
 const subscribePromotionRoutes = require("../routes/subscribePromotionRoutes");
 const datesManagementRoutes = require("../routes/datesManagementRoutes");
+const bookingServiceRoutes = require("../routes/bookingServiceRoutes");
 const { swaggerUi, specs, CSS_URL, customCss } = require("../config/swagger");
 
 connectDB();
@@ -33,27 +34,27 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-const corsOptions = {
-  origin: [
-    "http://localhost:3001/",
-    "http://localhost:3000/",
-    "http://localhost:5173/",
-    "https://www.ridegudauri.ge/",
-    "https://ridegudauri.ge/",
-    "https://admin.ridegudauri.ge/",
-    "https://api.ridegudauri.ge/",
-    "https://admin.ridegudauri.ge/",
-    "https://admin.ridegudauri.com/",
-  ],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
-  credentials: true,
-  optionsSuccessStatus: 204,
-};
+// const corsOptions = {
+//   origin: [
+//     "http://localhost:3001/",
+//     "http://localhost:3000/",
+//     "http://localhost:5173/",
+//     "https://www.ridegudauri.ge/",
+//     "https://ridegudauri.ge/",
+//     "https://admin.ridegudauri.ge/",
+//     "https://api.ridegudauri.ge/",
+//     "https://admin.ridegudauri.ge/",
+//     "https://admin.ridegudauri.com/",
+//   ],
+//   allowedHeaders: ["Content-Type", "Authorization"],
+//   methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
+//   credentials: true,
+//   optionsSuccessStatus: 204,
+// };
 
-// Routesss
+// // Routesss
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 
 app.use(
   "/api-docs",
@@ -70,6 +71,7 @@ app.use("/api/otherActivitiesPage", otherActivitiesPageRoutes);
 app.use("/api/contactPage", contactPageRoutes);
 app.use("/api/pricemanagement", priceManagementRoutes);
 app.use("/api/datesmanagement", datesManagementRoutes);
+app.use("/api/bookingservices", bookingServiceRoutes);
 
 app.use("/api/subscribe", subscribePromotionRoutes);
 app.use("/api/coupon", couponRoutes);
