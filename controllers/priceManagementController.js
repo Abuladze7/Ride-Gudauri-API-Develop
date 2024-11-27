@@ -844,7 +844,7 @@ exports.updateSnowmobilePrices = async (req, res) => {
 // ========== TRANSFER AND TOURS PRICES ========== //
 exports.getTransferAndToursPrices = async (req, res) => {
   try {
-    const { selector, participants, coupon } = req.query;
+    const { selector, coupon } = req.query;
 
     // Define valid selectors and their database mappings
     const validSelectors = [
@@ -880,14 +880,6 @@ exports.getTransferAndToursPrices = async (req, res) => {
       });
     }
 
-    // Validate `participants`
-    const numParticipants = parseInt(participants, 10);
-    if (isNaN(numParticipants) || numParticipants < 1 || numParticipants > 7) {
-      return res
-        .status(400)
-        .json({ message: "Participants must be a number between 1 and 7." });
-    }
-
     // Fetch prices from the database
     const prices = await TransferAndToursPrices.findOne();
     if (!prices) {
@@ -896,15 +888,12 @@ exports.getTransferAndToursPrices = async (req, res) => {
 
     // Fetch the base price
     const field = selectorMapping[selector];
-    const basePricePerParticipant = prices[field];
-    if (!basePricePerParticipant) {
+    const basePriceGEL = prices[field];
+    if (!basePriceGEL) {
       return res.status(400).json({
         message: `No price found for the selected option: ${selector}`,
       });
     }
-
-    // Calculate the total price in GEL
-    const basePriceGEL = basePricePerParticipant * numParticipants;
 
     // Initialize discount
     let discountedPriceGEL = null;

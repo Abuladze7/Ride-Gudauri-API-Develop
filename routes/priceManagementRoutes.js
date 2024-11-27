@@ -1113,14 +1113,6 @@ router.put("/snowmobile/:id", auth, admin, updateSnowmobilePrices);
  *         required: true
  *         description: The selected transfer or tour type.
  *       - in: query
- *         name: participants
- *         schema:
- *           type: integer
- *           minimum: 1
- *           maximum: 7
- *         required: true
- *         description: The number of participants (between 1 and 7).
- *       - in: query
  *         name: coupon
  *         schema:
  *           type: string
