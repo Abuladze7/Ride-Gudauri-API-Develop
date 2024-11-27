@@ -76,7 +76,10 @@ exports.createOtheractivitiesBooking = async (req, res) => {
     const { email, type, selector, participants, couponCode } = req.body;
 
     let basePrice = await getPrice(type, selector);
-    let totalGel = basePrice * Number(participants);
+    let totalGel = basePrice;
+    if (type !== "Transfers and tours") {
+      totalGel = totalGel * Number(participants);
+    }
 
     if (couponCode) {
       const coupon = await Coupon.findOne({ name: couponCode.toUpperCase() });
