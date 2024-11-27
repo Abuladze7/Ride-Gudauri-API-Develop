@@ -25,6 +25,7 @@ exports.getIndividualSkiLessonPrices = async (req, res) => {
         .status(400)
         .json({ message: "fromDate, toDate and hours are required" });
     }
+
     const prices = await IndividualSkiLessonPrices.findOne();
 
     const getPrice = prices[convertToSnakeCase(hours)];
@@ -42,7 +43,28 @@ exports.getIndividualSkiLessonPrices = async (req, res) => {
 
     const differencesInDays = (endDay - startDay) / (1000 * 60 * 60 * 24) + 1;
 
-    const priceInGel = getPrice * differencesInDays;
+    // Define February 1 to 20 range
+    const FEB_START = new Date(startDay.getFullYear(), 1, 1); // February 1
+    const FEB_END = new Date(endDay.getFullYear(), 1, 20); // February 20
+
+    // Calculate overlapping days with February 1-20
+    const overlapStart = Math.max(startDay, FEB_START);
+    const overlapEnd = Math.min(endDay, FEB_END);
+
+    const overlappingDays =
+      overlapStart <= overlapEnd
+        ? (new Date(overlapEnd) - new Date(overlapStart)) /
+            (1000 * 60 * 60 * 24) +
+          1
+        : 0;
+
+    const nonOverlappingDays = differencesInDays - overlappingDays;
+
+    // Calculate price
+    let priceInGel =
+      getPrice * overlappingDays * 1.2 + // Increased price for overlapping days
+      getPrice * nonOverlappingDays; // Regular price for non-overlapping days
+
     const priceInUSD = await getFormattedUsd(priceInGel);
 
     let result = {
@@ -65,7 +87,7 @@ exports.getIndividualSkiLessonPrices = async (req, res) => {
 
           // Apply the discount
           const discountedGel = priceInGel - priceInGel * discountRate;
-          const discountedUsd = priceInUSD - priceInUSD * discountRate;
+          const discountedUsd = await getFormattedUsd(discountedGel);
 
           result.discountedGEL = Math.round(discountedGel);
           result.discountedUSD = Math.round(discountedUsd);
@@ -123,6 +145,7 @@ exports.getIndividualSnowboardPricesPrices = async (req, res) => {
         .status(400)
         .json({ message: "fromDate, toDate and hours are required" });
     }
+
     const prices = await IndividualSnowboardPrices.findOne();
 
     if (!prices) return res.status(404).json({ message: "Prices not found" });
@@ -142,7 +165,28 @@ exports.getIndividualSnowboardPricesPrices = async (req, res) => {
 
     const differencesInDays = (endDay - startDay) / (1000 * 60 * 60 * 24) + 1;
 
-    const priceInGel = getPrice * differencesInDays;
+    // Define February 1 to 20 range
+    const FEB_START = new Date(startDay.getFullYear(), 1, 1); // February 1
+    const FEB_END = new Date(endDay.getFullYear(), 1, 20); // February 20
+
+    // Calculate overlapping days with February 1-20
+    const overlapStart = Math.max(startDay, FEB_START);
+    const overlapEnd = Math.min(endDay, FEB_END);
+
+    const overlappingDays =
+      overlapStart <= overlapEnd
+        ? (new Date(overlapEnd) - new Date(overlapStart)) /
+            (1000 * 60 * 60 * 24) +
+          1
+        : 0;
+
+    const nonOverlappingDays = differencesInDays - overlappingDays;
+
+    // Calculate price
+    let priceInGel =
+      getPrice * overlappingDays * 1.2 + // Increased price for overlapping days
+      getPrice * nonOverlappingDays; // Regular price for non-overlapping days
+
     const priceInUSD = await getFormattedUsd(priceInGel);
 
     let result = {
@@ -165,7 +209,7 @@ exports.getIndividualSnowboardPricesPrices = async (req, res) => {
 
           // Apply the discount
           const discountedGel = priceInGel - priceInGel * discountRate;
-          const discountedUsd = priceInUSD - priceInUSD * discountRate;
+          const discountedUsd = await getFormattedUsd(discountedGel);
 
           result.discountedGEL = Math.round(discountedGel);
           result.discountedUSD = Math.round(discountedUsd);
@@ -242,16 +286,35 @@ exports.getGroupSkiPrices = async (req, res) => {
     const prices = await GroupSkiLessonPrices.findOne();
     if (!prices) return res.status(404).json({ message: "Prices not found" });
 
-    const durationKey = convertToSnakeCase(hours); // Converts "two hours" to "two_hours"
+    const durationKey = convertToSnakeCase(hours);
 
     const basePrice = prices[durationKey];
     if (!basePrice) {
       return res.status(400).json({ message: "Invalid hours duration" });
     }
 
+    const FEB_START = new Date(startDay.getFullYear(), 1, 1); // February 1
+    const FEB_END = new Date(endDay.getFullYear(), 1, 20); // February 20
+
     const differencesInDays = (endDay - startDay) / (1000 * 60 * 60 * 24) + 1;
+
+    // Calculate overlap with February 1-20
+    const overlapStart = Math.max(startDay, FEB_START);
+    const overlapEnd = Math.min(endDay, FEB_END);
+
+    const overlappingDays =
+      overlapStart <= overlapEnd
+        ? (new Date(overlapEnd) - new Date(overlapStart)) /
+            (1000 * 60 * 60 * 24) +
+          1
+        : 0;
+
+    const nonOverlappingDays = differencesInDays - overlappingDays;
+
     // Calculate the total price
-    let totalPriceInGel = basePrice * groupSize * differencesInDays;
+    let totalPriceInGel =
+      basePrice * groupSize * overlappingDays * 1.2 + // Increased price for overlapping days
+      basePrice * groupSize * nonOverlappingDays; // Regular price for non-overlapping days
 
     // Optional: Apply coupon
     if (coupon) {
@@ -354,8 +417,27 @@ exports.getGroupSnowboardPrices = async (req, res) => {
 
     const differencesInDays = (endDay - startDay) / (1000 * 60 * 60 * 24) + 1;
 
+    // Define February 1 to 20 range
+    const FEB_START = new Date(startDay.getFullYear(), 1, 1); // February 1
+    const FEB_END = new Date(endDay.getFullYear(), 1, 20); // February 20
+
+    // Calculate overlapping days with February 1-20
+    const overlapStart = Math.max(startDay, FEB_START);
+    const overlapEnd = Math.min(endDay, FEB_END);
+
+    const overlappingDays =
+      overlapStart <= overlapEnd
+        ? (new Date(overlapEnd) - new Date(overlapStart)) /
+            (1000 * 60 * 60 * 24) +
+          1
+        : 0;
+
+    const nonOverlappingDays = differencesInDays - overlappingDays;
+
     // Calculate the total price
-    let totalPriceInGel = basePrice * groupSize * differencesInDays;
+    let totalPriceInGel =
+      basePrice * groupSize * overlappingDays * 1.2 + // Increased price for overlapping days
+      basePrice * groupSize * nonOverlappingDays; // Regular price for non-overlapping days
 
     // Optional: Apply coupon
     if (coupon) {

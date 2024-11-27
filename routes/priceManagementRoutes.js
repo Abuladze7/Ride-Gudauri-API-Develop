@@ -250,6 +250,7 @@ router.get("/", getAllPrices);
  *         schema:
  *           type: string
  *           enum:
+ *             - 1 Hour
  *             - 2 Hours
  *             - 3 Hours
  *             - 4 Hours
@@ -364,6 +365,7 @@ router.put("/individualski/:id", auth, admin, updateIndividualSkiLessonPrices);
  *         schema:
  *           type: string
  *           enum:
+ *             - 1 Hour
  *             - 2 Hours
  *             - 3 Hours
  *             - 4 Hours
@@ -460,7 +462,48 @@ router.put(
  * /api/pricemanagement/groupski:
  *   get:
  *     summary: Retrieve Group Ski Lesson Prices
- *     tags: [Price Management]
+ *     tags:
+ *       - Price Management
+ *     parameters:
+ *       - in: query
+ *         name: fromDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *         required: true
+ *         description: "Start date for the group ski lesson (format: MM/DD/YYYY)"
+ *       - in: query
+ *         name: toDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *         required: true
+ *         description: "End date for the group ski lesson (format: MM/DD/YYYY)"
+ *       - in: query
+ *         name: hours
+ *         schema:
+ *           type: string
+ *           enum:
+ *             - 2 Hours
+ *             - 3 Hours
+ *             - 4 Hours
+ *             - Full Day
+ *         required: true
+ *         description: "Duration of the lesson (e.g., '2 Hours')"
+ *       - in: query
+ *         name: groupMembers
+ *         schema:
+ *           type: integer
+ *           minimum: 2
+ *           maximum: 5
+ *         required: true
+ *         description: "Number of members in the group (must be between 2 and 5)"
+ *       - in: query
+ *         name: coupon
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: "Optional coupon code for applying a discount"
  *     responses:
  *       200:
  *         description: Successfully retrieved Group Ski Lesson Prices
@@ -469,22 +512,20 @@ router.put(
  *             schema:
  *               type: object
  *               properties:
- *                 _id:
- *                   type: string
- *                 two_hours:
+ *                 originalGEL:
  *                   type: number
- *                 three_hours:
+ *                   description: Original total price in GEL
+ *                 originalUSD:
  *                   type: number
- *                 four_hours:
+ *                   description: Original total price in USD
+ *                 discountedGEL:
  *                   type: number
- *                 full_day:
+ *                   description: Discounted total price in GEL (if a valid coupon is applied, otherwise same as original)
+ *                 discountedUSD:
  *                   type: number
- *                 createdAt:
- *                   type: string
- *                   format: date-time
- *                 updatedAt:
- *                   type: string
- *                   format: date-time
+ *                   description: Discounted total price in USD (if a valid coupon is applied, otherwise same as original)
+ *       400:
+ *         description: Invalid input (e.g., missing or invalid query parameters)
  *       404:
  *         description: Prices not found
  *       500:
@@ -539,9 +580,9 @@ router.put("/groupski/:id", auth, admin, updateGroupSkiLessonPrices);
 // ========== GROUP SNOWBOARD LESSON ========== //
 /**
  * @swagger
- * /api/pricemanagement/groupski:
+ * /api/pricemanagement/groupsnowboard:
  *   get:
- *     summary: Retrieve Group Ski Lesson Prices
+ *     summary: Retrieve Group Snowboard Lesson Prices
  *     tags:
  *       - Price Management
  *     parameters:

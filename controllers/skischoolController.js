@@ -73,7 +73,7 @@ exports.createskischoolBooking = async (req, res) => {
       return res.status(400).json({ message: "Invalid lessonType" });
     }
 
-    // Debugging: Check if prices document exists
+    // Check if prices document exists
     if (!prices) {
       console.error(`Prices document not found for ${activityType}`);
       return res
@@ -89,11 +89,29 @@ exports.createskischoolBooking = async (req, res) => {
       return res.status(400).json({ message: "Invalid hours duration" });
     }
 
+    // Define February 1 to 20 range
+    const FEB_START = new Date(startDay.getFullYear(), 1, 1); // February 1
+    const FEB_END = new Date(endDay.getFullYear(), 1, 20); // February 20
+
+    // Calculate overlapping days with February 1-20
+    const overlapStart = Math.max(startDay, FEB_START);
+    const overlapEnd = Math.min(endDay, FEB_END);
+
+    const overlappingDays =
+      overlapStart <= overlapEnd
+        ? (new Date(overlapEnd) - new Date(overlapStart)) /
+            (1000 * 60 * 60 * 24) +
+          1
+        : 0;
+
+    const nonOverlappingDays = differencesInDays - overlappingDays;
+
     // Calculate total price
     totalPriceInGel =
       lessonType === "Individual"
-        ? basePrice * differencesInDays
-        : basePrice * parseInt(groupMembers, 10) * differencesInDays;
+        ? basePrice * overlappingDays * 1.2 + basePrice * nonOverlappingDays
+        : basePrice * parseInt(groupMembers, 10) * overlappingDays * 1.2 +
+          basePrice * parseInt(groupMembers, 10) * nonOverlappingDays;
 
     // Apply coupon if valid
     if (coupon) {
