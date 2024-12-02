@@ -25,6 +25,8 @@ const subscribePromotionRoutes = require("../routes/subscribePromotionRoutes");
 const datesManagementRoutes = require("../routes/datesManagementRoutes");
 const bookingServiceRoutes = require("../routes/bookingServiceRoutes");
 const { swaggerUi, specs, CSS_URL, customCss } = require("../config/swagger");
+const https = require("https");
+const fs = require("fs");
 
 connectDB();
 
@@ -88,8 +90,22 @@ app.use("/api/seoSettings", seoRoutes);
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
+app.post("/api/test", (req, res) => {
+  console.log(req.body);
+  res.json({ message: "POST POST POST" });
+});
+
+// Load SSL Certificates
+const sslOptions = {
+  key: fs.readFileSync("certs/key.pem"), // Path to your key file
+  cert: fs.readFileSync("certs/cert.pem"), // Path to your cert file
+};
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+// Start HTTPS Server
+https.createServer(sslOptions, app).listen(PORT, () => {
+  console.log(`HTTPS server running on https://localhost:${PORT}`);
+});
 
 module.exports = app;

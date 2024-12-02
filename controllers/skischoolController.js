@@ -11,6 +11,40 @@ const IndividualSnowboardPrices = require("../models/individualSnowboardPricesMo
 const GroupSkiLessonPrices = require("../models/groupSkiLessonPricesModel");
 const GroupSnowboardPrices = require("../models/groupSnowboardPricesModel");
 const Coupon = require("../models/couponModel");
+const { authBog, requestBogBooking } = require("../bog-api");
+
+exports.submitBooking = async (req, res) => {
+  try {
+    const data = await authBog();
+    const token = data.access_token;
+
+    const dummyData = {
+      callback_url: `https://webhook.site/2818a018-dfb0-4084-ad30-e6c02fe9b296`,
+      buyer: {
+        full_name: "Nikoloz Abuladze",
+        email: "test@mail.com",
+        phone: "555555555",
+      },
+      purchase_units: {
+        currency: "GEL",
+        total_amount: 0.01,
+        basket: [
+          {
+            quantity: 1,
+            unit_price: 0.01,
+            product_id: "123TestID123213",
+          },
+        ],
+      },
+    };
+
+    const requestedBooking = await requestBogBooking(dummyData, token, "ka");
+
+    res.status(200).json(requestedBooking);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 
 exports.createskischoolBooking = async (req, res) => {
   try {
