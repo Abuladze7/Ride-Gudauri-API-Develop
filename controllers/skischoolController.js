@@ -205,6 +205,8 @@ exports.createskischoolBooking = async (req, res) => {
 exports.bookingStatus = async (req, res) => {
   try {
     const { body } = req.body;
+    if (!body) return res.status(404).json({ message: "Something went wrong" });
+
     const { order_status, external_order_id } = body;
     const booking = await skischoolBooking.findByIdAndUpdate(
       external_order_id,
@@ -212,6 +214,7 @@ exports.bookingStatus = async (req, res) => {
         status: order_status.key,
       }
     );
+
     if (!booking) {
       return res.status(404).json({ message: "Booking not found" });
     }
