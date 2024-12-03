@@ -208,20 +208,18 @@ exports.bookingStatus = async (req, res) => {
     if (!body) return res.status(404).json({ message: "Something went wrong" });
 
     const { order_status, external_order_id } = body;
-    const booking = await skischoolBooking.findByIdAndUpdate(
-      external_order_id,
-      {
-        status: order_status.key,
-      }
-    );
+    const booking = await skischoolBooking.findById(external_order_id);
 
     if (!booking) {
       return res.status(404).json({ message: "Booking not found" });
     }
+    booking.status = order_status.key;
+    await booking.save();
 
-    res
-      .status(200)
-      .json({ message: "Booking status recieved and updated successfully" });
+    res.status(200).json({
+      message: "Booking status recieved and updated successfully",
+      booking,
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
