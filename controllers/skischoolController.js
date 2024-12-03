@@ -147,12 +147,12 @@ exports.createskischoolBooking = async (req, res) => {
     const totalPriceInUsd = await getFormattedUsd(totalPriceInGel);
 
     // Fallback to prevent undefined currency
-    // if (!totalPriceInGel || !totalPriceInUsd) {
-    //   console.error("Failed to calculate total prices");
-    //   return res
-    //     .status(500)
-    //     .json({ message: "Error calculating total prices" });
-    // }
+    if (!totalPriceInGel || !totalPriceInUsd) {
+      console.error("Failed to calculate total prices");
+      return res
+        .status(500)
+        .json({ message: "Error calculating total prices" });
+    }
 
     const data = await authBog();
     const token = data.access_token;
