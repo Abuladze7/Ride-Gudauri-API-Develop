@@ -154,6 +154,9 @@ exports.createskischoolBooking = async (req, res) => {
     //     .json({ message: "Error calculating total prices" });
     // }
 
+    const data = await authBog();
+    const token = data.access_token;
+
     // Save booking
     const newBooking = new skischoolBooking({
       ...req.body,
@@ -171,45 +174,6 @@ exports.createskischoolBooking = async (req, res) => {
       notification.set({ skiNotification: true });
       await notification.save();
     }
-
-    // Send email
-    // const body = {
-    //   from: process.env.GMAIL_USER,
-    //   to: email,
-    //   subject: "Booking Confirmation",
-    //   html:
-    //     activityType === "Snowboard Lesson"
-    //       ? snowboardLessonBookingTemplate({
-    //           ...req.body,
-    //           currency: {
-    //             usd: totalPriceInUsd,
-    //             gel: totalPriceInGel,
-    //           },
-    //         })
-    //       : skiLessonBookingTemplate({
-    //           ...req.body,
-    //           currency: {
-    //             usd: totalPriceInUsd,
-    //             gel: totalPriceInGel,
-    //           },
-    //         }),
-    //   attachments: [
-    //     {
-    //       filename: "AccountDetail.pdf",
-    //       path: path.join(
-    //         __dirname,
-    //         "../lib/mail/attachments/AccountDetail.pdf"
-    //       ),
-    //     },
-    //   ],
-    // };
-
-    // const message =
-    //   "Thank you for booking our service. Please check your email for further details.";
-    // sendEmail(body, res, message);
-
-    const data = await authBog();
-    const token = data.access_token;
 
     const dummyData = {
       // callback_url: `https://webhook.site/2818a018-dfb0-4084-ad30-e6c02fe9b296`,
