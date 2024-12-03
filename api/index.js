@@ -95,17 +95,10 @@ app.post("/api/test", (req, res) => {
   res.json({ message: "POST POST POST" });
 });
 
-// Load SSL Certificates
-const sslOptions = {
-  key: fs.readFileSync("certs/key.pem"), // Path to your key file
-  cert: fs.readFileSync("certs/cert.pem"), // Path to your cert file
-};
-
 const PORT = process.env.PORT || 5000;
 
-// Start HTTPS Server
-https.createServer(sslOptions, app).listen(PORT, () => {
-  console.log(`HTTPS server running on https://localhost:${PORT}`);
-});
+app.listen(PORT, () =>
+  console.log(`App listening on http://localhost:${PORT}`)
+);
 
 module.exports = app;

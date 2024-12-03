@@ -334,7 +334,7 @@ router.get("/", getAllPrices);
  *         description: Internal server error
  */
 router.get("/individualski", getIndividualSkiLessonPrices);
-router.put("/individualski/:id", auth, admin, updateIndividualSkiLessonPrices);
+router.put("/individualski/:id", updateIndividualSkiLessonPrices);
 // router.post("/individualski", createIndividualSkiLessonPrices);
 
 // ========== INDIVIDUAL SNOWBOARD LESSON ========== //

@@ -12,6 +12,7 @@ const GroupSkiLessonPrices = require("../models/groupSkiLessonPricesModel");
 const GroupSnowboardPrices = require("../models/groupSnowboardPricesModel");
 const Coupon = require("../models/couponModel");
 const { authBog, requestBogBooking } = require("../bog-api");
+const BookingService = require("../models/bookingServicesModel");
 
 exports.submitBooking = async (req, res) => {
   try {
@@ -27,11 +28,11 @@ exports.submitBooking = async (req, res) => {
       },
       purchase_units: {
         currency: "GEL",
-        total_amount: 0.01,
+        total_amount: 100000,
         basket: [
           {
             quantity: 1,
-            unit_price: 0.01,
+            unit_price: 100000,
             product_id: "123TestID123213",
           },
         ],
@@ -49,7 +50,9 @@ exports.submitBooking = async (req, res) => {
 exports.createskischoolBooking = async (req, res) => {
   try {
     const {
+      name,
       email,
+      number,
       lessonType,
       activityType,
       fromDate,
@@ -65,6 +68,13 @@ exports.createskischoolBooking = async (req, res) => {
           "fromDate, toDate, hours, lessonType, and activityType are required",
       });
     }
+
+    const service = await BookingService.findOne({
+      type: lessonType.toLowerCase(),
+      name: activityType,
+    });
+
+    if (!service) return res.status(404).json({ message: "Service not found" });
 
     const startDay = new Date(fromDate);
     const endDay = new Date(toDate);
@@ -170,12 +180,12 @@ exports.createskischoolBooking = async (req, res) => {
     const totalPriceInUsd = await getFormattedUsd(totalPriceInGel);
 
     // Fallback to prevent undefined currency
-    if (!totalPriceInGel || !totalPriceInUsd) {
-      console.error("Failed to calculate total prices");
-      return res
-        .status(500)
-        .json({ message: "Error calculating total prices" });
-    }
+    // if (!totalPriceInGel || !totalPriceInUsd) {
+    //   console.error("Failed to calculate total prices");
+    //   return res
+    //     .status(500)
+    //     .json({ message: "Error calculating total prices" });
+    // }
 
     // Save booking
     const newBooking = new skischoolBooking({
@@ -186,7 +196,7 @@ exports.createskischoolBooking = async (req, res) => {
       },
       orderTime: new Date(),
     });
-    await newBooking.save();
+    const bookedService = await newBooking.save();
 
     // Update notification
     const notification = await SkiSchoolNotification.findOne();
@@ -196,42 +206,98 @@ exports.createskischoolBooking = async (req, res) => {
     }
 
     // Send email
-    const body = {
-      from: process.env.GMAIL_USER,
-      to: email,
-      subject: "Booking Confirmation",
-      html:
-        activityType === "Snowboard Lesson"
-          ? snowboardLessonBookingTemplate({
-              ...req.body,
-              currency: {
-                usd: totalPriceInUsd,
-                gel: totalPriceInGel,
-              },
-            })
-          : skiLessonBookingTemplate({
-              ...req.body,
-              currency: {
-                usd: totalPriceInUsd,
-                gel: totalPriceInGel,
-              },
-            }),
-      attachments: [
-        {
-          filename: "AccountDetail.pdf",
-          path: path.join(
-            __dirname,
-            "../lib/mail/attachments/AccountDetail.pdf"
-          ),
-        },
-      ],
+    // const body = {
+    //   from: process.env.GMAIL_USER,
+    //   to: email,
+    //   subject: "Booking Confirmation",
+    //   html:
+    //     activityType === "Snowboard Lesson"
+    //       ? snowboardLessonBookingTemplate({
+    //           ...req.body,
+    //           currency: {
+    //             usd: totalPriceInUsd,
+    //             gel: totalPriceInGel,
+    //           },
+    //         })
+    //       : skiLessonBookingTemplate({
+    //           ...req.body,
+    //           currency: {
+    //             usd: totalPriceInUsd,
+    //             gel: totalPriceInGel,
+    //           },
+    //         }),
+    //   attachments: [
+    //     {
+    //       filename: "AccountDetail.pdf",
+    //       path: path.join(
+    //         __dirname,
+    //         "../lib/mail/attachments/AccountDetail.pdf"
+    //       ),
+    //     },
+    //   ],
+    // };
+
+    // const message =
+    //   "Thank you for booking our service. Please check your email for further details.";
+    // sendEmail(body, res, message);
+
+    const data = await authBog();
+    const token = data.access_token;
+
+    const dummyData = {
+      callback_url: `https://webhook.site/2818a018-dfb0-4084-ad30-e6c02fe9b296`,
+      // callback_url: `https://api-ridegudauri-develop.vercel.app/api/skischool/bookingstatus`,
+      external_order_id: bookedService._id,
+      buyer: {
+        full_name: name,
+        email: email,
+        phone: number,
+      },
+      purchase_units: {
+        currency: "GEL",
+        total_amount: totalPriceInGel,
+        basket: [
+          {
+            quantity: 1,
+            unit_price: totalPriceInGel,
+            product_id: service._id,
+          },
+        ],
+      },
     };
 
-    const message =
-      "Thank you for booking our service. Please check your email for further details.";
-    sendEmail(body, res, message);
+    const requestedBooking = await requestBogBooking(dummyData, token, "en");
+
+    res.status(200).json(requestedBooking);
   } catch (err) {
     console.error(err); // Improved error logging
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.bookingStatus = async (req, res) => {
+  try {
+    const { body } = req.body;
+    if (!body) return res.status(404).json({ message: "Something went wrong" });
+
+    const { order_status, external_order_id } = body;
+
+    if (!order_status || !external_order_id)
+      return res.status(404).json({ message: "Order status or id  not found" });
+
+    const booking = await skischoolBooking.findById(external_order_id);
+
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+    booking.status = order_status.key;
+    await booking.save();
+
+    res.status(200).json({
+      message: "Booking status recieved and updated successfully",
+      booking,
+    });
+  } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };

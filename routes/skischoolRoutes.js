@@ -5,10 +5,10 @@ const {
   getskischoolBooking,
   updateSkischoolBooking,
   deleteSkischoolBooking,
-  submitBooking,
+  bookingStatus,
 } = require("../controllers/skischoolController");
 
-router.post("/submit", submitBooking);
+router.post("/bookingstatus", bookingStatus);
 
 router.post("/", createskischoolBooking);
 router.get("/", getskischoolBooking);
