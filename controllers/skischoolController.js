@@ -14,39 +14,6 @@ const Coupon = require("../models/couponModel");
 const { authBog, requestBogBooking } = require("../bog-api");
 const BookingService = require("../models/bookingServicesModel");
 
-exports.submitBooking = async (req, res) => {
-  try {
-    const data = await authBog();
-    const token = data.access_token;
-
-    const dummyData = {
-      callback_url: `https://webhook.site/2818a018-dfb0-4084-ad30-e6c02fe9b296`,
-      buyer: {
-        full_name: "Nikoloz Abuladze",
-        email: "test@mail.com",
-        phone: "555555555",
-      },
-      purchase_units: {
-        currency: "GEL",
-        total_amount: 100000,
-        basket: [
-          {
-            quantity: 1,
-            unit_price: 100000,
-            product_id: "123TestID123213",
-          },
-        ],
-      },
-    };
-
-    const requestedBooking = await requestBogBooking(dummyData, token, "ka");
-
-    res.status(200).json(requestedBooking);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
-
 exports.createskischoolBooking = async (req, res) => {
   try {
     const {
@@ -245,8 +212,8 @@ exports.createskischoolBooking = async (req, res) => {
     const token = data.access_token;
 
     const dummyData = {
-      callback_url: `https://webhook.site/2818a018-dfb0-4084-ad30-e6c02fe9b296`,
-      // callback_url: `https://api-ridegudauri-develop.vercel.app/api/skischool/bookingstatus`,
+      // callback_url: `https://webhook.site/2818a018-dfb0-4084-ad30-e6c02fe9b296`,
+      callback_url: `https://api-ridegudauri-develop.vercel.app/api/skischool/bookingstatus`,
       external_order_id: bookedService._id,
       buyer: {
         full_name: name,
