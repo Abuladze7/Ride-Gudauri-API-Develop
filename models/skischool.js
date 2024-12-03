@@ -19,6 +19,7 @@ const skischoolBookingSchema = new mongoose.Schema(
     currency: { usd: Number, gel: Number },
     orderTime: { type: Date },
     location: { type: String },
+    status: { type: String, default: "pending" },
   },
   {
     timestamps: true,
