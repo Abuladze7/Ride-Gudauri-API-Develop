@@ -202,6 +202,27 @@ exports.createskischoolBooking = async (req, res) => {
   }
 };
 
+exports.bookingStatus = async (req, res) => {
+  try {
+    const { body, order_status } = req.body;
+    const booking = await skischoolBooking.findByIdAndUpdate(
+      body.external_order_id,
+      {
+        status: order_status.key,
+      }
+    );
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Booking status recieved and updated successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 exports.getskischoolBooking = async (req, res) => {
   try {
     const bookings = await skischoolBooking.find();
