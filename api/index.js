@@ -95,6 +95,11 @@ app.post("/api/test", (req, res) => {
   res.json({ message: "POST POST POST" });
 });
 
+app.post("/api/test", (req, res) => {
+  console.log("Hello World!");
+  res.json({ message: "POST POST POST" });
+});
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () =>
