@@ -204,9 +204,10 @@ exports.createskischoolBooking = async (req, res) => {
 
 exports.bookingStatus = async (req, res) => {
   try {
-    const { body, order_status } = req.body;
+    const { body } = req.body;
+    const { order_status, external_order_id } = body;
     const booking = await skischoolBooking.findByIdAndUpdate(
-      body.external_order_id,
+      external_order_id,
       {
         status: order_status.key,
       }
