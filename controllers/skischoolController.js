@@ -1,10 +1,5 @@
-const { sendEmail, convertToSnakeCase, getFormattedUsd } = require("../lib");
-const {
-  skiLessonBookingTemplate,
-  snowboardLessonBookingTemplate,
-} = require("../lib/mail/templates");
+const { convertToSnakeCase, getFormattedUsd, sendEmail } = require("../lib");
 const skischoolBooking = require("../models/skischool");
-const path = require("path");
 const SkiSchoolNotification = require("../models/skiSchoolNotificationModel");
 const IndividualSkiLessonPrices = require("../models/individualSkiLessonPricesModel");
 const IndividualSnowboardPrices = require("../models/individualSnowboardPricesModel");
@@ -13,6 +8,10 @@ const GroupSnowboardPrices = require("../models/groupSnowboardPricesModel");
 const Coupon = require("../models/couponModel");
 const { authBog, requestBogBooking } = require("../bog-api");
 const BookingService = require("../models/bookingServicesModel");
+const {
+  skiLessonBookingTemplate,
+  snowboardLessonBookingTemplate,
+} = require("../lib/mail/templates");
 
 exports.createskischoolBooking = async (req, res) => {
   try {
@@ -124,6 +123,8 @@ exports.createskischoolBooking = async (req, res) => {
         : basePrice * parseInt(groupMembers, 10) * overlappingDays * 1.2 +
           basePrice * parseInt(groupMembers, 10) * nonOverlappingDays;
 
+    let discountedPriceInGel = null;
+
     // Apply coupon if valid
     if (coupon) {
       const discountCoupon = await Coupon.findOne({
@@ -138,13 +139,17 @@ exports.createskischoolBooking = async (req, res) => {
             : discountCoupon.skiLessonDiscount / 100;
 
         if (!isExpired && discountRate > 0) {
-          totalPriceInGel -= totalPriceInGel * discountRate;
+          discountedPriceInGel =
+            totalPriceInGel - totalPriceInGel * discountRate;
         }
       }
     }
 
     // Convert to USD
     const totalPriceInUsd = await getFormattedUsd(totalPriceInGel);
+    const discountedPriceInUsd = discountedPriceInGel
+      ? await getFormattedUsd(discountedPriceInGel)
+      : null;
 
     // Fallback to prevent undefined currency
     // if (!totalPriceInGel || !totalPriceInUsd) {
@@ -154,13 +159,24 @@ exports.createskischoolBooking = async (req, res) => {
     //     .json({ message: "Error calculating total prices" });
     // }
 
+    const data = await authBog();
+    const token = data.access_token;
+
+    const currency = {
+      usd: totalPriceInUsd,
+      gel: totalPriceInGel,
+      discountUSD: discountedPriceInUsd
+        ? Number(discountedPriceInUsd.toFixed(2))
+        : null,
+      discountGEL: discountedPriceInGel
+        ? Number(discountedPriceInGel.toFixed(2))
+        : null,
+    };
+
     // Save booking
     const newBooking = new skischoolBooking({
       ...req.body,
-      currency: {
-        usd: totalPriceInUsd,
-        gel: totalPriceInGel,
-      },
+      currency,
       orderTime: new Date(),
     });
     const bookedService = await newBooking.save();
@@ -172,47 +188,7 @@ exports.createskischoolBooking = async (req, res) => {
       await notification.save();
     }
 
-    // Send email
-    // const body = {
-    //   from: process.env.GMAIL_USER,
-    //   to: email,
-    //   subject: "Booking Confirmation",
-    //   html:
-    //     activityType === "Snowboard Lesson"
-    //       ? snowboardLessonBookingTemplate({
-    //           ...req.body,
-    //           currency: {
-    //             usd: totalPriceInUsd,
-    //             gel: totalPriceInGel,
-    //           },
-    //         })
-    //       : skiLessonBookingTemplate({
-    //           ...req.body,
-    //           currency: {
-    //             usd: totalPriceInUsd,
-    //             gel: totalPriceInGel,
-    //           },
-    //         }),
-    //   attachments: [
-    //     {
-    //       filename: "AccountDetail.pdf",
-    //       path: path.join(
-    //         __dirname,
-    //         "../lib/mail/attachments/AccountDetail.pdf"
-    //       ),
-    //     },
-    //   ],
-    // };
-
-    // const message =
-    //   "Thank you for booking our service. Please check your email for further details.";
-    // sendEmail(body, res, message);
-
-    const data = await authBog();
-    const token = data.access_token;
-
     const dummyData = {
-      // callback_url: `https://webhook.site/2818a018-dfb0-4084-ad30-e6c02fe9b296`,
       callback_url: `https://api-ridegudauri-develop.vercel.app/api/skischool/bookingstatus`,
       external_order_id: bookedService._id,
       buyer: {
@@ -222,11 +198,16 @@ exports.createskischoolBooking = async (req, res) => {
       },
       purchase_units: {
         currency: "GEL",
-        total_amount: totalPriceInGel,
+        total_amount: discountedPriceInGel
+          ? Number((Number(discountedPriceInGel.toFixed(2)) * 0.2).toFixed(2))
+          : Number((totalPriceInGel * 0.2).toFixed(2)),
         basket: [
           {
             quantity: 1,
             unit_price: totalPriceInGel,
+            unit_discount_price: discountedPriceInGel
+              ? Number(discountedPriceInGel.toFixed(2))
+              : null,
             product_id: service._id,
           },
         ],
@@ -247,7 +228,8 @@ exports.bookingStatus = async (req, res) => {
     const { body } = req.body;
     if (!body) return res.status(404).json({ message: "Something went wrong" });
 
-    const { order_status, external_order_id } = body;
+    const { order_status, external_order_id, purchase_units, redirect_links } =
+      body;
 
     if (!order_status || !external_order_id)
       return res.status(404).json({ message: "Order status or id  not found" });
@@ -257,11 +239,39 @@ exports.bookingStatus = async (req, res) => {
     if (!booking) {
       return res.status(404).json({ message: "Booking not found" });
     }
+
     booking.status = order_status.key;
+    booking.orderDetails = redirect_links.success;
+
+    if (order_status.key === "completed") {
+      booking.paidPrice = purchase_units.transfer_amount;
+
+      await booking.save();
+
+      const emailBody = {
+        from: process.env.GMAIL_USER,
+        to: booking.email,
+        subject: "Booking Confirmation",
+        html:
+          booking.activityType === "Snowboard Lesson"
+            ? snowboardLessonBookingTemplate(booking)
+            : skiLessonBookingTemplate(booking),
+      };
+
+      const message =
+        "Thank you for booking our service. Please check your email for further details.";
+
+      const responseBody = {
+        message,
+        booking,
+      };
+      return sendEmail(emailBody, res, responseBody);
+    }
+
     await booking.save();
 
     res.status(200).json({
-      message: "Booking status recieved and updated successfully",
+      message: "Booking status recieved and  updated successfully",
       booking,
     });
   } catch (err) {
