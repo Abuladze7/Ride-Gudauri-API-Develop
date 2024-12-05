@@ -189,8 +189,7 @@ exports.createskischoolBooking = async (req, res) => {
     }
 
     const dummyData = {
-      callback_url: "https://webhook.site/2818a018-dfb0-4084-ad30-e6c02fe9b296",
-      // callback_url: `https://api-ridegudauri-develop.vercel.app/api/skischool/bookingstatus`,
+      callback_url: `https://api-ridegudauri-develop.vercel.app/api/skischool/bookingstatus`,
       external_order_id: bookedService._id,
       buyer: {
         full_name: name,
@@ -231,9 +230,6 @@ exports.bookingStatus = async (req, res) => {
 
     const { order_status, external_order_id, purchase_units, redirect_links } =
       body;
-
-    if (!order_status || !external_order_id)
-      return res.status(404).json({ message: "Order status or id  not found" });
 
     const booking = await skischoolBooking.findById(external_order_id);
 

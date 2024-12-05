@@ -5,7 +5,10 @@ const {
   getParaglidingBooking,
   updateParaglidingBooking,
   deleteParaglidingBooking,
+  bookingStatus,
 } = require("../controllers/paraglidingController");
+
+router.post("/bookingstatus", bookingStatus);
 
 router.post("/", createParaglidingBooking);
 router.get("/", getParaglidingBooking);
