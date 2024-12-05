@@ -152,12 +152,12 @@ exports.createskischoolBooking = async (req, res) => {
       : null;
 
     // Fallback to prevent undefined currency
-    // if (!totalPriceInGel || !totalPriceInUsd) {
-    //   console.error("Failed to calculate total prices");
-    //   return res
-    //     .status(500)
-    //     .json({ message: "Error calculating total prices" });
-    // }
+    if (!totalPriceInGel || !totalPriceInUsd) {
+      console.error("Failed to calculate total prices");
+      return res
+        .status(500)
+        .json({ message: "Error calculating total prices" });
+    }
 
     const data = await authBog();
     const token = data.access_token;
@@ -189,7 +189,8 @@ exports.createskischoolBooking = async (req, res) => {
     }
 
     const dummyData = {
-      callback_url: `https://api-ridegudauri-develop.vercel.app/api/skischool/bookingstatus`,
+      callback_url: "https://webhook.site/2818a018-dfb0-4084-ad30-e6c02fe9b296",
+      // callback_url: `https://api-ridegudauri-develop.vercel.app/api/skischool/bookingstatus`,
       external_order_id: bookedService._id,
       buyer: {
         full_name: name,
