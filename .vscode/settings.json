@@ -1,3 +1,11 @@
 {
-  "cSpell.words": ["gudauri", "plantrip"]
+  "cSpell.words": [
+    "gudauri",
+    "plantrip"
+  ],
+  "powermode.enabled": true,
+  "powermode.shake.enabled": false,
+  "powermode.combo.counterEnabled": "hide",
+  "powermode.combo.timerEnabled": "hide",
+  "powermode.presets": "particles"
 }

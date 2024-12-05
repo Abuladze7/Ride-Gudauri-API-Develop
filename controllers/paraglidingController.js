@@ -103,7 +103,7 @@ exports.createParaglidingBooking = async (req, res) => {
     const message =
       "Thank you for booking our service. Please check your email";
 
-    sendEmail(body, res, message);
+    sendEmail(body, res, { message });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

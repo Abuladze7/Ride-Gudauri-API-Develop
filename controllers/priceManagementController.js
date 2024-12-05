@@ -89,7 +89,7 @@ exports.getIndividualSkiLessonPrices = async (req, res) => {
           const discountedGel = priceInGel - priceInGel * discountRate;
           const discountedUsd = await getFormattedUsd(discountedGel);
 
-          result.discountedGEL = Math.round(discountedGel);
+          result.discountedGEL = Number(discountedGel.toFixed(2));
           result.discountedUSD = Math.round(discountedUsd);
         }
       }
@@ -358,7 +358,7 @@ exports.createGroupSkiLessonPrices = async (req, res) => {
 
 exports.updateGroupSkiLessonPrices = async (req, res) => {
   try {
-    const updatedPrices = await GroupSkiLessonPrices.findById(
+    const updatedPrices = await GroupSkiLessonPrices.findByIdAndUpdate(
       req.params.id,
       req.body,
       {
