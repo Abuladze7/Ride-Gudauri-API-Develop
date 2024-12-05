@@ -3,8 +3,10 @@ const { paraglidingBookingTemplate } = require("../lib/mail/templates");
 const paraglidingBooking = require("../models/paragliding");
 const ParaglidingNotification = require("../models/paraglidingNotificationModel");
 const ParaglidingPrice = require("../models/paraglidingPricesModel");
-const path = require("path");
+const BookingService = require("../models/bookingServicesModel");
 const Coupon = require("../models/couponModel");
+const bookingService = require("../models/bookingServicesModel");
+const { requestBogBooking, authBog } = require("../bog-api");
 exports.createParaglidingBooking = async (req, res) => {
   try {
     const {
@@ -19,6 +21,15 @@ exports.createParaglidingBooking = async (req, res) => {
     } = req.body;
 
     const priceData = await ParaglidingPrice.findOne();
+    const service = await BookingService.findOne({
+      type: "paragliding",
+      name: "Paragliding",
+    });
+
+    if (!service) {
+      return res.status(404).json({ message: "Service not found" });
+    }
+
     if (!priceData) {
       return res.status(404).json({ message: "Price data not found" });
     }
@@ -37,6 +48,13 @@ exports.createParaglidingBooking = async (req, res) => {
     const gelPrice = priceData.paragliding * participantsCount;
     let usdPrice = await getFormattedUsd(gelPrice);
 
+    if (!gelPrice || !usdPrice) {
+      console.error("Failed to calculate total prices");
+      return res.status(500).json({
+        message: "Error calculating total price",
+      });
+    }
+
     let discountedGel = null;
     let discountedUsd = null;
 
@@ -53,17 +71,18 @@ exports.createParaglidingBooking = async (req, res) => {
           );
           discountedGel = discountPrice.paragliding * participantsCount;
           discountedUsd = await getFormattedUsd(discountedGel);
-        } else {
-          return res.status(400).json({ message: "Coupon has expired" });
         }
-      } else {
-        return res.status(404).json({ message: "Invalid coupon" });
       }
     }
 
+    const data = await authBog();
+    const token = data.access_token;
+
     const currency = {
-      usd: discountedUsd || usdPrice, // Use discounted USD if available
-      gel: discountedGel || gelPrice, // Use discounted GEL if available
+      usd: usdPrice,
+      gel: gelPrice,
+      discountUSD: discountedUsd ? Number(discountedUsd.toFixed(2)) : null,
+      discountGEL: discountedGel ? Number(discountedGel.toFixed(2)) : null,
     };
 
     const newBooking = new paraglidingBooking({
@@ -77,35 +96,95 @@ exports.createParaglidingBooking = async (req, res) => {
       additionalDetails,
     });
 
-    const body = {
-      from: process.env.GMAIL_USER,
-      to: `${email}`,
-      subject: "Booking Confirmation",
-      html: paraglidingBookingTemplate({ ...req.body, currency }),
-      attachments: [
-        {
-          filename: "AccountDetail.pdf",
-          path: path.join(
-            __dirname,
-            "../lib/mail/attachments/AccountDetail.pdf"
-          ),
-        },
-      ],
-    };
-
-    await newBooking.save();
+    const bookedService = await newBooking.save();
 
     const notification = await ParaglidingNotification.findOne();
     if (notification) {
       notification.set({ paraglidingNotification: true });
       await notification.save();
     }
-    const message =
-      "Thank you for booking our service. Please check your email";
 
-    sendEmail(body, res, { message });
+    const dummyData = {
+      callback_url: `https://api-ridegudauri-develop.vercel.app/api/paragliding/bookingstatus`,
+      external_order_id: bookedService._id,
+      buyer: {
+        full_name: fullName,
+        email,
+        phone: number,
+      },
+      purchase_units: {
+        currency: "GEL",
+        total_amount: 50,
+        basket: [
+          {
+            name: "Paragliding booking",
+            quantity: participantsCount,
+            unit_price: gelPrice,
+            unit_discount_price: discountedGel
+              ? Number(discountedGel.toFixed(2))
+              : null,
+            product_id: service._id,
+          },
+        ],
+      },
+    };
+
+    const requestedBooking = await requestBogBooking(dummyData, token, "en");
+
+    res.status(200).json(requestedBooking);
   } catch (err) {
+    console.log(err);
     res.status(500).json({ error: err.message });
+  }
+};
+
+exports.bookingStatus = async (req, res) => {
+  try {
+    const { body } = req.body;
+    if (!body) return res.status(404).json({ message: "Something went wrong" });
+
+    const { order_status, external_order_id, purchase_units, redirect_links } =
+      body;
+
+    const booking = await paraglidingBooking.findById(external_order_id);
+
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    booking.status = order_status.key;
+    booking.orderDetails = redirect_links.success;
+
+    if (order_status.key === "completed") {
+      booking.paidPrice = purchase_units.transfer_amount;
+
+      await booking.save();
+
+      const eamilBody = {
+        from: process.env.GMAIL_USER,
+        to: `${booking.email}`,
+        subject: "Booking Confirmation",
+        html: paraglidingBookingTemplate(booking),
+      };
+
+      const message =
+        "Thank you for booking our service. Please check your email for further details.";
+
+      const responseBody = {
+        message,
+        booking,
+      };
+
+      return sendEmail(eamilBody, res, responseBody);
+    }
+    await booking.save();
+
+    res.status(200).json({
+      message: "Booking status recieved and  updated successfully",
+      booking,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
 

@@ -11,7 +11,12 @@ const paraglidingBookingSchema = new mongoose.Schema(
     currency: {
       usd: Number,
       gel: Number,
+      discountUSD: { type: Number, default: null },
+      discountGEL: { type: Number, default: null },
     },
+    paidPrice: { type: Number, default: null },
+    status: { type: String, default: "pending" },
+    orderDetails: { type: String, default: "" },
     orderTime: { type: Date, default: Date.now },
     additionalDetails: { type: String },
   },
