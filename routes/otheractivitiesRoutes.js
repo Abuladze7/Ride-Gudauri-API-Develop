@@ -5,7 +5,10 @@ const {
   getOtheractivitiesBooking,
   updateOtheractivitiesBooking,
   deleteOtheractivitiesBooking,
+  bookingStatus,
 } = require("../controllers/otheractivitiesController");
+
+router.post("/bookingstatus", bookingStatus);
 
 router.post("/", createOtheractivitiesBooking);
 router.get("/", getOtheractivitiesBooking);

@@ -5,7 +5,6 @@ const ParaglidingNotification = require("../models/paraglidingNotificationModel"
 const ParaglidingPrice = require("../models/paraglidingPricesModel");
 const BookingService = require("../models/bookingServicesModel");
 const Coupon = require("../models/couponModel");
-const bookingService = require("../models/bookingServicesModel");
 const { requestBogBooking, authBog } = require("../bog-api");
 exports.createParaglidingBooking = async (req, res) => {
   try {
@@ -105,6 +104,7 @@ exports.createParaglidingBooking = async (req, res) => {
     }
 
     const dummyData = {
+      // callback_url: "https://webhook.site/2818a018-dfb0-4084-ad30-e6c02fe9b296",
       callback_url: `https://api-ridegudauri-develop.vercel.app/api/paragliding/bookingstatus`,
       external_order_id: bookedService._id,
       buyer: {
@@ -114,7 +114,7 @@ exports.createParaglidingBooking = async (req, res) => {
       },
       purchase_units: {
         currency: "GEL",
-        total_amount: 50,
+        total_amount: 0.05,
         basket: [
           {
             name: "Paragliding booking",
