@@ -96,13 +96,13 @@
       <div class="content">
         <div class="head-image-content">
           <img
-            src="https://res.cloudinary.com/dmw14gcns/image/upload/v1723188134/gudauri-logo_ychbkq.jpg"
+            src="https://res.cloudinary.com/dmw14gcns/image/upload/v1733305934/ride-gudauri-logo_qkjdvm.png"
             alt="gudauri-logo"
           />
 
           <div class="head-texts">
             <p>Dear ${fullName}</p>
-            <p>Thank you for booking Quad Bikes with Ride Gudauri!</p>
+            <p>Thank you for booking Snowmobile with Ride Gudauri!</p>
             <p>We are excited to help you enjoy a thrilling experience.</p>
           </div>
         </div>
@@ -143,11 +143,12 @@
             </tr>
           </table>
           <div class="total">
-            <h2>Final Cost:</h2>
-            <div class="currencies">
-              <p><strong>Total amount (in GEL): </strong> ${gel}₾</p>
-              <p><strong>Total amount (in USD): </strong> ${usd}$</p>
-            </div>
+            <h2>Payment Information:</h2>
+            <p style="margin-top: 12px">
+              You have been successfully charged <strong>50 Gel</strong> of the
+              total amount during booking. The remaining balance will need to be
+              paid onsite before your lesson begins.
+            </p>
           </div>
         </div>
       </div>
@@ -155,67 +156,46 @@
 
     <div class="note-section">
       <div class="note-section-content">
-        <h1 style="font-size: 28px; color: red">PLEASE NOTE</h1>
-        <p style="margin-top: 16px">
-          To complete your booking, 10% of the full amount should be transferred
-          to the account information provided below:
-        </p>
-
-        <p style="margin-top: 16px">
-          <strong>Amount to Transfer: [10% of total amount] </strong>
-          ${offTotalGEL} GEL / ${offTotalUSD} USD
-        </p>
-
         <div class="invoice" style="margin-top: 24px">
           <h2 style="font-size: 28px">Invoice</h2>
           <table style="width: 100%; margin-top: 16px">
             <tr>
               <th>Total Amount</th>
-              <th>Amount to Transfer</th>
-              <th>Account Information</th>
+              <th>Amount Paid</th>
+              <th>Balance Due Onsite</th>
             </tr>
             <tr>
-              <td>${usd} USD</td>
-              <td>10%</td>
-              <td>${offTotalUSD} USD</td>
+              <td>${totalGEL}₾ GEL</td>
+              <td>${paidPrice}₾ GEL</td>
+              <td>${dueOnsitePrice}₾ GEL</td>
             </tr>
           </table>
         </div>
-        <p style="margin-top: 44px">
-          <strong
-            >Account Information: (Please refer to the attached file for the
-            detailed bank requisites)
-          </strong>
-        </p>
       </div>
     </div>
     <div class="important-information-section">
       <div class="information-content">
         <strong>Important Information: </strong>
 
-        <ul style="padding: 24px">
-          <li>
-            To confirm your booking more quickly, please send us a
-            <b> screenshot of the transaction </b>
-            once the transfer is completed. This will allow us to proceed
-            without waiting the 3 business days it takes for us to receive the
-            payment.
-          </li>
-          <li style="margin-top: 12px">
-            We might need to contact you 1-3 business days before your scheduled
-            lesson to provide specific information about some necessary details.
-            This contact will be made through <b>WhatsApp</b>, so please ensure
-            that the phone number you provided on our website is correct and
-            up-to-date.
-          </li>
-        </ul>
-
-        <p style="margin-top: 18px">
-          If you have any questions or need to update your contact information,
-          please do not hesitate to reach out to us at info@ridegudauri.com or
-          +995 591 144 114. We look forward to seeing you on the slopes!
+        <p style="margin-top: 12px">
+          Our team will contact you 1–3 business days before your scheduled
+          Snowmobile via WhatsApp to provide further details and ensure
+          everything is prepared for your experience. Please make sure the phone
+          number you provided during booking is correct and reachable.
         </p>
 
+        <p style="margin-top: 50px">
+          If you have any questions or need assistance, feel free to contact us:
+        </p>
+
+        <ul style="margin-top: 18px; padding-left: 30px">
+          <li><strong>Email:</strong> info@ridegudauri.com</li>
+          <li><strong>Phone/WhatsApp:</strong> +995 591 144 114</li>
+        </ul>
+
+        <p style="margin-top: 24px">
+          We look forward to seeing you on the slopes!
+        </p>
         <p style="margin-top: 18px">Best regards,</p>
         <p style="margin-top: 18px">Ride Gudauri Team</p>
       </div>
