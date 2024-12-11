@@ -162,7 +162,8 @@ exports.createSkiSchoolIndividualLesson = async (req, res) => {
 
 exports.updateSkiSchoolIndividualLesson = async (req, res) => {
   try {
-    const { title, subtitle, image, description, locationTitle } = req.body;
+    const { title, subtitle, image, description, locationTitle, warning } =
+      req.body;
     const { itemId } = req.query;
 
     const lesson = await SkiSchoolPageIndividualLesson.findOne();
@@ -172,6 +173,7 @@ exports.updateSkiSchoolIndividualLesson = async (req, res) => {
     if (title) lesson.title = title;
     if (subtitle) lesson.subtitle = subtitle;
     if (locationTitle) lesson.locationTitle = locationTitle;
+    if (warning) lesson.warning = warning;
 
     if (itemId) {
       const item = lesson.items.id(itemId);
@@ -303,7 +305,8 @@ exports.createSkiSchoolPrivateGroupLesson = async (req, res) => {
 
 exports.updateSkiSchoolPrivateGroupLesson = async (req, res) => {
   try {
-    const { title, subtitle, image, description, locationTitle } = req.body;
+    const { title, subtitle, image, description, locationTitle, warning } =
+      req.body;
     const { itemId } = req.query;
 
     const lesson = await SkiSchoolPagePrivateGroupLesson.findOne();
@@ -313,6 +316,7 @@ exports.updateSkiSchoolPrivateGroupLesson = async (req, res) => {
     if (title) lesson.title = title;
     if (subtitle) lesson.subtitle = subtitle;
     if (locationTitle) lesson.locationTitle = locationTitle;
+    if (warning) lesson.warning = warning;
 
     if (itemId) {
       const item = lesson.items.id(itemId);

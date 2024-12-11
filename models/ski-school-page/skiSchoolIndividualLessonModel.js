@@ -12,6 +12,7 @@ const skiSchoolPageIndividualLessonSchema = new Schema(
         link: { type: String },
       },
     ],
+    warning: { type: String },
     items: [
       {
         image: {

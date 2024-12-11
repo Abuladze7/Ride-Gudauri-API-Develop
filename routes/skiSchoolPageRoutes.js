@@ -399,8 +399,8 @@ router.delete(
  *       500:
  *         description: Internal server error
  */
+router.put("/aboutSection/:id", updateSkiSchoolPageAbout);
 // router.post("/aboutSection", createSkiSchoolPageAbout);
-router.put("/aboutSection/:id", auth, admin, updateSkiSchoolPageAbout);
 
 // ========== Individual Lessons ========== //
 /**
@@ -429,20 +429,36 @@ router.put("/aboutSection/:id", auth, admin, updateSkiSchoolPageAbout);
  *               subtitle:
  *                 type: string
  *                 description: Subtitle of the lesson
+ *               locationTitle:
+ *                 type: string
+ *                 description: Title of the lesson location
+ *               locationInfo:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     title:
+ *                       type: string
+ *                       description: Title of the location link
+ *                     link:
+ *                       type: string
+ *                       description: URL for the location link
+ *               warning:
+ *                 type: string
+ *                 description: Warning or special notes about the lesson
  *               image:
  *                 type: object
  *                 description: Image details to update
  *                 properties:
  *                   public_id:
  *                     type: string
+ *                     description: Public ID of the image
  *                   url:
  *                     type: string
+ *                     description: URL of the image
  *               description:
  *                 type: string
  *                 description: Description of the item
- *               locationTitle:
- *                 type: string
- *                 description: Title of the lesson location
  *     responses:
  *       200:
  *         description: Section updated successfully
@@ -451,8 +467,8 @@ router.put("/aboutSection/:id", auth, admin, updateSkiSchoolPageAbout);
  *       500:
  *         description: Internal server error
  */
+router.put("/individualLesson", updateSkiSchoolIndividualLesson);
 // router.post("/individualLesson", createSkiSchoolIndividualLesson);
-router.put("/individualLesson", auth, admin, updateSkiSchoolIndividualLesson);
 
 /**
  * @swagger
@@ -581,20 +597,36 @@ router.delete(
  *               subtitle:
  *                 type: string
  *                 description: Subtitle of the lesson
+ *               locationTitle:
+ *                 type: string
+ *                 description: Title of the lesson location
+ *               locationInfo:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     title:
+ *                       type: string
+ *                       description: Title of the location link
+ *                     link:
+ *                       type: string
+ *                       description: URL for the location link
+ *               warning:
+ *                 type: string
+ *                 description: Warning or special notes about the lesson
  *               image:
  *                 type: object
  *                 description: Image details to update
  *                 properties:
  *                   public_id:
  *                     type: string
+ *                     description: Public ID of the image
  *                   url:
  *                     type: string
+ *                     description: URL of the image
  *               description:
  *                 type: string
  *                 description: Description of the item
- *               locationTitle:
- *                 type: string
- *                 description: Title of the lesson location
  *     responses:
  *       200:
  *         description: Private group lesson updated successfully
@@ -603,8 +635,8 @@ router.delete(
  *       500:
  *         description: Internal server error
  */
+router.put("/groupLesson", updateSkiSchoolPrivateGroupLesson);
 // router.post("/groupLesson", createSkiSchoolPrivateGroupLesson);
-router.put("/groupLesson", auth, admin, updateSkiSchoolPrivateGroupLesson);
 
 router.put(
   "/groupLocationInfo/:id",
